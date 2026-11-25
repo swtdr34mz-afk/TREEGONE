@@ -119,8 +119,8 @@ struct Bank {
                                       {P_RESO, 110}, {P_F_ENV_AMT, 200}, {P_F_DEC, 40}, {P_A_DEC, 50}, {P_A_SUS, 40},
                                       {P_A_REL, 38}, {P_FXA_TYPE, FX_BBD}, {P_FXA_MIX, 30}, {P_FXA_SYNC, 1}, {P_FXA_DIV, 4},
                                       {P_FXA_P2, 56}, {P_PAN_SPREAD, 86}});
-        /* a sequence (PLAY), the low-pass opening with the LFO */
-        p[i++] = make("Seq Pulse", {{P_O1_OCT, 1}, {P_O2_LEVEL, 100}, {P_O2_PULSE, 1}, {P_O2_SAW, 0}, {P_CUTOFF, 44},
+        /* a pulsing arp (its sequence still in the program, for the MPC's PLAY), the low-pass opening with the LFO */
+        p[i++] = make("Pulse Runner", {{P_ARP_ON, 1}, {P_ARP_MODE, AM_UP}, {P_DIVIDE, DV_16}, {P_O1_OCT, 1}, {P_O2_LEVEL, 100}, {P_O2_PULSE, 1}, {P_O2_SAW, 0}, {P_CUTOFF, 44},
                                     {P_RESO, 140}, {P_F_ENV_AMT, 194}, {P_F_DEC, 42}, {P_A_DEC, 55}, {P_A_SUS, 30},
                                     {P_A_REL, 30}, {P_LFO_FREQ, 60}, {P_LFO_AMT, 60}, {P_LFO_FILT, 1}, {P_FXA_TYPE, FX_DDL},
                                     {P_FXA_MIX, 22}, {P_FXA_SYNC, 1}, {P_FXA_DIV, 4}, {P_FXA_P2, 50}});

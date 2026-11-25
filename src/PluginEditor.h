@@ -2,8 +2,8 @@
  * Copyright (C) 2026 swtdr34mz (TREEGONE) */
 /* The editor: the Trigon-6's front panel without its keys, a desktop module's proportions (1760 x 800,
  * scaled to the window: drag the corner). On top VOLUME and AFTERTOUCH, LFO and POLYMOD, OSCILLATORS, FILTER (with
- * TREEGONE's TYPE: LP1 OTA, LP2 LADDER, SVF and the SVF's MODE) and AMPLIFIER; then CLOCK, EFFECTS, ARPEGGIATOR,
- * SEQUENCER and the PROGRAMS (the name line, BANK, the display, TENS, the ten number buttons, WRITE, GLOBALS, LOAD
+ * TREEGONE's TYPE: LP1 OTA, LP2 LADDER, SVF and the SVF's MODE) and AMPLIFIER; then CLOCK, EFFECTS, ARPEGGIATOR and
+ * the PROGRAMS (the name line, BANK, the display, TENS, the ten number buttons, WRITE, GLOBALS, LOAD
  * SYX, SOURCE); at the bottom TRANSPOSE, HOLD, GLIDE, UNISON, DISTORTION, VINTAGE, PAN SPREAD, PGM VOLUME,
  * P WHL RANGE, KEY MODE.
  *

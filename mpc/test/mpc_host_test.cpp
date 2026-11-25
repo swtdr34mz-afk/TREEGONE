@@ -318,7 +318,7 @@ int main(int argc, char **argv)
 
     /* the poly sequencer: the program's own sequence plays on PLAY, on the MPC's tempo; and stops */
     {
-        p.d(effSetProgram, 0, 11);       /* (Seq Pulse) */
+        p.d(effSetProgram, 0, 11);       /* (Pulse Runner: its sequence) */
         render(p, 4410, {}, {256});
         int play = param(p, "Seq Play");
         p.e->setParameter(p.e, play, 1.0f);
@@ -330,7 +330,7 @@ int main(int argc, char **argv)
 
     /* state: the parameters and the sequences saved and restored */
     {
-        p.d(effSetProgram, 0, 11);       /* (Seq Pulse) */
+        p.d(effSetProgram, 0, 11);       /* (Pulse Runner: its sequence) */
         render(p, 4410, {}, {256});
         void *chunk = nullptr;
         VstIntPtr sz = p.d(effGetChunk, 0, 0, &chunk);

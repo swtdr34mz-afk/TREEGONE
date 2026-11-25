@@ -665,7 +665,7 @@ void Panel::filesDropped(const juce::StringArray &files, int, int)
 
 /* ------------------------------------------------------------------------------- the build --- */
 /* The panel's places, as a desktop module: the first band (AFTER TOUCH, LFO, POLYMOD, OSCILLATORS, FILTER, AMPLIFIER)
- * as the code gives it; under it CLOCK, EFFECTS, ARPEGGIATOR, SEQUENCER (given at x from 1702, moved down) and the
+ * as the code gives it; under it CLOCK, EFFECTS, ARPEGGIATOR (given at x from 1702, moved down) and the
  * PROGRAMS (PG + x: given where they are); at the bottom the strip (given at y from 440). */
 constexpr float PG = 5000.0f;
 static juce::Point<float> at(float x, float y)
@@ -675,7 +675,7 @@ static juce::Point<float> at(float x, float y)
     if (y < 440.0f) {
         if (x < 1702.0f)
             return {X0 + x, y};
-        return y < 258.0f ? juce::Point<float>(X0 + x - 1696.0f, y + 410.0f) : juce::Point<float>(X0 + x - 1283.0f, y + 175.0f);
+        return y < 258.0f ? juce::Point<float>(X0 + x - 1696.0f, y + 410.0f) : juce::Point<float>(X0 + x - 1165.0f, y + 175.0f);
     }
     if (x < 500.0f)
         return {X0 + x, y + 182.0f};
@@ -731,11 +731,11 @@ void Panel::build()
     {
         auto *k = add<Knob>([glob] { return glob("volume"); }, [this](juce::RangedAudioParameter *q) { touchGlobal(q); });
         place(k, 95, 95, KD, KD);
-        knob(95, 228, P_AT_AMT);
+        knob(95, 214, P_AT_AMT);
         const float xs[3] = {45, 95, 145};
         const int dst[8] = {P_AT_F1, P_AT_F2, P_AT_F3, P_AT_FILT, P_AT_AMP, P_AT_LFO, P_AT_FXA, P_AT_FXB};
         for (int i = 0; i < 8; i++)
-            pbutton(i < 6 ? xs[i % 3] : xs[i - 6] + 25.0f, 300.0f + 50.0f * (float)(i / 3), dst[i]);
+            pbutton(i < 6 ? xs[i % 3] : xs[i - 6] + 25.0f, 282.0f + 48.0f * (float)(i / 3), dst[i]);
     }
     /* LFO */
     {
@@ -855,7 +855,7 @@ void Panel::build()
     /* EFFECTS: ON/OFF, the two types' displays, A/B; TYPE, 1, 2, SYNC, DRY<>WET (of the one chosen) */
     {
         auto fx = [this](int a, int b) { return proc.fxEditB.load() ? b : a; };
-        pbutton(1870, 70, P_FX_ON);
+        pbutton(1885, 70, P_FX_ON);
         for (int s = 0; s < 2; s++) {
             auto *d = add<Seg>(3, [this, s] {
                 int p = s ? P_FXB_TYPE : P_FXA_TYPE;
@@ -868,29 +868,29 @@ void Panel::build()
                 return juce::String(FXTYPE_SHORT[proc.value(p)]);
             }, [this, s] { return proc.value(P_FX_ON) ? (proc.fxEditB.load() == s ? 1.0f : 0.55f) : 0.2f; });
             d->onClick = [this, s](const juce::MouseEvent &) { proc.fxEditB = s; };
-            place(d, 1945.0f + 74.0f * (float)s, 70, 66, 30);
+            place(d, 1975.0f + 80.0f * (float)s, 70, 66, 30);
         }
-        button(2090, 62, [this] { proc.fxEditB = proc.fxEditB.load() ? 0 : 1; }, [] { return false; });
+        button(2192, 62, [this] { proc.fxEditB = proc.fxEditB.load() ? 0 : 1; }, [] { return false; });
         add<Leds>(2, [this](int i) { return proc.fxEditB.load() == i ? 1.0f : 0.0f; }, [this](int i) { proc.fxEditB = i; })
-            ->setBounds(atR(2078, 74, 12, 28).toNearestInt());
+            ->setBounds(atR(2180, 74, 12, 28).toNearestInt());
         auto fxKnob = [&](float x, float y, std::function<int()> which) {
             auto *k = add<Knob>([this, which] { return proc.param(which()); }, [this, which](juce::RangedAudioParameter *) { touch(which()); });
             place(k, x, y, KS, KS);
         };
-        fxKnob(1985, 115, [this, fx] { return fx(P_FXA_TYPE, P_FXB_TYPE); });
+        fxKnob(2128, 82, [this, fx] { return fx(P_FXA_TYPE, P_FXB_TYPE); });
         /* PARAM 1: synced, a delay's time is a note of the clock */
-        fxKnob(1880, 185, [this, fx] {
+        fxKnob(1905, 185, [this, fx] {
             int t = proc.value(fx(P_FXA_TYPE, P_FXB_TYPE));
             bool dly = t == FX_DDL || t == FX_BBD;
             return dly && proc.value(fx(P_FXA_SYNC, P_FXB_SYNC)) ? fx(P_FXA_DIV, P_FXB_DIV) : fx(P_FXA_P1, P_FXB_P1);
         });
-        fxKnob(1950, 185, [fx] { return fx(P_FXA_P2, P_FXB_P2); });
-        button(2018, 176, [this, fx] {
+        fxKnob(1990, 185, [fx] { return fx(P_FXA_P2, P_FXB_P2); });
+        button(2075, 176, [this, fx] {
             int p = fx(P_FXA_SYNC, P_FXB_SYNC);
             proc.setValue(p, proc.value(p) ? 0 : 1);
             touch(p);
         }, [this, fx] { return proc.value(fx(P_FXA_SYNC, P_FXB_SYNC)) != 0; });
-        fxKnob(2080, 185, [fx] { return fx(P_FXA_MIX, P_FXB_MIX); });
+        fxKnob(2170, 185, [fx] { return fx(P_FXA_MIX, P_FXB_MIX); });
     }
     /* ARPEGGIATOR */
     {
@@ -899,17 +899,6 @@ void Panel::build()
         choiceLeds(1835, 322, 14, P_ARP_OCT, 3);
         knob(1885, 340, P_ARP_MODE, KS);
         choiceLeds(1920, 312, 13, P_ARP_MODE, NARPMODE);
-    }
-    /* SEQUENCER: PLAY, RECORD; while recording REST, TIE */
-    {
-        button(2025, 315, [this] {
-            proc.setValue(P_SEQ_ON, proc.value(P_SEQ_ON) ? 0 : 1);
-            touch(P_SEQ_ON);
-        }, [this] { return proc.playingNow.load(); });
-        button(2085, 315, [this] { proc.command(TreegoneProcessor::C_RECORD, proc.recording.load() ? 0 : 1); },
-               [this] { return proc.recording.load(); });
-        button(2025, 378, [this] { proc.command(TreegoneProcessor::C_REST); }, [] { return false; });
-        button(2085, 378, [this] { proc.command(TreegoneProcessor::C_TIE); }, [] { return false; });
     }
 
     /* the strip: TRANSPOSE, HOLD, GLIDE RATE, GLIDE, UNISON */
@@ -1060,17 +1049,16 @@ void Panel::paintBackground(juce::Graphics &g, float sc)
     };
     const S secs[] = {{12, 160, 182, 428, "AFTER TOUCH"},  {196, 30, 630, 210, "LFO"},       {196, 225, 630, 428, "POLYMOD"},
                       {645, 30, 1228, 428, "OSCILLATORS"}, {1243, 30, 1695, 250, "FILTER"},  {1243, 265, 1695, 428, "AMPLIFIER"},
-                      {1708, 30, 1840, 250, "CLOCK"},      {1853, 30, 2108, 250, "EFFECTS"}, {1708, 265, 1990, 428, "ARPEGGIATOR"},
-                      {2000, 265, 2108, 428, "SEQUENCER"}};
+                      {1708, 30, 1840, 250, "CLOCK"},      {1853, 30, 2226, 250, "EFFECTS"}, {1708, 265, 1990, 428, "ARPEGGIATOR"}};
     for (auto &s : secs)
         drawSection(g, R(s.x0, s.y0, s.x1, s.y1), s.t);
     legend(95, 40, "VOLUME", 13.0f);
-    legend(95, 265, "AMOUNT");
+    legend(95, 251, "AMOUNT");
     {
         const char *at[8] = {"FREQ 1", "FREQ 2", "FREQ 3", "FILTER", "AMP", "LFO", "FX MIX A", "FX MIX B"};
         const float xs[3] = {45, 95, 145};
         for (int i = 0; i < 8; i++)
-            small(C(i < 6 ? xs[i % 3] : xs[i - 6] + 25.0f, 317.0f + 50.0f * (float)(i / 3), 60, 12), at[i], Justification::centred, 9.0f);
+            small(C(i < 6 ? xs[i % 3] : xs[i - 6] + 25.0f, 299.0f + 48.0f * (float)(i / 3), 60, 12), at[i], Justification::centred, 9.0f);
     }
     /* LFO */
     legend(270, 135, "FREQUENCY");
@@ -1180,22 +1168,22 @@ void Panel::paintBackground(juce::Graphics &g, float sc)
         legend(1660, 214, "VELOCITY", 9.0f);
         legend(1660, 352, "VELOCITY", 9.0f);
     }
-    /* CLOCK, EFFECTS, ARPEGGIATOR, SEQUENCER */
+    /* CLOCK, EFFECTS, ARPEGGIATOR */
     legend(1740, 185, "DIVIDE", 9.5f);
     legend(1806, 185, "BPM", 9.5f);
     legend(1772, 232, "TAP", 9.5f);
-    legend(1870, 88, "ON/OFF", 9.0f);
-    small(C(1945, 95, 66, 11), "A", Justification::centred, 9.0f);
-    small(C(2019, 95, 66, 11), "B", Justification::centred, 9.0f);
-    small(atR(2092.0f, 74.0f, 12.0f, 14.0f), "A", Justification::centredLeft, 8.5f);
-    small(atR(2092.0f, 88.0f, 12.0f, 14.0f), "B", Justification::centredLeft, 8.5f);
-    legend(2090, 46, "A / B", 9.0f);
-    legend(1985, 147, "TYPE", 9.5f);
-    legend(1880, 218, "1", 10.0f);
-    legend(1950, 218, "2", 10.0f);
-    small(C(1915, 152, 120, 11), "EFFECT PARAMETERS", Justification::centred, 8.5f);
-    legend(2018, 194, "SYNC", 9.0f);
-    legend(2080, 218, "DRY <> WET", 9.0f);
+    legend(1885, 88, "ON/OFF", 9.0f);
+    small(C(1975, 95, 66, 11), "A", Justification::centred, 9.0f);
+    small(C(2055, 95, 66, 11), "B", Justification::centred, 9.0f);
+    small(atR(2194.0f, 74.0f, 12.0f, 14.0f), "A", Justification::centredLeft, 8.5f);
+    small(atR(2194.0f, 88.0f, 12.0f, 14.0f), "B", Justification::centredLeft, 8.5f);
+    legend(2192, 46, "A / B", 9.0f);
+    legend(2128, 116, "TYPE", 9.5f);
+    legend(1905, 218, "1", 10.0f);
+    legend(1990, 218, "2", 10.0f);
+    small(C(1948, 150, 140, 11), "EFFECT PARAMETERS", Justification::centred, 8.5f);
+    legend(2075, 194, "SYNC", 9.0f);
+    legend(2170, 218, "DRY <> WET", 9.0f);
     legend(1730, 348, "ON/OFF", 9.0f);
     legend(1800, 375, "OCTAVES", 9.0f);
     for (int i = 0; i < 3; i++)
@@ -1203,10 +1191,6 @@ void Panel::paintBackground(juce::Graphics &g, float sc)
     legend(1885, 375, "MODE", 9.0f);
     for (int i = 0; i < NARPMODE; i++)
         small(atR(1928.0f, 305.5f + 13.0f * (float)i, 60.0f, 13.0f), ARPMODE_NAME[i], Justification::centredLeft, 8.5f);
-    legend(2025, 333, "PLAY", 9.0f);
-    legend(2085, 333, "RECORD", 9.0f);
-    legend(2025, 396, "REST", 8.5f);
-    legend(2085, 396, "TIE", 8.5f);
     /* the strip */
     g.setColour(col::frame.withAlpha(0.9f));
     g.drawLine(X0 + 12.0f, 668.0f, X0 + 1695.0f, 668.0f, 1.2f);
