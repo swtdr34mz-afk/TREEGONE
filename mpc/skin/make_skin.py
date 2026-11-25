@@ -9,10 +9,14 @@ The renderer (render_skin.cpp) draws each MPC page with the VST3's own art and c
 this places each picture where it was cut from, bound to the MPC plugin's parameter:
 
   knobs      film strips (a frame a value), dragged; a double tap opens the MPC's editor (its list for a choice)
-  buttons    a picture for each value; a tap switches it (or steps to the next value: TYPE, SAW / REV, KEYBOARD)
-  LED lists  each row a radio button
+  buttons    a picture for each value; a tap switches it (or steps to the next value: TYPE, SAW / REV, KEYBOARD, A / B)
+  LEDs       each a radio button (the octaves' round their knobs, the lists beside SHAPE, OCTAVES, MODE, TYPE)
+  displays   film strips that show a parameter's value (the effects' 7-segment displays, the red values under knobs)
 
-The pages (the function keys): OSC, FILTER, MOD, AT/FX, PLAY, MASTER. On each the 16 Q-Links turn up to four groups,
+On FX the A / B button and the A and B LEDs choose which effect the knobs below edit (a value of the screen's own,
+as PROPHETIC 6's EFFECTS SELECT): A's controls show with A, B's with B.
+
+The pages (the function keys) as the Trigon-6's panel: OSC, FLT/AMP, LFO/PM, FX, AT/ARP, PLAY. On each the 16 Q-Links turn up to four groups,
 the top row of Q-Links the first group and so on down. Standard library only (Pillow, if there, makes the pictures
 smaller).
 """
@@ -32,6 +36,13 @@ GLOBAL = {"vol": 0, "voices": 1 + V1, "quality": 2 + V1, "hold": 3 + V1}
 NPARAMS = 4 + NP
 
 
+FXH = "Local/2/fx"                       # FX: the effect the knobs edit (A 0, B 1; the screen's own value)
+
+
+def handle(pid):
+    return FXH if pid == "fxsel" else "Parameter %d" % mpc(pid)
+
+
 def mpc(pid, layer=0):
     """the MPC index of a page's id"""
     if pid in GLOBAL:
@@ -46,19 +57,21 @@ PAGES = [
              ["o2_oct", "o2_pitch", "o2_pw", "o2_level"],
              ["o3_oct", "o3_pitch", "o3_pw", "o3_level"],
              (["noise"], False)]),
-    ("FILTER", [["cutoff", "reso", "f_env_amt", "svf_mode"],
-                ["f_att", "f_dec", "f_sus", "f_rel"],
-                ["a_att", "a_dec", "a_sus", "a_rel"]]),
-    ("MOD", [["lfo_freq", "lfo_shape", "lfo_amt"],
-             ["pm_osc3", "pm_fenv"]]),
-    ("AT/FX", [(["at_amt"], False),
-               ["fxa_type", "fxa_mix", "fxa_p1", "fxa_p2"],
-               ["fxb_type", "fxb_mix", "fxb_p1", "fxb_p2"]]),
-    ("PLAY", [["split_point", "split_oct", "split_glide", "split_vol"],
-              ["glide_rate", "glide_mode", "uni_voices", "uni_detune"],
-              (["arp_mode", "arp_oct", "divide", "key_mode"], False)]),
-    ("MASTER", [["distortion", "vintage", "pan_spread", "pgm_vol"],
-                (["vol"], False)]),
+    ("FLT/AMP", [["cutoff", "reso", "f_env_amt", "svf_mode"],
+                 ["f_att", "f_dec", "f_sus", "f_rel"],
+                 ["a_att", "a_dec", "a_sus", "a_rel"]]),
+    ("LFO/PM", [["lfo_freq", "lfo_shape", "lfo_amt"],
+                ["pm_osc3", "pm_fenv"]]),
+    ("FX", [(["fxa_type", "fxa_mix", "fxa_p1", "fxa_p2"], False),
+            (["fxb_type", "fxb_mix", "fxb_p1", "fxb_p2"], False),
+            (["fxa_div", "fxb_div"], False)]),
+    ("AT/ARP", [["at_amt"],
+                ["arp_oct", "arp_mode"],
+                ["divide"]]),
+    ("PLAY", [["distortion", "vintage", "pan_spread", "pgm_vol"],
+              ["glide_mode", "uni_voices", "uni_detune", "vol"],
+              ["split_point", "split_oct", "split_glide", "split_vol"],
+              (["glide_rate", "pb_range", "key_mode"], False)]),
 ]
 # Program (Track) mode: the knobs as the MPC's own program knobs, bottom left Q-Link 1
 PROGRAM_QLINKS = ["fxb_mix", "lfo_amt", "vintage", "vol",
@@ -143,7 +156,7 @@ def main(argv):
     pages = {p["name"]: p for p in m["pages"]}
     for p in m["pages"]:
         for c in p["controls"]:
-            if c["id"] not in GLOBAL and c["id"] not in IDS:
+            if c["id"] not in GLOBAL and c["id"] not in IDS and c["id"] != "fxsel":
                 sys.exit("%s: the page's %s is not one of the MPC plugin's parameters" % (p["name"], c["id"]))
 
     if os.path.isdir(out):
@@ -168,42 +181,47 @@ def main(argv):
     names = {}                           # the discrete parameters' names by MPC index (replacementStrings)
 
     def tab_children(page, layer):
-        kids = [entry("panel", "Image", image_data(use(page["background"])), bounds((0, 0, 1280, 628))),
-                entry("label", "Image", image_data(use(page["labelA"])), bounds(page["labelRect"]))]
+        kids = [entry("panel", "Image", image_data(use(page["background"])), bounds((0, 0, 1280, 628)))]
         boxes, legends = [], []
 
+        def fx_hide(c):
+            return ["IndexedEnabling/%d/2/%s" % (c["fx"], FXH)] if c.get("fx", -1) >= 0 else []
+
         for i, c in enumerate(page["controls"]):
-            idx = mpc(c["id"], layer)
-            if c["names"]:
-                names[idx] = c["names"]
-            h = "Parameter %d" % idx
+            h = handle(c["id"])
+            if c["names"] and c["id"] != "fxsel":
+                names[mpc(c["id"])] = c["names"]
             if c["kind"] == "knob":
                 fr = c["frame"]
                 kx, ky, w, hh = c["rect"]
                 ox, oy = kx - fr[0], ky - fr[1]
                 ov = "menu overlay" if c["names"] else "knob overlay bipolar" if c["bipolar"] else "knob overlay"
                 name = "%s knob %d %s" % (page["name"].lower(), i, c["id"])
-                if name not in defined:  # (one definition for both layers: the handle is remapped)
-                    defined.add(name)
-                    knob = O(("version", 3), ("knobType", "FilmStrip"), ("filmStrip", use(c["strip"])), ("numFrames", c["frames"]),
-                             ("invert", False), ("dragOrientation", "Vertical"), ("handleName", "Data"))
-                    defs.append((name, component(
-                        [action("Mouse Down", "Q-Link", "Data", ""), action("Double Click", "Show Overlay", "Data", ov),
-                         action("Enter Pressed", "Show Overlay", "Data", ov)],
-                        [entry("knob", "Knob", knob, bounds((ox, oy, w, hh))),
-                         entry("focus", "Focus", focus, O(("version", 1), ("acceptsHWFocus", "No"), ("showWhenDataModelInvalid", "Show"),
-                                                          ("whenVisible", "WhenFocussed"), ("boundsType", "Absolute"),
-                                                          ("bounds", box((0, 0, fr[2], fr[3])))))])))
-                kids.append(entry(c["id"], name, O(("version", 1), ("handleName", "Data")), bounds(fr, "Yes"), [("Data", h)]))
+                knob = O(("version", 3), ("knobType", "FilmStrip"), ("filmStrip", use(c["strip"])), ("numFrames", c["frames"]),
+                         ("invert", False), ("dragOrientation", "Vertical"), ("handleName", "Data"))
+                defs.append((name, component(
+                    [action("Mouse Down", "Q-Link", "Data", ""), action("Double Click", "Show Overlay", "Data", ov),
+                     action("Enter Pressed", "Show Overlay", "Data", ov)],
+                    [entry("knob", "Knob", knob, bounds((ox, oy, w, hh))),
+                     entry("focus", "Focus", focus, O(("version", 1), ("acceptsHWFocus", "No"), ("showWhenDataModelInvalid", "Show"),
+                                                      ("whenVisible", "WhenFocussed"), ("boundsType", "Absolute"),
+                                                      ("bounds", box((0, 0, fr[2], fr[3])))))])))
+                kids.append(entry(c["id"], name, O(("version", 1), ("handleName", "Data")),
+                                  bounds(fr, "Yes", fx_hide(c) or None, "Hide"), [("Data", h)]))
                 boxes.append((c["id"], fr))
                 legends.append((c["id"], fr))
+            elif c["kind"] == "display":
+                strip = O(("version", 2), ("imageType", "FilmStrip"), ("colour", "0"), ("image", use(c["strip"])),
+                          ("numFrames", c["frames"]), ("handleName", h))
+                kids.append(entry(c["id"] + " display", "Image", strip, bounds(c["rect"], "No", fx_hide(c) or None, "Hide")))
+                boxes.append((c["id"], c["rect"]))   # (a knob's value: in its Q-Link frame with it)
             elif c["kind"] == "button":
                 rs = c["ranges"]
                 for r in rs:
-                    hide = [range_handle(r["a"], r["b"], c["steps"], h)] if len(rs) > 1 else None
+                    hide = fx_hide(c) + ([range_handle(r["a"], r["b"], c["steps"], h)] if len(rs) > 1 else [])
                     data = O(("version", 2), ("onImage", use(r["image"])), ("offImage", r["image"]), ("buttonId", r["next"]),
                              ("numButtonsInGroup", c["steps"]), ("handleName", h), ("gestureBehaviour", "Instant"))
-                    kids.append(entry(c["id"], "Button", data, bounds(c["rect"], "No", hide, "Hide")))
+                    kids.append(entry(c["id"], "Button", data, bounds(c["rect"], "No", hide or None, "Hide")))
                 boxes.append((c["id"], c["rect"]))
             else:
                 if len(c["rows"]) != c["steps"]:
@@ -211,7 +229,7 @@ def main(argv):
                 for k, row in enumerate(c["rows"]):
                     data = O(("version", 2), ("onImage", use(row["on"])), ("offImage", use(row["off"])), ("buttonId", k),
                              ("numButtonsInGroup", c["steps"]), ("handleName", h), ("gestureBehaviour", "Instant"))
-                    kids.append(entry(c["id"], "Button", data, bounds(row["rect"])))
+                    kids.append(entry(c["id"], "Button", data, bounds(row["rect"], "No", fx_hide(c) or None, "Hide")))
                     boxes.append((c["id"], row["rect"]))
         return kids, boxes, legends
 

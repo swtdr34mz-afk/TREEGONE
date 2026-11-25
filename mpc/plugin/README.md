@@ -22,17 +22,19 @@ denselben Ordner; jedes Gerät lädt seine eigene Datei darin.
 
 ## Die Seiten
 
+Aufgeteilt wie das Panel des Trigon-6: jeder Bereich eine Seite, Titel und Linien statt Kästen.
+
 | Taste | Was drauf ist |
 | --- | --- |
-| **OSC** | die drei Oszillatoren (Octave, Pitch, Wellenformen, Pulse Width, Volume), Sync, Osc-3-Keyboard, Noise, Fdbk/Drive |
-| **FILTER** | Filter-Typ (LP1 OTA, LP2 Ladder, SVF), Cutoff, Resonance, Env Amt, SVF Mode, 2 Pole, Keyboard, Velocity, Filter-Hüllkurve; Amp-Hüllkurve |
-| **MOD** | LFO (Frequency, Sync, Shape, Amount, acht Ziele); Poly Mod (Osc 3, Filter Env, sieben Ziele) |
-| **AT/FX** | Aftertouch (Amount, acht Ziele); Effekte A und B (Typ, Dry/Wet, zwei Werte, Sync), FX On |
-| **PLAY** | Arp, Clock Divide, Sequencer PLAY, LOW SPLIT (an/aus, Splitpunkt, Oktave, Glide, Lautstärke, +1 Stimme); Glide, Unison, Key Mode, Pitch-Wheel |
-| **MASTER** | Distortion, Vintage, Pan Spread, Program-Volume, Lautstärke; 6/12 Stimmen, Qualität, Hold |
+| **OSC** | OSCILLATORS 1 2 3: Octave (mit LEDs drumherum, Osc 3 auch LO), Sync Osc 2 / Pitch, Dreieck, Säge (Osc 3: Saw/Rev Saw), Puls, Pulse Width, Volume; Fdbk/Drive, Noise, Osc-3-Keyboard |
+| **FLT/AMP** | FILTER: Typ (LP1 OTA, LP2 Ladder, SVF), Cutoff, Resonance, Env Amt, SVF Mode, 2 Pole, Keyboard (Half/Full), Hüllkurve, Velocity; AMPLIFIER: Hüllkurve, Velocity |
+| **LFO/PM** | LFO: Frequency, Sync, Shape, Amount, acht Ziele; POLYMOD: Osc 3, Filter Env, sieben Ziele |
+| **FX** | EFFECTS: On/Off, Displays A und B, A/B (welcher Effekt unten bearbeitet wird), Type; Parameter 1 und 2 mit Displays, Sync, Sync Time, Dry/Wet |
+| **AT/ARP** | AFTER TOUCH: Amount, acht Ziele; ARPEGGIATOR: On/Off, Octaves, Mode; CLOCK: Divide, Hold |
+| **PLAY** | Hold, Glide Rate, Glide, Unison, Distortion, Vintage, Pan Spread, Pgm Volume, P Whl Range, Key Mode; Glide Mode, Unison-Stimmen und -Detune, 6/12 Stimmen, Qualität, Lautstärke; LOW SPLIT |
 
 Ein Knopf wird mit dem Finger gezogen oder mit seinem Q-Link gedreht; zweimal tippen öffnet den großen Regler der MPC
-(bei einer Auswahl die Liste). Ein Taster schaltet um, eine LED-Liste wählt aus.
+(bei einer Auswahl die Liste). Ein Taster schaltet um, eine LED wählt aus (auch die LEDs um die Octave-Knöpfe).
 
 **QUALITY**: ECO (2x) ist voreingestellt und reicht auf der MPC; HIGH (4x) braucht fast doppelt so viel Rechenzeit.
 
