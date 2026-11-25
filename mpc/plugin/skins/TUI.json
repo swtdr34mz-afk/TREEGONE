@@ -3249,7 +3249,7 @@
           }
         },
         {
-          "key": "fx knob 5 fxa_type",
+          "key": "fx a knob 3 fxa_type",
           "value": {
             "version": 2,
             "actions": [
@@ -3300,7 +3300,7 @@
                   "data": {
                     "version": 3,
                     "knobType": "FilmStrip",
-                    "filmStrip": "fx_005_fxa_type_knob.png",
+                    "filmStrip": "fxa_003_fxa_type_knob.png",
                     "numFrames": 10,
                     "invert": false,
                     "dragOrientation": "Vertical",
@@ -3351,7 +3351,7 @@
           }
         },
         {
-          "key": "fx knob 6 fxa_p1",
+          "key": "fx a knob 4 fxa_p1",
           "value": {
             "version": 2,
             "actions": [
@@ -3402,7 +3402,7 @@
                   "data": {
                     "version": 3,
                     "knobType": "FilmStrip",
-                    "filmStrip": "fx_006_fxa_p1_knob.png",
+                    "filmStrip": "fxa_004_fxa_p1_knob.png",
                     "numFrames": 77,
                     "invert": false,
                     "dragOrientation": "Vertical",
@@ -3453,7 +3453,7 @@
           }
         },
         {
-          "key": "fx knob 9 fxa_p2",
+          "key": "fx a knob 7 fxa_p2",
           "value": {
             "version": 2,
             "actions": [
@@ -3504,7 +3504,7 @@
                   "data": {
                     "version": 3,
                     "knobType": "FilmStrip",
-                    "filmStrip": "fx_009_fxa_p2_knob.png",
+                    "filmStrip": "fxa_007_fxa_p2_knob.png",
                     "numFrames": 77,
                     "invert": false,
                     "dragOrientation": "Vertical",
@@ -3555,7 +3555,7 @@
           }
         },
         {
-          "key": "fx knob 11 fxa_div",
+          "key": "fx a knob 9 fxa_div",
           "value": {
             "version": 2,
             "actions": [
@@ -3606,7 +3606,7 @@
                   "data": {
                     "version": 3,
                     "knobType": "FilmStrip",
-                    "filmStrip": "fx_011_fxa_div_knob.png",
+                    "filmStrip": "fxa_009_fxa_div_knob.png",
                     "numFrames": 9,
                     "invert": false,
                     "dragOrientation": "Vertical",
@@ -3657,7 +3657,7 @@
           }
         },
         {
-          "key": "fx knob 13 fxa_mix",
+          "key": "fx a knob 11 fxa_mix",
           "value": {
             "version": 2,
             "actions": [
@@ -3708,7 +3708,7 @@
                   "data": {
                     "version": 3,
                     "knobType": "FilmStrip",
-                    "filmStrip": "fx_013_fxa_mix_knob.png",
+                    "filmStrip": "fxa_011_fxa_mix_knob.png",
                     "numFrames": 77,
                     "invert": false,
                     "dragOrientation": "Vertical",
@@ -3759,7 +3759,7 @@
           }
         },
         {
-          "key": "fx knob 14 fxb_type",
+          "key": "fx b knob 3 fxb_type",
           "value": {
             "version": 2,
             "actions": [
@@ -3810,7 +3810,7 @@
                   "data": {
                     "version": 3,
                     "knobType": "FilmStrip",
-                    "filmStrip": "fx_014_fxb_type_knob.png",
+                    "filmStrip": "fxb_003_fxb_type_knob.png",
                     "numFrames": 14,
                     "invert": false,
                     "dragOrientation": "Vertical",
@@ -3861,7 +3861,7 @@
           }
         },
         {
-          "key": "fx knob 15 fxb_p1",
+          "key": "fx b knob 4 fxb_p1",
           "value": {
             "version": 2,
             "actions": [
@@ -3912,7 +3912,7 @@
                   "data": {
                     "version": 3,
                     "knobType": "FilmStrip",
-                    "filmStrip": "fx_015_fxb_p1_knob.png",
+                    "filmStrip": "fxb_004_fxb_p1_knob.png",
                     "numFrames": 77,
                     "invert": false,
                     "dragOrientation": "Vertical",
@@ -3963,7 +3963,7 @@
           }
         },
         {
-          "key": "fx knob 18 fxb_p2",
+          "key": "fx b knob 7 fxb_p2",
           "value": {
             "version": 2,
             "actions": [
@@ -4014,7 +4014,7 @@
                   "data": {
                     "version": 3,
                     "knobType": "FilmStrip",
-                    "filmStrip": "fx_018_fxb_p2_knob.png",
+                    "filmStrip": "fxb_007_fxb_p2_knob.png",
                     "numFrames": 77,
                     "invert": false,
                     "dragOrientation": "Vertical",
@@ -4065,7 +4065,7 @@
           }
         },
         {
-          "key": "fx knob 20 fxb_div",
+          "key": "fx b knob 9 fxb_div",
           "value": {
             "version": 2,
             "actions": [
@@ -4116,7 +4116,7 @@
                   "data": {
                     "version": 3,
                     "knobType": "FilmStrip",
-                    "filmStrip": "fx_020_fxb_div_knob.png",
+                    "filmStrip": "fxb_009_fxb_div_knob.png",
                     "numFrames": 9,
                     "invert": false,
                     "dragOrientation": "Vertical",
@@ -4167,7 +4167,7 @@
           }
         },
         {
-          "key": "fx knob 22 fxb_mix",
+          "key": "fx b knob 11 fxb_mix",
           "value": {
             "version": 2,
             "actions": [
@@ -4218,7 +4218,7 @@
                   "data": {
                     "version": 3,
                     "knobType": "FilmStrip",
-                    "filmStrip": "fx_022_fxb_mix_knob.png",
+                    "filmStrip": "fxb_011_fxb_mix_knob.png",
                     "numFrames": 77,
                     "invert": false,
                     "dragOrientation": "Vertical",
@@ -5697,7 +5697,7 @@
           }
         },
         {
-          "key": "play knob 20 vol",
+          "key": "play knob 22 vol",
           "value": {
             "version": 2,
             "actions": [
@@ -5748,7 +5748,7 @@
                   "data": {
                     "version": 3,
                     "knobType": "FilmStrip",
-                    "filmStrip": "play_020_vol_knob.png",
+                    "filmStrip": "play_022_vol_knob.png",
                     "numFrames": 98,
                     "invert": false,
                     "dragOrientation": "Vertical",
@@ -5799,7 +5799,7 @@
           }
         },
         {
-          "key": "play knob 23 split_point",
+          "key": "play knob 25 split_point",
           "value": {
             "version": 2,
             "actions": [
@@ -5850,7 +5850,7 @@
                   "data": {
                     "version": 3,
                     "knobType": "FilmStrip",
-                    "filmStrip": "play_023_split_point_knob.png",
+                    "filmStrip": "play_025_split_point_knob.png",
                     "numFrames": 98,
                     "invert": false,
                     "dragOrientation": "Vertical",
@@ -5901,7 +5901,7 @@
           }
         },
         {
-          "key": "play knob 25 split_oct",
+          "key": "play knob 27 split_oct",
           "value": {
             "version": 2,
             "actions": [
@@ -5952,7 +5952,7 @@
                   "data": {
                     "version": 3,
                     "knobType": "FilmStrip",
-                    "filmStrip": "play_025_split_oct_knob.png",
+                    "filmStrip": "play_027_split_oct_knob.png",
                     "numFrames": 4,
                     "invert": false,
                     "dragOrientation": "Vertical",
@@ -6003,7 +6003,7 @@
           }
         },
         {
-          "key": "play knob 27 split_glide",
+          "key": "play knob 29 split_glide",
           "value": {
             "version": 2,
             "actions": [
@@ -6054,7 +6054,7 @@
                   "data": {
                     "version": 3,
                     "knobType": "FilmStrip",
-                    "filmStrip": "play_027_split_glide_knob.png",
+                    "filmStrip": "play_029_split_glide_knob.png",
                     "numFrames": 98,
                     "invert": false,
                     "dragOrientation": "Vertical",
@@ -6105,7 +6105,7 @@
           }
         },
         {
-          "key": "play knob 28 split_vol",
+          "key": "play knob 30 split_vol",
           "value": {
             "version": 2,
             "actions": [
@@ -6156,7 +6156,7 @@
                   "data": {
                     "version": 3,
                     "knobType": "FilmStrip",
-                    "filmStrip": "play_028_split_vol_knob.png",
+                    "filmStrip": "play_030_split_vol_knob.png",
                     "numFrames": 98,
                     "invert": false,
                     "dragOrientation": "Vertical",
@@ -6460,10 +6460,6 @@
       {
         "key": "Parameter 111",
         "value": ["Off", "On"]
-      },
-      {
-        "key": "Parameter 112",
-        "value": ["A", "B"]
       }
     ],
     "info": {
@@ -10211,7 +10207,7 @@
       },
       {
         "version": 1,
-        "tabName": "FX",
+        "tabName": "FX A",
         "fnKeyIndex": 3,
         "fnKeySubIndex": 0,
         "componentDefinition": {
@@ -10243,7 +10239,7 @@
                   "version": 2,
                   "imageType": "Regular",
                   "colour": "0",
-                  "image": "fx_panel.png"
+                  "image": "fxa_panel.png"
                 }
               },
               "handle remapping": {
@@ -10267,8 +10263,8 @@
                 "type": "Button",
                 "data": {
                   "version": 2,
-                  "onImage": "fx_000_fx_on_button_0.png",
-                  "offImage": "fx_000_fx_on_button_0.png",
+                  "onImage": "fxa_000_fx_on_button_0.png",
+                  "offImage": "fxa_000_fx_on_button_0.png",
                   "buttonId": 1,
                   "numButtonsInGroup": 2,
                   "handleName": "Parameter 81",
@@ -10297,8 +10293,8 @@
                 "type": "Button",
                 "data": {
                   "version": 2,
-                  "onImage": "fx_000_fx_on_button_1.png",
-                  "offImage": "fx_000_fx_on_button_1.png",
+                  "onImage": "fxa_000_fx_on_button_1.png",
+                  "offImage": "fxa_000_fx_on_button_1.png",
                   "buttonId": 0,
                   "numButtonsInGroup": 2,
                   "handleName": "Parameter 81",
@@ -10323,71 +10319,13 @@
               "version": 2,
               "componentData": {
                 "version": 1,
-                "name": "fxsel",
-                "type": "Button",
-                "data": {
-                  "version": 2,
-                  "onImage": "fx_001_fxsel_led0_on.png",
-                  "offImage": "fx_001_fxsel_led0_off.png",
-                  "buttonId": 0,
-                  "numButtonsInGroup": 2,
-                  "handleName": "Parameter 112",
-                  "gestureBehaviour": "Instant"
-                }
-              },
-              "handle remapping": {
-                "version": 1,
-                "map": []
-              },
-              "bounds": {
-                "version": 1,
-                "acceptsHWFocus": "No",
-                "showWhenDataModelInvalid": "Hide",
-                "whenVisible": "Always",
-                "boundsType": "Absolute",
-                "bounds": "236 114 46 36"
-              }
-            },
-            {
-              "version": 2,
-              "componentData": {
-                "version": 1,
-                "name": "fxsel",
-                "type": "Button",
-                "data": {
-                  "version": 2,
-                  "onImage": "fx_001_fxsel_led1_on.png",
-                  "offImage": "fx_001_fxsel_led1_off.png",
-                  "buttonId": 1,
-                  "numButtonsInGroup": 2,
-                  "handleName": "Parameter 112",
-                  "gestureBehaviour": "Instant"
-                }
-              },
-              "handle remapping": {
-                "version": 1,
-                "map": []
-              },
-              "bounds": {
-                "version": 1,
-                "acceptsHWFocus": "No",
-                "showWhenDataModelInvalid": "Hide",
-                "whenVisible": "Always",
-                "boundsType": "Absolute",
-                "bounds": "546 114 46 36"
-              }
-            },
-            {
-              "version": 2,
-              "componentData": {
-                "version": 1,
                 "name": "fxa_type display",
                 "type": "Image",
                 "data": {
                   "version": 2,
                   "imageType": "FilmStrip",
                   "colour": "0",
-                  "image": "fx_002_fxa_type_display.png",
+                  "image": "fxa_001_fxa_type_display.png",
                   "numFrames": 10,
                   "handleName": "Parameter 82"
                 }
@@ -10415,7 +10353,7 @@
                   "version": 2,
                   "imageType": "FilmStrip",
                   "colour": "0",
-                  "image": "fx_003_fxb_type_display.png",
+                  "image": "fxa_002_fxb_type_display.png",
                   "numFrames": 14,
                   "handleName": "Parameter 88"
                 }
@@ -10437,68 +10375,8 @@
               "version": 2,
               "componentData": {
                 "version": 1,
-                "name": "fxsel",
-                "type": "Button",
-                "data": {
-                  "version": 2,
-                  "onImage": "fx_004_fxsel_button_0.png",
-                  "offImage": "fx_004_fxsel_button_0.png",
-                  "buttonId": 1,
-                  "numButtonsInGroup": 2,
-                  "handleName": "Parameter 112",
-                  "gestureBehaviour": "Instant"
-                }
-              },
-              "handle remapping": {
-                "version": 1,
-                "map": []
-              },
-              "bounds": {
-                "version": 2,
-                "acceptsHWFocus": "No",
-                "showWhenDataModelInvalid": "Hide",
-                "whenVisible": "Always",
-                "boundsType": "Absolute",
-                "bounds": "874 90 92 72",
-                "additionalInvalidatingHandles": ["IndexedEnabling/0/2/Parameter 112"]
-              }
-            },
-            {
-              "version": 2,
-              "componentData": {
-                "version": 1,
-                "name": "fxsel",
-                "type": "Button",
-                "data": {
-                  "version": 2,
-                  "onImage": "fx_004_fxsel_button_1.png",
-                  "offImage": "fx_004_fxsel_button_1.png",
-                  "buttonId": 0,
-                  "numButtonsInGroup": 2,
-                  "handleName": "Parameter 112",
-                  "gestureBehaviour": "Instant"
-                }
-              },
-              "handle remapping": {
-                "version": 1,
-                "map": []
-              },
-              "bounds": {
-                "version": 2,
-                "acceptsHWFocus": "No",
-                "showWhenDataModelInvalid": "Hide",
-                "whenVisible": "Always",
-                "boundsType": "Absolute",
-                "bounds": "874 90 92 72",
-                "additionalInvalidatingHandles": ["IndexedEnabling/1/2/Parameter 112"]
-              }
-            },
-            {
-              "version": 2,
-              "componentData": {
-                "version": 1,
                 "name": "fxa_type",
-                "type": "fx knob 5 fxa_type",
+                "type": "fx a knob 3 fxa_type",
                 "data": {
                   "version": 1,
                   "handleName": "Data"
@@ -10514,13 +10392,12 @@
                 ]
               },
               "bounds": {
-                "version": 2,
+                "version": 1,
                 "acceptsHWFocus": "Yes",
                 "showWhenDataModelInvalid": "Hide",
                 "whenVisible": "Always",
                 "boundsType": "Absolute",
-                "bounds": "1050 62 140 166",
-                "additionalInvalidatingHandles": ["IndexedEnabling/0/2/Parameter 112"]
+                "bounds": "1050 62 140 166"
               }
             },
             {
@@ -10528,7 +10405,7 @@
               "componentData": {
                 "version": 1,
                 "name": "fxa_p1",
-                "type": "fx knob 6 fxa_p1",
+                "type": "fx a knob 4 fxa_p1",
                 "data": {
                   "version": 1,
                   "handleName": "Data"
@@ -10544,13 +10421,12 @@
                 ]
               },
               "bounds": {
-                "version": 2,
+                "version": 1,
                 "acceptsHWFocus": "Yes",
                 "showWhenDataModelInvalid": "Hide",
                 "whenVisible": "Always",
                 "boundsType": "Absolute",
-                "bounds": "40 330 140 166",
-                "additionalInvalidatingHandles": ["IndexedEnabling/0/2/Parameter 112"]
+                "bounds": "40 330 140 166"
               }
             },
             {
@@ -10563,7 +10439,7 @@
                   "version": 2,
                   "imageType": "FilmStrip",
                   "colour": "0",
-                  "image": "fx_007_fxa_p1_display.png",
+                  "image": "fxa_005_fxa_p1_display.png",
                   "numFrames": 256,
                   "handleName": "Parameter 84"
                 }
@@ -10573,13 +10449,12 @@
                 "map": []
               },
               "bounds": {
-                "version": 2,
+                "version": 1,
                 "acceptsHWFocus": "No",
                 "showWhenDataModelInvalid": "Hide",
                 "whenVisible": "Always",
                 "boundsType": "Absolute",
-                "bounds": "215 381 160 38",
-                "additionalInvalidatingHandles": ["IndexedEnabling/0/2/Parameter 112"]
+                "bounds": "215 381 160 38"
               }
             },
             {
@@ -10592,7 +10467,7 @@
                   "version": 2,
                   "imageType": "FilmStrip",
                   "colour": "0",
-                  "image": "fx_008_fxa_p2_display.png",
+                  "image": "fxa_006_fxa_p2_display.png",
                   "numFrames": 128,
                   "handleName": "Parameter 85"
                 }
@@ -10602,13 +10477,12 @@
                 "map": []
               },
               "bounds": {
-                "version": 2,
+                "version": 1,
                 "acceptsHWFocus": "No",
                 "showWhenDataModelInvalid": "Hide",
                 "whenVisible": "Always",
                 "boundsType": "Absolute",
-                "bounds": "415 381 160 38",
-                "additionalInvalidatingHandles": ["IndexedEnabling/0/2/Parameter 112"]
+                "bounds": "415 381 160 38"
               }
             },
             {
@@ -10616,7 +10490,7 @@
               "componentData": {
                 "version": 1,
                 "name": "fxa_p2",
-                "type": "fx knob 9 fxa_p2",
+                "type": "fx a knob 7 fxa_p2",
                 "data": {
                   "version": 1,
                   "handleName": "Data"
@@ -10632,13 +10506,12 @@
                 ]
               },
               "bounds": {
-                "version": 2,
+                "version": 1,
                 "acceptsHWFocus": "Yes",
                 "showWhenDataModelInvalid": "Hide",
                 "whenVisible": "Always",
                 "boundsType": "Absolute",
-                "bounds": "580 330 140 166",
-                "additionalInvalidatingHandles": ["IndexedEnabling/0/2/Parameter 112"]
+                "bounds": "580 330 140 166"
               }
             },
             {
@@ -10649,8 +10522,8 @@
                 "type": "Button",
                 "data": {
                   "version": 2,
-                  "onImage": "fx_010_fxa_sync_button_0.png",
-                  "offImage": "fx_010_fxa_sync_button_0.png",
+                  "onImage": "fxa_008_fxa_sync_button_0.png",
+                  "offImage": "fxa_008_fxa_sync_button_0.png",
                   "buttonId": 1,
                   "numButtonsInGroup": 2,
                   "handleName": "Parameter 86",
@@ -10668,7 +10541,7 @@
                 "whenVisible": "Always",
                 "boundsType": "Absolute",
                 "bounds": "764 354 92 72",
-                "additionalInvalidatingHandles": ["IndexedEnabling/0/2/Parameter 112", "IndexedEnabling/0/2/Parameter 86"]
+                "additionalInvalidatingHandles": ["IndexedEnabling/0/2/Parameter 86"]
               }
             },
             {
@@ -10679,8 +10552,8 @@
                 "type": "Button",
                 "data": {
                   "version": 2,
-                  "onImage": "fx_010_fxa_sync_button_1.png",
-                  "offImage": "fx_010_fxa_sync_button_1.png",
+                  "onImage": "fxa_008_fxa_sync_button_1.png",
+                  "offImage": "fxa_008_fxa_sync_button_1.png",
                   "buttonId": 0,
                   "numButtonsInGroup": 2,
                   "handleName": "Parameter 86",
@@ -10698,7 +10571,7 @@
                 "whenVisible": "Always",
                 "boundsType": "Absolute",
                 "bounds": "764 354 92 72",
-                "additionalInvalidatingHandles": ["IndexedEnabling/0/2/Parameter 112", "IndexedEnabling/1/2/Parameter 86"]
+                "additionalInvalidatingHandles": ["IndexedEnabling/1/2/Parameter 86"]
               }
             },
             {
@@ -10706,7 +10579,7 @@
               "componentData": {
                 "version": 1,
                 "name": "fxa_div",
-                "type": "fx knob 11 fxa_div",
+                "type": "fx a knob 9 fxa_div",
                 "data": {
                   "version": 1,
                   "handleName": "Data"
@@ -10722,13 +10595,12 @@
                 ]
               },
               "bounds": {
-                "version": 2,
+                "version": 1,
                 "acceptsHWFocus": "Yes",
                 "showWhenDataModelInvalid": "Hide",
                 "whenVisible": "Always",
                 "boundsType": "Absolute",
-                "bounds": "896 336 128 154",
-                "additionalInvalidatingHandles": ["IndexedEnabling/0/2/Parameter 112"]
+                "bounds": "896 336 128 154"
               }
             },
             {
@@ -10741,7 +10613,7 @@
                   "version": 2,
                   "imageType": "FilmStrip",
                   "colour": "0",
-                  "image": "fx_012_fxa_div_display.png",
+                  "image": "fxa_010_fxa_div_display.png",
                   "numFrames": 9,
                   "handleName": "Parameter 87"
                 }
@@ -10751,13 +10623,12 @@
                 "map": []
               },
               "bounds": {
-                "version": 2,
+                "version": 1,
                 "acceptsHWFocus": "No",
                 "showWhenDataModelInvalid": "Hide",
                 "whenVisible": "Always",
                 "boundsType": "Absolute",
-                "bounds": "885 488 150 21",
-                "additionalInvalidatingHandles": ["IndexedEnabling/0/2/Parameter 112"]
+                "bounds": "885 488 150 21"
               }
             },
             {
@@ -10765,7 +10636,7 @@
               "componentData": {
                 "version": 1,
                 "name": "fxa_mix",
-                "type": "fx knob 13 fxa_mix",
+                "type": "fx a knob 11 fxa_mix",
                 "data": {
                   "version": 1,
                   "handleName": "Data"
@@ -10781,13 +10652,182 @@
                 ]
               },
               "bounds": {
-                "version": 2,
+                "version": 1,
                 "acceptsHWFocus": "Yes",
                 "showWhenDataModelInvalid": "Hide",
                 "whenVisible": "Always",
                 "boundsType": "Absolute",
-                "bounds": "1070 330 140 166",
-                "additionalInvalidatingHandles": ["IndexedEnabling/0/2/Parameter 112"]
+                "bounds": "1070 330 140 166"
+              }
+            }
+          ]
+        },
+        "qlinkBoundsData": ["34 56 1182 459", "879 330 162 185"]
+      },
+      {
+        "version": 1,
+        "tabName": "FX B",
+        "fnKeyIndex": 3,
+        "fnKeySubIndex": 1,
+        "componentDefinition": {
+          "version": 2,
+          "actions": [],
+          "backgroundData": {
+            "version": 1,
+            "focussed": {
+              "version": 1,
+              "colour": "0",
+              "image": ""
+            },
+            "unfocussed": {
+              "version": 1,
+              "colour": "0",
+              "image": ""
+            }
+          },
+          "ignoreMousePresses": false,
+          "disableCoarseDataWheel": false,
+          "componentsData": [
+            {
+              "version": 2,
+              "componentData": {
+                "version": 1,
+                "name": "panel",
+                "type": "Image",
+                "data": {
+                  "version": 2,
+                  "imageType": "Regular",
+                  "colour": "0",
+                  "image": "fxb_panel.png"
+                }
+              },
+              "handle remapping": {
+                "version": 1,
+                "map": []
+              },
+              "bounds": {
+                "version": 1,
+                "acceptsHWFocus": "No",
+                "showWhenDataModelInvalid": "Show",
+                "whenVisible": "Always",
+                "boundsType": "Absolute",
+                "bounds": "0 0 1280 628"
+              }
+            },
+            {
+              "version": 2,
+              "componentData": {
+                "version": 1,
+                "name": "fx_on",
+                "type": "Button",
+                "data": {
+                  "version": 2,
+                  "onImage": "fxb_000_fx_on_button_0.png",
+                  "offImage": "fxb_000_fx_on_button_0.png",
+                  "buttonId": 1,
+                  "numButtonsInGroup": 2,
+                  "handleName": "Parameter 81",
+                  "gestureBehaviour": "Instant"
+                }
+              },
+              "handle remapping": {
+                "version": 1,
+                "map": []
+              },
+              "bounds": {
+                "version": 2,
+                "acceptsHWFocus": "No",
+                "showWhenDataModelInvalid": "Hide",
+                "whenVisible": "Always",
+                "boundsType": "Absolute",
+                "bounds": "59 93 102 78",
+                "additionalInvalidatingHandles": ["IndexedEnabling/0/2/Parameter 81"]
+              }
+            },
+            {
+              "version": 2,
+              "componentData": {
+                "version": 1,
+                "name": "fx_on",
+                "type": "Button",
+                "data": {
+                  "version": 2,
+                  "onImage": "fxb_000_fx_on_button_1.png",
+                  "offImage": "fxb_000_fx_on_button_1.png",
+                  "buttonId": 0,
+                  "numButtonsInGroup": 2,
+                  "handleName": "Parameter 81",
+                  "gestureBehaviour": "Instant"
+                }
+              },
+              "handle remapping": {
+                "version": 1,
+                "map": []
+              },
+              "bounds": {
+                "version": 2,
+                "acceptsHWFocus": "No",
+                "showWhenDataModelInvalid": "Hide",
+                "whenVisible": "Always",
+                "boundsType": "Absolute",
+                "bounds": "59 93 102 78",
+                "additionalInvalidatingHandles": ["IndexedEnabling/1/2/Parameter 81"]
+              }
+            },
+            {
+              "version": 2,
+              "componentData": {
+                "version": 1,
+                "name": "fxa_type display",
+                "type": "Image",
+                "data": {
+                  "version": 2,
+                  "imageType": "FilmStrip",
+                  "colour": "0",
+                  "image": "fxb_001_fxa_type_display.png",
+                  "numFrames": 10,
+                  "handleName": "Parameter 82"
+                }
+              },
+              "handle remapping": {
+                "version": 1,
+                "map": []
+              },
+              "bounds": {
+                "version": 1,
+                "acceptsHWFocus": "No",
+                "showWhenDataModelInvalid": "Hide",
+                "whenVisible": "Always",
+                "boundsType": "Absolute",
+                "bounds": "290 100 200 64"
+              }
+            },
+            {
+              "version": 2,
+              "componentData": {
+                "version": 1,
+                "name": "fxb_type display",
+                "type": "Image",
+                "data": {
+                  "version": 2,
+                  "imageType": "FilmStrip",
+                  "colour": "0",
+                  "image": "fxb_002_fxb_type_display.png",
+                  "numFrames": 14,
+                  "handleName": "Parameter 88"
+                }
+              },
+              "handle remapping": {
+                "version": 1,
+                "map": []
+              },
+              "bounds": {
+                "version": 1,
+                "acceptsHWFocus": "No",
+                "showWhenDataModelInvalid": "Hide",
+                "whenVisible": "Always",
+                "boundsType": "Absolute",
+                "bounds": "600 100 200 64"
               }
             },
             {
@@ -10795,7 +10835,7 @@
               "componentData": {
                 "version": 1,
                 "name": "fxb_type",
-                "type": "fx knob 14 fxb_type",
+                "type": "fx b knob 3 fxb_type",
                 "data": {
                   "version": 1,
                   "handleName": "Data"
@@ -10811,13 +10851,12 @@
                 ]
               },
               "bounds": {
-                "version": 2,
+                "version": 1,
                 "acceptsHWFocus": "Yes",
                 "showWhenDataModelInvalid": "Hide",
                 "whenVisible": "Always",
                 "boundsType": "Absolute",
-                "bounds": "1050 62 140 166",
-                "additionalInvalidatingHandles": ["IndexedEnabling/1/2/Parameter 112"]
+                "bounds": "1050 62 140 166"
               }
             },
             {
@@ -10825,7 +10864,7 @@
               "componentData": {
                 "version": 1,
                 "name": "fxb_p1",
-                "type": "fx knob 15 fxb_p1",
+                "type": "fx b knob 4 fxb_p1",
                 "data": {
                   "version": 1,
                   "handleName": "Data"
@@ -10841,13 +10880,12 @@
                 ]
               },
               "bounds": {
-                "version": 2,
+                "version": 1,
                 "acceptsHWFocus": "Yes",
                 "showWhenDataModelInvalid": "Hide",
                 "whenVisible": "Always",
                 "boundsType": "Absolute",
-                "bounds": "40 330 140 166",
-                "additionalInvalidatingHandles": ["IndexedEnabling/1/2/Parameter 112"]
+                "bounds": "40 330 140 166"
               }
             },
             {
@@ -10860,7 +10898,7 @@
                   "version": 2,
                   "imageType": "FilmStrip",
                   "colour": "0",
-                  "image": "fx_016_fxb_p1_display.png",
+                  "image": "fxb_005_fxb_p1_display.png",
                   "numFrames": 256,
                   "handleName": "Parameter 90"
                 }
@@ -10870,13 +10908,12 @@
                 "map": []
               },
               "bounds": {
-                "version": 2,
+                "version": 1,
                 "acceptsHWFocus": "No",
                 "showWhenDataModelInvalid": "Hide",
                 "whenVisible": "Always",
                 "boundsType": "Absolute",
-                "bounds": "215 381 160 38",
-                "additionalInvalidatingHandles": ["IndexedEnabling/1/2/Parameter 112"]
+                "bounds": "215 381 160 38"
               }
             },
             {
@@ -10889,7 +10926,7 @@
                   "version": 2,
                   "imageType": "FilmStrip",
                   "colour": "0",
-                  "image": "fx_017_fxb_p2_display.png",
+                  "image": "fxb_006_fxb_p2_display.png",
                   "numFrames": 128,
                   "handleName": "Parameter 91"
                 }
@@ -10899,13 +10936,12 @@
                 "map": []
               },
               "bounds": {
-                "version": 2,
+                "version": 1,
                 "acceptsHWFocus": "No",
                 "showWhenDataModelInvalid": "Hide",
                 "whenVisible": "Always",
                 "boundsType": "Absolute",
-                "bounds": "415 381 160 38",
-                "additionalInvalidatingHandles": ["IndexedEnabling/1/2/Parameter 112"]
+                "bounds": "415 381 160 38"
               }
             },
             {
@@ -10913,7 +10949,7 @@
               "componentData": {
                 "version": 1,
                 "name": "fxb_p2",
-                "type": "fx knob 18 fxb_p2",
+                "type": "fx b knob 7 fxb_p2",
                 "data": {
                   "version": 1,
                   "handleName": "Data"
@@ -10929,13 +10965,12 @@
                 ]
               },
               "bounds": {
-                "version": 2,
+                "version": 1,
                 "acceptsHWFocus": "Yes",
                 "showWhenDataModelInvalid": "Hide",
                 "whenVisible": "Always",
                 "boundsType": "Absolute",
-                "bounds": "580 330 140 166",
-                "additionalInvalidatingHandles": ["IndexedEnabling/1/2/Parameter 112"]
+                "bounds": "580 330 140 166"
               }
             },
             {
@@ -10946,8 +10981,8 @@
                 "type": "Button",
                 "data": {
                   "version": 2,
-                  "onImage": "fx_019_fxb_sync_button_0.png",
-                  "offImage": "fx_019_fxb_sync_button_0.png",
+                  "onImage": "fxb_008_fxb_sync_button_0.png",
+                  "offImage": "fxb_008_fxb_sync_button_0.png",
                   "buttonId": 1,
                   "numButtonsInGroup": 2,
                   "handleName": "Parameter 92",
@@ -10965,7 +11000,7 @@
                 "whenVisible": "Always",
                 "boundsType": "Absolute",
                 "bounds": "764 354 92 72",
-                "additionalInvalidatingHandles": ["IndexedEnabling/1/2/Parameter 112", "IndexedEnabling/0/2/Parameter 92"]
+                "additionalInvalidatingHandles": ["IndexedEnabling/0/2/Parameter 92"]
               }
             },
             {
@@ -10976,8 +11011,8 @@
                 "type": "Button",
                 "data": {
                   "version": 2,
-                  "onImage": "fx_019_fxb_sync_button_1.png",
-                  "offImage": "fx_019_fxb_sync_button_1.png",
+                  "onImage": "fxb_008_fxb_sync_button_1.png",
+                  "offImage": "fxb_008_fxb_sync_button_1.png",
                   "buttonId": 0,
                   "numButtonsInGroup": 2,
                   "handleName": "Parameter 92",
@@ -10995,7 +11030,7 @@
                 "whenVisible": "Always",
                 "boundsType": "Absolute",
                 "bounds": "764 354 92 72",
-                "additionalInvalidatingHandles": ["IndexedEnabling/1/2/Parameter 112", "IndexedEnabling/1/2/Parameter 92"]
+                "additionalInvalidatingHandles": ["IndexedEnabling/1/2/Parameter 92"]
               }
             },
             {
@@ -11003,7 +11038,7 @@
               "componentData": {
                 "version": 1,
                 "name": "fxb_div",
-                "type": "fx knob 20 fxb_div",
+                "type": "fx b knob 9 fxb_div",
                 "data": {
                   "version": 1,
                   "handleName": "Data"
@@ -11019,13 +11054,12 @@
                 ]
               },
               "bounds": {
-                "version": 2,
+                "version": 1,
                 "acceptsHWFocus": "Yes",
                 "showWhenDataModelInvalid": "Hide",
                 "whenVisible": "Always",
                 "boundsType": "Absolute",
-                "bounds": "896 336 128 154",
-                "additionalInvalidatingHandles": ["IndexedEnabling/1/2/Parameter 112"]
+                "bounds": "896 336 128 154"
               }
             },
             {
@@ -11038,7 +11072,7 @@
                   "version": 2,
                   "imageType": "FilmStrip",
                   "colour": "0",
-                  "image": "fx_021_fxb_div_display.png",
+                  "image": "fxb_010_fxb_div_display.png",
                   "numFrames": 9,
                   "handleName": "Parameter 93"
                 }
@@ -11048,13 +11082,12 @@
                 "map": []
               },
               "bounds": {
-                "version": 2,
+                "version": 1,
                 "acceptsHWFocus": "No",
                 "showWhenDataModelInvalid": "Hide",
                 "whenVisible": "Always",
                 "boundsType": "Absolute",
-                "bounds": "885 488 150 21",
-                "additionalInvalidatingHandles": ["IndexedEnabling/1/2/Parameter 112"]
+                "bounds": "885 488 150 21"
               }
             },
             {
@@ -11062,7 +11095,7 @@
               "componentData": {
                 "version": 1,
                 "name": "fxb_mix",
-                "type": "fx knob 22 fxb_mix",
+                "type": "fx b knob 11 fxb_mix",
                 "data": {
                   "version": 1,
                   "handleName": "Data"
@@ -11078,18 +11111,17 @@
                 ]
               },
               "bounds": {
-                "version": 2,
+                "version": 1,
                 "acceptsHWFocus": "Yes",
                 "showWhenDataModelInvalid": "Hide",
                 "whenVisible": "Always",
                 "boundsType": "Absolute",
-                "bounds": "1070 330 140 166",
-                "additionalInvalidatingHandles": ["IndexedEnabling/1/2/Parameter 112"]
+                "bounds": "1070 330 140 166"
               }
             }
           ]
         },
-        "qlinkBoundsData": []
+        "qlinkBoundsData": ["34 56 1182 459", "879 330 162 185"]
       },
       {
         "version": 1,
@@ -12789,9 +12821,9 @@
                 "type": "Button",
                 "data": {
                   "version": 2,
-                  "onImage": "play_018_voices_led0_on.png",
-                  "offImage": "play_018_voices_led0_off.png",
-                  "buttonId": 0,
+                  "onImage": "play_018_voices_button_0.png",
+                  "offImage": "play_018_voices_button_0.png",
+                  "buttonId": 1,
                   "numButtonsInGroup": 2,
                   "handleName": "Parameter 103",
                   "gestureBehaviour": "Instant"
@@ -12802,12 +12834,13 @@
                 "map": []
               },
               "bounds": {
-                "version": 1,
+                "version": 2,
                 "acceptsHWFocus": "No",
                 "showWhenDataModelInvalid": "Hide",
                 "whenVisible": "Always",
                 "boundsType": "Absolute",
-                "bounds": "630 272 104 24"
+                "bounds": "566 260 92 72",
+                "additionalInvalidatingHandles": ["IndexedEnabling/0/2/Parameter 103"]
               }
             },
             {
@@ -12818,8 +12851,67 @@
                 "type": "Button",
                 "data": {
                   "version": 2,
-                  "onImage": "play_018_voices_led1_on.png",
-                  "offImage": "play_018_voices_led1_off.png",
+                  "onImage": "play_018_voices_button_1.png",
+                  "offImage": "play_018_voices_button_1.png",
+                  "buttonId": 0,
+                  "numButtonsInGroup": 2,
+                  "handleName": "Parameter 103",
+                  "gestureBehaviour": "Instant"
+                }
+              },
+              "handle remapping": {
+                "version": 1,
+                "map": []
+              },
+              "bounds": {
+                "version": 2,
+                "acceptsHWFocus": "No",
+                "showWhenDataModelInvalid": "Hide",
+                "whenVisible": "Always",
+                "boundsType": "Absolute",
+                "bounds": "566 260 92 72",
+                "additionalInvalidatingHandles": ["IndexedEnabling/1/2/Parameter 103"]
+              }
+            },
+            {
+              "version": 2,
+              "componentData": {
+                "version": 1,
+                "name": "voices",
+                "type": "Button",
+                "data": {
+                  "version": 2,
+                  "onImage": "play_019_voices_led0_on.png",
+                  "offImage": "play_019_voices_led0_off.png",
+                  "buttonId": 0,
+                  "numButtonsInGroup": 2,
+                  "handleName": "Parameter 103",
+                  "gestureBehaviour": "Instant"
+                }
+              },
+              "handle remapping": {
+                "version": 1,
+                "map": []
+              },
+              "bounds": {
+                "version": 1,
+                "acceptsHWFocus": "No",
+                "showWhenDataModelInvalid": "Hide",
+                "whenVisible": "Always",
+                "boundsType": "Absolute",
+                "bounds": "658 272 104 24"
+              }
+            },
+            {
+              "version": 2,
+              "componentData": {
+                "version": 1,
+                "name": "voices",
+                "type": "Button",
+                "data": {
+                  "version": 2,
+                  "onImage": "play_019_voices_led1_on.png",
+                  "offImage": "play_019_voices_led1_off.png",
                   "buttonId": 1,
                   "numButtonsInGroup": 2,
                   "handleName": "Parameter 103",
@@ -12836,7 +12928,7 @@
                 "showWhenDataModelInvalid": "Hide",
                 "whenVisible": "Always",
                 "boundsType": "Absolute",
-                "bounds": "630 296 104 24"
+                "bounds": "658 296 104 24"
               }
             },
             {
@@ -12847,8 +12939,68 @@
                 "type": "Button",
                 "data": {
                   "version": 2,
-                  "onImage": "play_019_quality_led0_on.png",
-                  "offImage": "play_019_quality_led0_off.png",
+                  "onImage": "play_020_quality_button_0.png",
+                  "offImage": "play_020_quality_button_0.png",
+                  "buttonId": 1,
+                  "numButtonsInGroup": 2,
+                  "handleName": "Parameter 104",
+                  "gestureBehaviour": "Instant"
+                }
+              },
+              "handle remapping": {
+                "version": 1,
+                "map": []
+              },
+              "bounds": {
+                "version": 2,
+                "acceptsHWFocus": "No",
+                "showWhenDataModelInvalid": "Hide",
+                "whenVisible": "Always",
+                "boundsType": "Absolute",
+                "bounds": "776 260 92 72",
+                "additionalInvalidatingHandles": ["IndexedEnabling/0/2/Parameter 104"]
+              }
+            },
+            {
+              "version": 2,
+              "componentData": {
+                "version": 1,
+                "name": "quality",
+                "type": "Button",
+                "data": {
+                  "version": 2,
+                  "onImage": "play_020_quality_button_1.png",
+                  "offImage": "play_020_quality_button_1.png",
+                  "buttonId": 0,
+                  "numButtonsInGroup": 2,
+                  "handleName": "Parameter 104",
+                  "gestureBehaviour": "Instant"
+                }
+              },
+              "handle remapping": {
+                "version": 1,
+                "map": []
+              },
+              "bounds": {
+                "version": 2,
+                "acceptsHWFocus": "No",
+                "showWhenDataModelInvalid": "Hide",
+                "whenVisible": "Always",
+                "boundsType": "Absolute",
+                "bounds": "776 260 92 72",
+                "additionalInvalidatingHandles": ["IndexedEnabling/1/2/Parameter 104"]
+              }
+            },
+            {
+              "version": 2,
+              "componentData": {
+                "version": 1,
+                "name": "quality",
+                "type": "Button",
+                "data": {
+                  "version": 2,
+                  "onImage": "play_021_quality_led0_on.png",
+                  "offImage": "play_021_quality_led0_off.png",
                   "buttonId": 0,
                   "numButtonsInGroup": 2,
                   "handleName": "Parameter 104",
@@ -12865,7 +13017,7 @@
                 "showWhenDataModelInvalid": "Hide",
                 "whenVisible": "Always",
                 "boundsType": "Absolute",
-                "bounds": "810 272 104 24"
+                "bounds": "868 272 104 24"
               }
             },
             {
@@ -12876,8 +13028,8 @@
                 "type": "Button",
                 "data": {
                   "version": 2,
-                  "onImage": "play_019_quality_led1_on.png",
-                  "offImage": "play_019_quality_led1_off.png",
+                  "onImage": "play_021_quality_led1_on.png",
+                  "offImage": "play_021_quality_led1_off.png",
                   "buttonId": 1,
                   "numButtonsInGroup": 2,
                   "handleName": "Parameter 104",
@@ -12894,7 +13046,7 @@
                 "showWhenDataModelInvalid": "Hide",
                 "whenVisible": "Always",
                 "boundsType": "Absolute",
-                "bounds": "810 296 104 24"
+                "bounds": "868 296 104 24"
               }
             },
             {
@@ -12902,7 +13054,7 @@
               "componentData": {
                 "version": 1,
                 "name": "vol",
-                "type": "play knob 20 vol",
+                "type": "play knob 22 vol",
                 "data": {
                   "version": 1,
                   "handleName": "Data"
@@ -12934,8 +13086,8 @@
                 "type": "Button",
                 "data": {
                   "version": 2,
-                  "onImage": "play_021_split_on_button_0.png",
-                  "offImage": "play_021_split_on_button_0.png",
+                  "onImage": "play_023_split_on_button_0.png",
+                  "offImage": "play_023_split_on_button_0.png",
                   "buttonId": 1,
                   "numButtonsInGroup": 2,
                   "handleName": "Parameter 106",
@@ -12964,8 +13116,8 @@
                 "type": "Button",
                 "data": {
                   "version": 2,
-                  "onImage": "play_021_split_on_button_1.png",
-                  "offImage": "play_021_split_on_button_1.png",
+                  "onImage": "play_023_split_on_button_1.png",
+                  "offImage": "play_023_split_on_button_1.png",
                   "buttonId": 0,
                   "numButtonsInGroup": 2,
                   "handleName": "Parameter 106",
@@ -12994,8 +13146,8 @@
                 "type": "Button",
                 "data": {
                   "version": 2,
-                  "onImage": "play_022_split_extra_button_0.png",
-                  "offImage": "play_022_split_extra_button_0.png",
+                  "onImage": "play_024_split_extra_button_0.png",
+                  "offImage": "play_024_split_extra_button_0.png",
                   "buttonId": 1,
                   "numButtonsInGroup": 2,
                   "handleName": "Parameter 111",
@@ -13024,8 +13176,8 @@
                 "type": "Button",
                 "data": {
                   "version": 2,
-                  "onImage": "play_022_split_extra_button_1.png",
-                  "offImage": "play_022_split_extra_button_1.png",
+                  "onImage": "play_024_split_extra_button_1.png",
+                  "offImage": "play_024_split_extra_button_1.png",
                   "buttonId": 0,
                   "numButtonsInGroup": 2,
                   "handleName": "Parameter 111",
@@ -13051,7 +13203,7 @@
               "componentData": {
                 "version": 1,
                 "name": "split_point",
-                "type": "play knob 23 split_point",
+                "type": "play knob 25 split_point",
                 "data": {
                   "version": 1,
                   "handleName": "Data"
@@ -13085,7 +13237,7 @@
                   "version": 2,
                   "imageType": "FilmStrip",
                   "colour": "0",
-                  "image": "play_024_split_point_display.png",
+                  "image": "play_026_split_point_display.png",
                   "numFrames": 128,
                   "handleName": "Parameter 107"
                 }
@@ -13108,7 +13260,7 @@
               "componentData": {
                 "version": 1,
                 "name": "split_oct",
-                "type": "play knob 25 split_oct",
+                "type": "play knob 27 split_oct",
                 "data": {
                   "version": 1,
                   "handleName": "Data"
@@ -13142,7 +13294,7 @@
                   "version": 2,
                   "imageType": "FilmStrip",
                   "colour": "0",
-                  "image": "play_026_split_oct_display.png",
+                  "image": "play_028_split_oct_display.png",
                   "numFrames": 4,
                   "handleName": "Parameter 108"
                 }
@@ -13165,7 +13317,7 @@
               "componentData": {
                 "version": 1,
                 "name": "split_glide",
-                "type": "play knob 27 split_glide",
+                "type": "play knob 29 split_glide",
                 "data": {
                   "version": 1,
                   "handleName": "Data"
@@ -13194,7 +13346,7 @@
               "componentData": {
                 "version": 1,
                 "name": "split_vol",
-                "type": "play knob 28 split_vol",
+                "type": "play knob 30 split_vol",
                 "data": {
                   "version": 1,
                   "handleName": "Data"

@@ -29,12 +29,12 @@ Aufgeteilt wie das Panel des Trigon-6: jeder Bereich eine Seite, Titel und Linie
 | **OSC** | OSCILLATORS 1 2 3: Octave (mit LEDs drumherum, Osc 3 auch LO), Sync Osc 2 / Pitch, Dreieck, Säge (Osc 3: Saw/Rev Saw), Puls, Pulse Width, Volume; Fdbk/Drive, Noise, Osc-3-Keyboard |
 | **FLT/AMP** | FILTER: Typ (LP1 OTA, LP2 Ladder, SVF), Cutoff, Resonance, Env Amt, SVF Mode, 2 Pole, Keyboard (Half/Full), Hüllkurve, Velocity; AMPLIFIER: Hüllkurve, Velocity |
 | **LFO/PM** | LFO: Frequency, Sync, Shape, Amount, acht Ziele; POLYMOD: Osc 3, Filter Env, sieben Ziele |
-| **FX** | EFFECTS: On/Off, Displays A und B, A/B (welcher Effekt unten bearbeitet wird), Type; Parameter 1 und 2 mit Displays, Sync, Sync Time, Dry/Wet |
+| **FX** | zwei Unterseiten: FX-Taste einmal = Effekt A, nochmal = Effekt B. Je: On/Off, Displays A und B, Type, Parameter 1 und 2 mit Displays, Sync, Sync Time, Dry/Wet (die Q-Links jeweils für diesen Effekt) |
 | **AT/ARP** | AFTER TOUCH: Amount, acht Ziele; ARPEGGIATOR: On/Off, Octaves, Mode; CLOCK: Divide, Hold |
 | **PLAY** | Hold, Glide Rate, Glide, Unison, Distortion, Vintage, Pan Spread, Pgm Volume, P Whl Range, Key Mode; Glide Mode, Unison-Stimmen und -Detune, 6/12 Stimmen, Qualität, Lautstärke; LOW SPLIT |
 
 Ein Knopf wird mit dem Finger gezogen oder mit seinem Q-Link gedreht; zweimal tippen öffnet den großen Regler der MPC
-(bei einer Auswahl die Liste). Ein Taster schaltet um, eine LED wählt aus (auch die LEDs um die Octave-Knöpfe). Auf FX wählen A/B und die LEDs A und B, welcher Effekt unten bearbeitet wird (der Parameter FX EDIT, ohne eigenen Klang).
+(bei einer Auswahl die Liste). Ein Taster schaltet um, eine LED wählt aus (auch die LEDs um die Octave-Knöpfe).
 
 **QUALITY**: ECO (2x) ist voreingestellt und reicht auf der MPC; HIGH (4x) braucht fast doppelt so viel Rechenzeit.
 

@@ -490,32 +490,31 @@ void pageMod(B &b)
     b.button(1100, 462, "pm_filt", "FILTER");
 }
 
-void pageFx(B &b)
+/* EFFECTS: two sub-pages, A and B (the FX key again switches); each edits its own effect, both displays shown */
+void pageFx(B &b, int f)
 {
-    b.title("EFFECTS", 640, 6);
+    b.title(f ? "EFFECTS  B" : "EFFECTS  A", 640, 6);
     float r1 = 140;
     b.button(110, r1 - 8, "fx_on", "ON/OFF", false, -1, b.BS + 4);
-    /* A and B: their LEDs (which one the knobs below edit; a tap on either), their displays */
     b.smallL("A", 262, r1 - 8, 15.0f);
     b.smallL("B", 572, r1 - 8, 15.0f);
-    b.leds(FXSEL, {{250, r1 - 8}, {560, r1 - 8}}, {Rectangle<float>(236, r1 - 26, 46, 36), Rectangle<float>(546, r1 - 26, 46, 36)});
+    led(b.g, 250, r1 - 8, f == 0);
+    led(b.g, 560, r1 - 8, f == 1);
     b.seg({290, r1 - 40, 200, 64}, "fxa_type", 3, [](int v) { return String(FXTYPE_SHORT[v]); });
     b.seg({600, r1 - 40, 200, 64}, "fxb_type", 3, [](int v) { return String(FXTYPE_SHORT[v]); });
-    b.button(920, r1 - 14, FXSEL, "A / B", true);
-    b.small("TYPE", 1120, r1 + 1.0f * 0 + b.KD * 0.72f + 2.0f + 6.0f + 10.0f, 15.5f);
-    for (int f = 0; f < 2; f++) {
-        String x = f ? "fxb_" : "fxa_";
-        b.knob(1120, r1 - 8, b.KD + 8, x + "type", "", f);
-        float r2 = 400;
-        b.knob(110, r2, b.KD + 8, x + "p1", "1", f);
-        b.seg({215, r2 - 19, 160, 38}, x + "p1", 3, [x](int v) { return shortText(x + "p1", v); }, f);
-        b.seg({415, r2 - 19, 160, 38}, x + "p2", 3, [x](int v) { return shortText(x + "p2", v); }, f);
-        b.knob(650, r2, b.KD + 8, x + "p2", "2", f);
-        b.button(810, r2 - 10, x + "sync", "SYNC", false, f);
-        b.knob(960, r2, b.KD, x + "div", "SYNC TIME", f);
-        b.value(960, r2 + b.KD * 0.72f + 25.0f, x + "div", f);
-        b.knob(1140, r2, b.KD + 8, x + "mix", "DRY < > WET", f);
-    }
+    b.small("A / B:", 920, r1 - 20, 15.0f);
+    b.small("press FX again", 920, r1 + 2, 15.0f);
+    String x = f ? "fxb_" : "fxa_";
+    b.knob(1120, r1 - 8, b.KD + 8, x + "type", "TYPE");
+    float r2 = 400;
+    b.knob(110, r2, b.KD + 8, x + "p1", "1");
+    b.seg({215, r2 - 19, 160, 38}, x + "p1", 3, [x](int v) { return shortText(x + "p1", v); });
+    b.seg({415, r2 - 19, 160, 38}, x + "p2", 3, [x](int v) { return shortText(x + "p2", v); });
+    b.knob(650, r2, b.KD + 8, x + "p2", "2");
+    b.button(810, r2 - 10, x + "sync", "SYNC");
+    b.knob(960, r2, b.KD, x + "div", "SYNC TIME");
+    b.value(960, r2 + b.KD * 0.72f + 25.0f, x + "div");
+    b.knob(1140, r2, b.KD + 8, x + "mix", "DRY < > WET");
     b.lineTitle("EFFECT PARAMETERS", 30, 1250, 268);
 }
 
@@ -563,10 +562,10 @@ void pagePlay(B &b)
     b.kv(150, r2, KD - 12, "glide_mode", "GLIDE MODE");
     b.kv(320, r2, KD - 12, "uni_voices", "UNI VOICES");
     b.kv(490, r2, KD - 12, "uni_detune", "UNI DETUNE");
-    b.ledList("voices", 640, r2 - 14, 24, {"6 VOICE", "12 VOICE"}, 80.0f);
-    b.legend("VOICES", 690, r2 + 34);
-    b.ledList("quality", 820, r2 - 14, 24, {"ECO (2x)", "HIGH (4x)"}, 80.0f);
-    b.legend("QUALITY", 870, r2 + 34);
+    b.button(612, r2 - 2, "voices", "VOICES", true);
+    b.ledList("voices", 668, r2 - 14, 24, {"6 VOICE", "12 VOICE"}, 80.0f);
+    b.button(822, r2 - 2, "quality", "QUALITY", true);
+    b.ledList("quality", 878, r2 - 14, 24, {"ECO (2x)", "HIGH (4x)"}, 80.0f);
     b.knob(1120, r2, KD - 12, "vol", "VOLUME");
     b.lineTitle("LOW SPLIT", 30, 1250, 420);
     float r3 = 490;
@@ -580,11 +579,11 @@ void pagePlay(B &b)
 
 struct Def {
     const char *name, *title;
-    void (*build)(B &);
+    std::function<void(B &)> build;
 };
 const std::vector<Def> DEFS = {
     {"OSC", "OSCILLATORS", pageOsc},       {"FLT/AMP", "FILTER / AMP", pageFilter}, {"LFO/PM", "LFO / POLYMOD", pageMod},
-    {"FX", "EFFECTS", pageFx},             {"AT/ARP", "AFTER TOUCH / ARP", pageAtArp}, {"PLAY", "PLAY", pagePlay},
+    {"FX A", "EFFECTS A", [](B &b) { pageFx(b, 0); }}, {"FX B", "EFFECTS B", [](B &b) { pageFx(b, 1); }},             {"AT/ARP", "AFTER TOUCH / ARP", pageAtArp}, {"PLAY", "PLAY", pagePlay},
 };
 
 /* ------------------------------------------------------------------------------ cutting --- */

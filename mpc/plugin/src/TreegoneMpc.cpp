@@ -54,6 +54,12 @@ int paramOf(int i)
     return -1;
 }
 static_assert(sizeof(SHORT) / sizeof(SHORT[0]) == NPARAM, "a short name for each parameter");
+/* a parameter the MPC steps a value a click (its choices: the names, or the numbers as the display shows them):
+ * the choices, the octaves, and the small counts from 0 (Unison Detune); 0-based, so their values are the same */
+bool stepped(const ParamDef &d)
+{
+    return d.kind == K_CHOICE || d.kind == K_ONOFF || d.kind == K_OCT || (d.kind == K_NUM && d.lo == 0 && d.hi <= 15);
+}
 
 class TreegoneMpc : public mpc::Plugin
 {
@@ -63,10 +69,13 @@ public:
         addParam(mpc::floatParam("vol", "Volume", 0.0f, 1.0f, 0.7f, "", 2));
         auto addP = [this](int p) {
             const ParamDef &d = PARAMS[p];
-            if (d.kind == K_CHOICE || d.kind == K_ONOFF) {
+            if (stepped(d)) {
                 std::vector<std::string> ch;
-                for (int k = d.lo; k <= d.hi; k++)
-                    ch.push_back(d.choice[k]);
+                for (int k = d.lo; k <= d.hi; k++) {
+                    char t[40];
+                    paramText(p, k, t, sizeof t, false);
+                    ch.push_back(t);
+                }
                 addParam(mpc::choiceParam(d.id, SHORT[p], ch, d.def - d.lo));
             } else {
                 addParam(mpc::intParam(d.id, SHORT[p], d.lo, d.hi, d.def));
@@ -90,7 +99,7 @@ public:
             for (int p = 0; p < NPARAM_V1; p++) {
                 int val = p == P_SEQ_ON ? 0 : FACTORY[k].p[p];   /* (the sequencer waits for PLAY) */
                 const ParamDef &d = PARAMS[p];
-                v[(size_t)indexOf(p)] = (float)(d.kind == K_CHOICE || d.kind == K_ONOFF ? val - d.lo : val);
+                v[(size_t)indexOf(p)] = (float)(stepped(d) ? val - d.lo : val);
             }
             addProgram(FACTORY[k].name, v);
         }
@@ -121,7 +130,7 @@ public:
             if (k >= 0 && k < NFACTORY) {
                 for (int p = NPARAM_V1; p < NPARAM; p++) {
                     const ParamDef &d = PARAMS[p];
-                    set(indexOf(p), (float)(d.kind == K_CHOICE || d.kind == K_ONOFF ? FACTORY[k].p[p] - d.lo : FACTORY[k].p[p]));
+                    set(indexOf(p), (float)(stepped(d) ? FACTORY[k].p[p] - d.lo : FACTORY[k].p[p]));
                 }
                 cur.seq = FACTORY[k].seq;
                 std::memcpy(cur.chord, FACTORY[k].chord, sizeof cur.chord);
@@ -181,7 +190,7 @@ public:
         if (paramOf(index) >= 0) {
             int p = paramOf(index);
             const ParamDef &d = PARAMS[p];
-            if (d.kind == K_CHOICE || d.kind == K_ONOFF)
+            if (stepped(d))
                 v += d.lo;
             v = mpc::clamp(v, d.lo, d.hi);
             paramText(p, v, t, sizeof t, p == P_LFO_FREQ && getInt(indexOf(P_LFO_SYNC)) != 0);
@@ -243,7 +252,7 @@ private:
     {
         const ParamDef &d = PARAMS[p];
         int v = getInt(indexOf(p));
-        if (d.kind == K_CHOICE || d.kind == K_ONOFF)
+        if (stepped(d))
             v += d.lo;
         return mpc::clamp(v, d.lo, d.hi);
     }

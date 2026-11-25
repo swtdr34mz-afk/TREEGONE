@@ -13,10 +13,9 @@ this places each picture where it was cut from, bound to the MPC plugin's parame
   LEDs       each a radio button (the octaves' round their knobs, the lists beside SHAPE, OCTAVES, MODE, TYPE)
   displays   film strips that show a parameter's value (the effects' 7-segment displays, the red values under knobs)
 
-On FX the A / B button and the A and B LEDs choose which effect the knobs below edit (the plugin's FX EDIT, a
-parameter with no sound of its own): A's controls show with A, B's with B.
+FX has two sub-pages, FX A and FX B: the FX function key pressed again switches (each its own Q-Links).
 
-The pages (the function keys) as the Trigon-6's panel: OSC, FLT/AMP, LFO/PM, FX, AT/ARP, PLAY. On each the 16 Q-Links turn up to four groups,
+The pages (the function keys) as the Trigon-6's panel: OSC, FLT/AMP, LFO/PM, FX (A, B), AT/ARP, PLAY. On each the 16 Q-Links turn up to four groups,
 the top row of Q-Links the first group and so on down. Standard library only (Pillow, if there, makes the pictures
 smaller).
 """
@@ -59,9 +58,10 @@ PAGES = [
                  ["a_att", "a_dec", "a_sus", "a_rel"]]),
     ("LFO/PM", [["lfo_freq", "lfo_shape", "lfo_amt"],
                 ["pm_osc3", "pm_fenv"]]),
-    ("FX", [(["fxa_type", "fxa_mix", "fxa_p1", "fxa_p2"], False),
-            (["fxb_type", "fxb_mix", "fxb_p1", "fxb_p2"], False),
-            (["fxa_div", "fxb_div"], False)]),
+    ("FX A", [["fxa_type", "fxa_mix", "fxa_p1", "fxa_p2"],
+              ["fxa_div"]]),
+    ("FX B", [["fxb_type", "fxb_mix", "fxb_p1", "fxb_p2"],
+              ["fxb_div"]]),
     ("AT/ARP", [["at_amt"],
                 ["arp_oct", "arp_mode"],
                 ["divide"]]),
@@ -258,9 +258,13 @@ def main(argv):
         return (x0, y0, x1 - x0, y1 - y0)
 
     tabs, qmaps = [], []
-    for key, (name, groups) in enumerate(PAGES):
+    key = -1
+    for name, groups in PAGES:
         page = pages[name]
-        for layer in (0,):
+        sub = 1 if name == "FX B" else 0   # (FX A and B: one function key, pressed again for B)
+        if sub == 0:
+            key += 1
+        for layer in (sub,):
             kids, boxes, legends = tab_children(page, layer)
             rects, q = [], {}
             for row, g in enumerate(groups):
