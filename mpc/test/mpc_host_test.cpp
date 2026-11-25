@@ -247,7 +247,7 @@ int main(int argc, char **argv)
     std::printf("  %s by %s, %d parameters, %d programs\n", p.str(effGetEffectName).c_str(), p.str(effGetVendorString).c_str(),
                 p.e->numParams, p.e->numPrograms);
     check(p.str(effGetEffectName) == "TREEGONE" && p.str(effGetVendorString) == "swtdr34mz", "names as in plugin.json");
-    check(p.e->numParams == 112, "112 parameters (their order permanent)");
+    check(p.e->numParams == 113, "113 parameters (their order permanent)");
 
     p.d(effSetSampleRate, 0, 0, nullptr, 44100.0f);
     p.d(effSetBlockSize, 0, 512);

@@ -39,16 +39,17 @@ enum {
     kQuality,
     kHold,
     kP2,                                 /* the parameters after 1.0's */
-    kNumParams = kP2 + NPARAM - NPARAM_V1
+    kFxEdit = kP2 + NPARAM - NPARAM_V1,  /* the FX page's A / B: which effect its knobs edit (no sound of its own) */
+    kNumParams
 };
-static_assert(kNumParams == 112, "the parameters' order is permanent");
+static_assert(kNumParams == 113, "the parameters' order is permanent");
 /* the MPC's index of a program parameter, and back (-1: not one) */
 int indexOf(int p) { return p < NPARAM_V1 ? kP + p : kP2 + p - NPARAM_V1; }
 int paramOf(int i)
 {
     if (i >= kP && i < kVoices)
         return i - kP;
-    if (i >= kP2 && i < kNumParams)
+    if (i >= kP2 && i < kFxEdit)
         return NPARAM_V1 + i - kP2;
     return -1;
 }
@@ -78,6 +79,7 @@ public:
         addParam(mpc::boolParam("hold", "Hold", false));
         for (int p = NPARAM_V1; p < NPARAM; p++)
             addP(p);
+        addParam(mpc::choiceParam("fxedit", "FX Edit", {"A", "B"}, 0));
 
         /* the factory programs: VOLUME and the sound; VOICES, QUALITY and HOLD they leave as they are */
         for (int k = 0; k < NFACTORY; k++) {

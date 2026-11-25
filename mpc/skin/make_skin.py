@@ -13,8 +13,8 @@ this places each picture where it was cut from, bound to the MPC plugin's parame
   LEDs       each a radio button (the octaves' round their knobs, the lists beside SHAPE, OCTAVES, MODE, TYPE)
   displays   film strips that show a parameter's value (the effects' 7-segment displays, the red values under knobs)
 
-On FX the A / B button and the A and B LEDs choose which effect the knobs below edit (a value of the screen's own,
-as PROPHETIC 6's EFFECTS SELECT): A's controls show with A, B's with B.
+On FX the A / B button and the A and B LEDs choose which effect the knobs below edit (the plugin's FX EDIT, a
+parameter with no sound of its own): A's controls show with A, B's with B.
 
 The pages (the function keys) as the Trigon-6's panel: OSC, FLT/AMP, LFO/PM, FX, AT/ARP, PLAY. On each the 16 Q-Links turn up to four groups,
 the top row of Q-Links the first group and so on down. Standard library only (Pillow, if there, makes the pictures
@@ -32,15 +32,12 @@ split_glide split_vol split_extra""".split()
 assert len(IDS) == 108
 NP = len(IDS)
 V1 = 102                                 # 1.0's parameters keep their numbers; the later ones follow the globals
-GLOBAL = {"vol": 0, "voices": 1 + V1, "quality": 2 + V1, "hold": 3 + V1}
-NPARAMS = 4 + NP
-
-
-FXH = "Local/2/fx"                       # FX: the effect the knobs edit (A 0, B 1; the screen's own value)
+GLOBAL = {"vol": 0, "voices": 1 + V1, "quality": 2 + V1, "hold": 3 + V1, "fxsel": 4 + NP}
+NPARAMS = 5 + NP
 
 
 def handle(pid):
-    return FXH if pid == "fxsel" else "Parameter %d" % mpc(pid)
+    return "Parameter %d" % mpc(pid)
 
 
 def mpc(pid, layer=0):
@@ -156,7 +153,7 @@ def main(argv):
     pages = {p["name"]: p for p in m["pages"]}
     for p in m["pages"]:
         for c in p["controls"]:
-            if c["id"] not in GLOBAL and c["id"] not in IDS and c["id"] != "fxsel":
+            if c["id"] not in GLOBAL and c["id"] not in IDS:
                 sys.exit("%s: the page's %s is not one of the MPC plugin's parameters" % (p["name"], c["id"]))
 
     if os.path.isdir(out):
@@ -185,11 +182,11 @@ def main(argv):
         boxes, legends = [], []
 
         def fx_hide(c):
-            return ["IndexedEnabling/%d/2/%s" % (c["fx"], FXH)] if c.get("fx", -1) >= 0 else []
+            return ["IndexedEnabling/%d/2/%s" % (c["fx"], handle("fxsel"))] if c.get("fx", -1) >= 0 else []
 
         for i, c in enumerate(page["controls"]):
             h = handle(c["id"])
-            if c["names"] and c["id"] != "fxsel":
+            if c["names"]:
                 names[mpc(c["id"])] = c["names"]
             if c["kind"] == "knob":
                 fr = c["frame"]
@@ -300,7 +297,9 @@ def main(argv):
         Image = None
         print("(no Pillow: the pictures copied as they are, many times larger)")
     for f in sorted(used):
-        if Image:
+        if Image and f.endswith("_panel.png"):   # (the panels' text smooth: in full colour)
+            Image.open(os.path.join(src, f)).convert("RGB").save(os.path.join(out, f), optimize=True)
+        elif Image:
             im = Image.open(os.path.join(src, f)).convert("RGB")
             im.quantize(256, method=Image.MEDIANCUT, dither=Image.NONE).save(os.path.join(out, f), optimize=True)
         else:

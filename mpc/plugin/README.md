@@ -34,7 +34,7 @@ Aufgeteilt wie das Panel des Trigon-6: jeder Bereich eine Seite, Titel und Linie
 | **PLAY** | Hold, Glide Rate, Glide, Unison, Distortion, Vintage, Pan Spread, Pgm Volume, P Whl Range, Key Mode; Glide Mode, Unison-Stimmen und -Detune, 6/12 Stimmen, Qualität, Lautstärke; LOW SPLIT |
 
 Ein Knopf wird mit dem Finger gezogen oder mit seinem Q-Link gedreht; zweimal tippen öffnet den großen Regler der MPC
-(bei einer Auswahl die Liste). Ein Taster schaltet um, eine LED wählt aus (auch die LEDs um die Octave-Knöpfe).
+(bei einer Auswahl die Liste). Ein Taster schaltet um, eine LED wählt aus (auch die LEDs um die Octave-Knöpfe). Auf FX wählen A/B und die LEDs A und B, welcher Effekt unten bearbeitet wird (der Parameter FX EDIT, ohne eigenen Klang).
 
 **QUALITY**: ECO (2x) ist voreingestellt und reicht auf der MPC; HIGH (4x) braucht fast doppelt so viel Rechenzeit.
 

@@ -28,7 +28,7 @@ using namespace tg;
 namespace {
 constexpr int TW = 1280, TH = 628;
 const Colour INK(0xffe9e9e9), LINE(0xffbdbdbd), VALUE(0xffff3a22);
-const String FXSEL = "fxsel";            /* the FX page's A/B: the screen's own value, no parameter */
+const String FXSEL = "fxsel";            /* the FX page's A/B: the plugin's FX EDIT */
 
 int paramIndex(const String &id)
 {
@@ -61,7 +61,7 @@ Range rangeOf(const String &id)
     if (id == "vol")
         return {0, 127, {}};
     if (id == FXSEL)
-        return {0, 1, {}};
+        return {0, 1, {"A", "B"}};
     std::fprintf(stderr, "unknown %s\n", id.toRawUTF8());
     std::exit(1);
 }
@@ -256,7 +256,7 @@ struct B {
         g.setFont(f);
         g.drawText(t, Rectangle<float>(cx - w * 0.5f, y - 10, w, 20), Justification::centred, false);
     }
-    Rectangle<float> legend(const String &t, float cx, float y, float size = 15.5f)
+    Rectangle<float> legend(const String &t, float cx, float y, float size = 17.0f)
     {
         auto r = Rectangle<float>(cx - 80, y, 160, size + 4);
         text(g, t, r, size);
@@ -266,7 +266,7 @@ struct B {
     {
         text(g, t, Rectangle<float>(160, size + 4).withCentre({cx, cy}), size);
     }
-    void smallL(const String &t, float x, float cy, float size = 14.0f)
+    void smallL(const String &t, float x, float cy, float size = 15.5f)
     {
         text(g, t, Rectangle<float>(x, cy - (size + 4) * 0.5f, 160, size + 4), size, Justification::centredLeft);
     }
@@ -315,7 +315,7 @@ struct B {
         if (s <= 0.0f)
             s = BS;
         if (leg.isNotEmpty() && fx <= 0)
-            legend(leg, cx, cy + s * 0.5f + 8.0f, 13.5f);
+            legend(leg, cx, cy + s * 0.5f + 8.0f, 15.5f);
         auto cap = capRect(cx, cy, s);
         int steps = stepsOf(id);
         Ctl c{Ctl::button, id, fx};
@@ -334,7 +334,7 @@ struct B {
         return add(c);
     }
     /* a list: LED, name; downwards */
-    Ctl &ledList(const String &id, float x, float y, float rh, const StringArray &names, float w = 120.0f, float size = 14.0f, int fx = -1)
+    Ctl &ledList(const String &id, float x, float y, float rh, const StringArray &names, float w = 120.0f, float size = 15.5f, int fx = -1)
     {
         std::vector<Point<float>> at;
         std::vector<Rectangle<float>> rows;
@@ -430,8 +430,8 @@ void pageFilter(B &b)
     float r1 = 124, r2 = 280, r3 = 492;
     float cT = 95, cC = 285, cR = 445, cE = 605, cS = 765, cP = 930, cK = 1110;
     /* TREEGONE's three filters: TYPE steps through them, or a tap on one */
-    b.button(cT - 40, r1 - 4, "f_type", "TYPE", true);
-    b.ledList("f_type", cT - 4, r1 - 24, 24, {"LP1 OTA 4P", "LP2 LADDER 4P", "SVF OTA 2P"}, 100.0f, 13.0f);
+    b.button(cT - 50, r1 - 4, "f_type", "TYPE", true);
+    b.ledList("f_type", cT + 6, r1 - 26, 26, {"LP1 OTA 4P", "LP2 LADDER 4P", "SVF OTA 2P"}, 100.0f, 14.0f);
     b.knob(cC, r1, b.KD, "cutoff", "CUTOFF");
     b.knob(cR, r1, b.KD, "reso", "RESONANCE");
     b.knob(cE, r1, b.KD, "f_env_amt", "ENV AMT");
@@ -473,7 +473,7 @@ void pageMod(B &b)
     b.knob(150, r1, b.KD, "lfo_freq", "FREQUENCY");
     b.button(300, r1 - 14, "lfo_sync", "LFO SYNC");
     b.knob(560, r1, b.KD, "lfo_shape", "SHAPE");
-    b.ledList("lfo_shape", 625, r1 - 40, 22, {"Triangle", "Sawtooth", "Rev Saw", "Square", "Random"}, 80.0f);
+    b.ledList("lfo_shape", 652, r1 - 44, 24, {"Triangle", "Sawtooth", "Rev Saw", "Square", "Random"}, 80.0f);
     b.knob(1000, r1, b.KD, "lfo_amt", "AMOUNT");
     const char *ld[8][2] = {{"lfo_f1", "FREQ 1"}, {"lfo_f2", "FREQ 2"}, {"lfo_f3", "FREQ 3"}, {"lfo_pw1", "PW 1"},
                             {"lfo_pw2", "PW 2"},  {"lfo_pw3", "PW 3"},  {"lfo_filt", "FILTER"}, {"lfo_amp", "AMP"}};
@@ -534,9 +534,9 @@ void pageAtArp(B &b)
     float r = 150;
     b.button(700, r - 6, "arp_on", "ON/OFF");
     b.knob(840, r, b.KD, "arp_oct", "OCTAVES");
-    b.ledList("arp_oct", 895, r - 22, 22, {"1", "2", "3"}, 30.0f);
+    b.ledList("arp_oct", 924, r - 24, 24, {"1", "2", "3"}, 30.0f);
     b.knob(1040, r, b.KD, "arp_mode", "MODE");
-    b.ledList("arp_mode", 1095, r - 44, 22, {"Up", "Down", "Up/Down", "Random", "Assign"}, 80.0f);
+    b.ledList("arp_mode", 1124, r - 48, 24, {"Up", "Down", "Up/Down", "Random", "Assign"}, 80.0f);
     b.hline(650, 1250, 300);
     b.title("CLOCK", 950, 312);
     float r2 = 450;
@@ -548,16 +548,16 @@ void pageAtArp(B &b)
 void pagePlay(B &b)
 {
     float KD = b.KD, r1 = 100;
-    b.button(70, r1 - 6, "hold", "HOLD");
-    b.knob(185, r1, KD, "glide_rate", "GLIDE RATE");
-    b.button(300, r1 - 6, "glide", "GLIDE");
-    b.button(400, r1 - 6, "unison", "UNISON");
-    b.knob(540, r1, KD, "distortion", "DISTORTION");
-    b.knob(680, r1, KD, "vintage", "VINTAGE");
-    b.knob(820, r1, KD, "pan_spread", "PAN SPREAD");
-    b.knob(960, r1, KD, "pgm_vol", "PGM VOLUME");
-    b.kv(1080, r1, KD - 14, "pb_range", "P WHL RANGE");
-    b.kv(1200, r1, KD - 14, "key_mode", "KEY MODE");
+    b.button(58, r1 - 6, "hold", "HOLD");
+    b.knob(168, r1, KD - 8, "glide_rate", "GLIDE RATE");
+    b.button(276, r1 - 6, "glide", "GLIDE");
+    b.button(364, r1 - 6, "unison", "UNISON");
+    b.knob(484, r1, KD - 8, "distortion", "DISTORTION");
+    b.knob(630, r1, KD - 8, "vintage", "VINTAGE");
+    b.knob(776, r1, KD - 8, "pan_spread", "PAN SPREAD");
+    b.knob(922, r1, KD - 8, "pgm_vol", "PGM VOLUME");
+    b.kv(1060, r1, KD - 16, "pb_range", "P WHL RANGE");
+    b.kv(1192, r1, KD - 16, "key_mode", "KEY MODE");
     b.lineTitle("GLIDE  /  UNISON  /  VOICES", 30, 1250, 222);
     float r2 = 298;
     b.kv(150, r2, KD - 12, "glide_mode", "GLIDE MODE");
