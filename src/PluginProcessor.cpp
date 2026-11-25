@@ -334,6 +334,11 @@ void TreegoneProcessor::prepareToPlay(double sampleRate, int)
 
 void TreegoneProcessor::handleMidi(const juce::MidiMessage &m)
 {
+    if (m.isNoteOn() && splitLearn.load()) {     /* SET: this key is the split point (it plays above it) */
+        learnedNote = juce::jlimit(0, 127, m.getNoteNumber() + 12 * transpose);
+        splitLearn = false;
+        return;
+    }
     if (m.isNoteOn())
         engine.noteOn(juce::jlimit(0, 127, m.getNoteNumber() + 12 * transpose), m.getFloatVelocity());
     else if (m.isNoteOff())

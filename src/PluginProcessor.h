@@ -55,6 +55,8 @@ public:
     std::atomic<float> uiScale{0.9f};
     std::atomic<bool> uiScaleSet{false};
     std::atomic<int> fxEditB{0};                /* the effects' A/B: which the knobs edit */
+    std::atomic<bool> splitLearn{false};        /* LOW SPLIT's SET: the next key played is the split point */
+    std::atomic<int> learnedNote{-1};
 
     juce::String programName() const;
     void setProgramName(const juce::String &);

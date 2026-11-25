@@ -21,11 +21,14 @@ import os
 import shutil
 import sys
 
-# The MPC plugin's parameters (mpc/plugin/src/TreegoneMpc.cpp): 0 VOLUME, then the program's 102, then the plugin's own.
-IDS = """o1_oct o1_tri o1_saw o1_pulse o1_pw o1_level sync o2_oct o2_pitch o2_tri o2_saw o2_pulse o2_pw o2_level o3_oct o3_pitch o3_tri o3_saw o3_pulse o3_pw o3_level o3_key noise fdbk_drive f_type cutoff reso f_env_amt pole2 f_key f_vel svf_mode f_att f_dec f_sus f_rel a_att a_dec a_sus a_rel a_vel lfo_freq lfo_sync lfo_shape lfo_amt lfo_f1 lfo_f2 lfo_f3 lfo_pw1 lfo_pw2 lfo_pw3 lfo_filt lfo_amp at_amt at_f1 at_f2 at_f3 at_filt at_amp at_lfo at_fxa at_fxb pm_osc3 pm_fenv pm_f1 pm_f2 pm_f3 pm_filt pm_pw1 pm_pw2 pm_fdbk glide_rate glide glide_mode unison uni_voices uni_detune key_mode bpm divide fx_on fxa_type fxa_mix fxa_p1 fxa_p2 fxa_sync fxa_div fxb_type fxb_mix fxb_p1 fxb_p2 fxb_sync fxb_div arp_on arp_oct arp_mode seq_on distortion vintage pan_spread pgm_vol pb_range""".split()
-assert len(IDS) == 102
+# The MPC plugin's parameters (mpc/plugin/src/TreegoneMpc.cpp): 0 VOLUME, the program's first 102, the plugin's own
+# (voices, quality, hold), then the program's later ones (LOW SPLIT).
+IDS = """o1_oct o1_tri o1_saw o1_pulse o1_pw o1_level sync o2_oct o2_pitch o2_tri o2_saw o2_pulse o2_pw o2_level o3_oct o3_pitch o3_tri o3_saw o3_pulse o3_pw o3_level o3_key noise fdbk_drive f_type cutoff reso f_env_amt pole2 f_key f_vel svf_mode f_att f_dec f_sus f_rel a_att a_dec a_sus a_rel a_vel lfo_freq lfo_sync lfo_shape lfo_amt lfo_f1 lfo_f2 lfo_f3 lfo_pw1 lfo_pw2 lfo_pw3 lfo_filt lfo_amp at_amt at_f1 at_f2 at_f3 at_filt at_amp at_lfo at_fxa at_fxb pm_osc3 pm_fenv pm_f1 pm_f2 pm_f3 pm_filt pm_pw1 pm_pw2 pm_fdbk glide_rate glide glide_mode unison uni_voices uni_detune key_mode bpm divide fx_on fxa_type fxa_mix fxa_p1 fxa_p2 fxa_sync fxa_div fxb_type fxb_mix fxb_p1 fxb_p2 fxb_sync fxb_div arp_on arp_oct arp_mode seq_on distortion vintage pan_spread pgm_vol pb_range split_on split_point split_oct
+split_glide split_vol split_extra""".split()
+assert len(IDS) == 108
 NP = len(IDS)
-GLOBAL = {"vol": 0, "voices": 1 + NP, "quality": 2 + NP, "hold": 3 + NP}
+V1 = 102                                 # 1.0's parameters keep their numbers; the later ones follow the globals
+GLOBAL = {"vol": 0, "voices": 1 + V1, "quality": 2 + V1, "hold": 3 + V1}
 NPARAMS = 4 + NP
 
 
@@ -33,7 +36,8 @@ def mpc(pid, layer=0):
     """the MPC index of a page's id"""
     if pid in GLOBAL:
         return GLOBAL[pid]
-    return 1 + IDS.index(pid)
+    i = IDS.index(pid)
+    return 1 + i if i < V1 else 4 + i
 
 
 # The pages (the renderer's names) and their Q-Links' groups top down (a group as (ids, False): not framed)
@@ -50,9 +54,9 @@ PAGES = [
     ("AT/FX", [(["at_amt"], False),
                ["fxa_type", "fxa_mix", "fxa_p1", "fxa_p2"],
                ["fxb_type", "fxb_mix", "fxb_p1", "fxb_p2"]]),
-    ("PLAY", [(["arp_mode", "arp_oct", "divide"], False),
+    ("PLAY", [["split_point", "split_oct", "split_glide", "split_vol"],
               ["glide_rate", "glide_mode", "uni_voices", "uni_detune"],
-              (["key_mode", "pb_range"], False)]),
+              (["arp_mode", "arp_oct", "divide", "key_mode"], False)]),
     ("MASTER", [["distortion", "vintage", "pan_spread", "pgm_vol"],
                 (["vol"], False)]),
 ]

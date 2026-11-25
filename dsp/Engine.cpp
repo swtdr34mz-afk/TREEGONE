@@ -70,7 +70,7 @@ const float LFO_SYNC_Q[16] = {32, 16, 8, 4, 3, 2, 1.5f, 1, 2.0f / 3.0f, 0.75f, 0
 const float DIV_SPB[NDIVIDE] = {0.5f, 1.0f, 4.0f / 3.0f, 2.0f, 2.0f, 3.0f, 4.0f, 4.0f, 6.0f, 8.0f};
 const float DIV_SWING[NDIVIDE] = {0, 0, 0, 0, 0.3333f, 0, 0, 0.3333f, 0, 0};
 
-enum { K_ARP = 1000, K_UNI = 2000, K_SEQ = 3000 };
+enum { K_ARP = 1000, K_UNI = 2000, K_SEQ = 3000, K_BASS = 4000 };
 constexpr float VOICE_GAIN = 0.30f;
 
 inline float envSec(float v) { return v <= 0.0f ? 0.0006f : 0.0006f * std::exp2(v * (15.5f / 127.0f)); }   /* 0.6 ms .. 27 s */
@@ -89,9 +89,9 @@ Engine::Engine()
     programInit(prog);
     tab = blepTables();
     uint32_t s = 0xC0FFEE11u;
-    for (int i = 0; i < MAXV; i++) {
+    for (int i = 0; i <= MAXV; i++) {
         V[i].seed = 0x1234567u + 7919u * (uint32_t)i;
-        V[i].panSlot = PAN_SLOT[i];
+        V[i].panSlot = i < MAXV ? PAN_SLOT[i] : 0.0f;
         for (auto &r : V[i].vr)
             r = rndF(s);                          /* (each voice's tolerances: the same every time) */
         for (auto &o : V[i].o)
@@ -114,6 +114,7 @@ void Engine::prepare(double sampleRate)
     fxA.prepare(sr);
     fxB.prepare(sr);
     nKeys = 0;
+    nB = 0;
     arpN = 0;
     arpI = -1;
     arpLatched = false;
@@ -140,7 +141,10 @@ void Engine::setParam(int p, int v)
 {
     if (p < 0 || p >= NPARAM)
         return;
+    int old = prog.p[p];
     prog.p[p] = (int16_t)clampf((float)v, (float)PARAMS[p].lo, (float)PARAMS[p].hi);
+    if (p == P_SPLIT_ON && old && !prog.p[p])
+        bassStop();
 }
 void Engine::setVoices(int n)
 {
@@ -154,8 +158,108 @@ void Engine::setVoices(int n)
 }
 
 /* ------------------------------------------------------------------- notes --- */
-void Engine::noteOn(int note, float vel) { key(note, vel, true); }
-void Engine::noteOff(int note) { key(note, 0.0f, false); }
+void Engine::noteOn(int note, float vel)
+{
+    if (prog.p[P_SPLIT_ON] && note < prog.p[P_SPLIT_POINT] && bassKey(note, vel, true))
+        return;
+    key(note, vel, true);
+}
+void Engine::noteOff(int note)
+{
+    if (bassKey(note, 0.0f, false))
+        return;
+    key(note, 0.0f, false);
+}
+
+/* ------------------------------------------------------------------- LOW SPLIT --- */
+/* Under the split point: one voice of the program's sound, monophonic, the last key played; legato with its own
+ * glide while a key is still held (without glide each key strikes again) */
+bool Engine::bassKey(int note, float vel, bool down)
+{
+    int at = -1;
+    for (int i = 0; i < nB; i++)
+        if (bKeys[i] == note)
+            at = i;
+    if (down) {
+        if (at >= 0)
+            return true;
+        bool held = nB > 0;
+        if (nB < NKEYS) {
+            bKeys[nB] = (int8_t)note;
+            bVel[nB++] = vel;
+        }
+        bassPlay(note, vel, held);
+        return true;
+    }
+    if (at < 0)
+        return false;
+    for (int i = at; i < nB - 1; i++) {
+        bKeys[i] = bKeys[i + 1];
+        bVel[i] = bVel[i + 1];
+    }
+    nB--;
+    Voice &v = V[MAXV];
+    if (nB > 0) {
+        if (v.note != bKeys[nB - 1] + (prog.p[P_SPLIT_OCT] - 2) * 12)
+            bassPlay(bKeys[nB - 1], bVel[nB - 1], true);
+    } else if (v.on && v.gate) {
+        if (susOn || holdOn)
+            v.sus = true;
+        else
+            releaseVoice(v);
+        v.gate = false;
+    }
+    return true;
+}
+
+void Engine::bassPlay(int note, float vel, bool legato)
+{
+    const int16_t *P = prog.p;
+    Voice &v = V[MAXV];
+    float target = (float)(note + (P[P_SPLIT_OCT] - 2) * 12);
+    bool fresh = !v.on;
+    bool glide = P[P_SPLIT_GLIDE] > 0 && legato && !fresh && v.gate;
+    v.on = true;
+    v.key = K_BASS;
+    v.note = (int)target;
+    if (!glide)
+        v.vel = vel;
+    v.uniDet = 0.0f;
+    v.gate = true;
+    v.sus = false;
+    v.fade = 1.0f;
+    v.pend = false;
+    v.age = ++ageN;
+    v.gmul = (float)P[P_SPLIT_VOL] / 100.0f;
+    v.t = target;
+    if (glide)
+        v.gr = 12.0f / glideSec((float)P[P_SPLIT_GLIDE]);
+    else {
+        v.p = target;
+        v.gr = 0.0f;
+        v.fe.st = ES_ATT;
+        v.ae.st = ES_ATT;
+        v.kick = 1.0f;
+    }
+    if (fresh) {
+        v.smOk = false;
+        v.fe.v = v.ae.v = 0.0f;
+        v.fbOut = 0.0f;
+        for (float &f : v.f)
+            f = 0.0f;
+        v.ffb = 0.0f;
+    }
+}
+
+void Engine::bassStop()
+{
+    nB = 0;
+    Voice &v = V[MAXV];
+    if (v.on) {
+        v.gate = v.sus = false;
+        releaseVoice(v);
+    }
+}
 
 void Engine::key(int note, float vel, bool down)
 {
@@ -467,6 +571,7 @@ void Engine::pressure(float v) { prV = clampf(v, 0.0f, 1.0f); }
 void Engine::allOff()
 {
     nKeys = 0;
+    nB = 0;
     arpN = 0;
     arpI = -1;
     arpLatched = false;
@@ -868,8 +973,8 @@ void Engine::voiceChunk(Voice &v, float *Lo, float *Ro)
     float avs = P[P_A_VEL] ? 0.15f + 0.85f * vel : 1.0f;
     if (P[P_AT_AMP])
         avs *= clampf(1.0f + at, 0.0f, 2.0f);
-    float pgm = (float)P[P_PGM_VOL] / 100.0f * VOICE_GAIN;
-    if ((v.key == K_UNI || (v.key >= K_ARP && P[P_UNISON])) && uniN > 1)
+    float pgm = (float)P[P_PGM_VOL] / 100.0f * VOICE_GAIN * (v.key == K_BASS ? v.gmul : 1.0f);
+    if ((v.key == K_UNI || (v.key >= K_ARP && v.key != K_BASS && P[P_UNISON])) && uniN > 1)
         pgm *= 1.0f / std::sqrt((float)uniN);
     float pan = clampf(v.panSlot * (float)P[P_PAN_SPREAD] / 127.0f, -1.0f, 1.0f);
 
@@ -1159,7 +1264,7 @@ void Engine::chunk()
     /* the voices */
     float bl[CH] = {}, br[CH] = {};
     float trackLo = 1e9f;
-    for (int i = 0; i < MAXV; i++) {
+    for (int i = 0; i <= MAXV; i++) {
         Voice &v = V[i];
         if (!v.on && !v.pend)
             continue;

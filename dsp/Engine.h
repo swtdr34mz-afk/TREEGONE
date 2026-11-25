@@ -68,6 +68,7 @@ public:
 
     int voicesSounding() const;
     float voiceLevel(int v) const { return v >= 0 && v < MAXV ? V[v].ae.v : 0.0f; }
+    bool splitSounding() const { return V[MAXV].on && V[MAXV].gate; }
     int seqStep() const;
     bool clockBeat() const;
     float bpmShown() const { return bpmNow; }
@@ -103,10 +104,11 @@ private:
         float pvel = 0.0f, pdet = 0.0f;
         bool pend = false;
         float panSlot = 0.0f;
+        float gmul = 1.0f;                       /* (the LOW SPLIT voice: its VOLUME) */
     };
 
     Program prog;
-    Voice V[MAXV];
+    Voice V[MAXV + 1];                           /* the last: LOW SPLIT's voice */
     Fx fxA, fxB;
     int nVoices = 6, quality = 1;
     float sr = 44100.0f;
@@ -142,8 +144,15 @@ private:
     bool recFresh = true;
     uint8_t sounding[PSEQ_NOTES] = {};
     int uniN = 1;
+    /* LOW SPLIT: the keys held under the split point, in order */
+    int8_t bKeys[NKEYS];
+    float bVel[NKEYS];
+    int nB = 0;
 
-    int cap() const { return nVoices; }
+    int cap() const { return nVoices - (prog.p[P_SPLIT_ON] && !prog.p[P_SPLIT_EXTRA] ? 1 : 0); }
+    bool bassKey(int note, float vel, bool down);
+    void bassPlay(int note, float vel, bool legato);
+    void bassStop();
     void key(int note, float vel, bool down);
     void playNote(int key, int note, float vel);
     void stopNote(int key);

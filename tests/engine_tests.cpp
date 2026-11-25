@@ -195,6 +195,39 @@ int main(int argc, char **argv)
         e.seqPlay(false);
     }
 
+    /* LOW SPLIT: under the split point one more voice (mono, its octave), the six above as before; legato glide; off
+     * lets it go */
+    {
+        Program p = FACTORY[0];
+        p.p[P_SPLIT_ON] = 1;
+        p.p[P_SPLIT_POINT] = 48;
+        p.p[P_SPLIT_OCT] = 1;
+        p.p[P_SPLIT_GLIDE] = 60;
+        e.prepare(48000.0);
+        e.setVoices(6);
+        e.setProgram(p);
+        for (int k : {60, 64, 67, 71, 72, 76})
+            e.noteOn(k, 0.8f);
+        e.noteOn(36, 0.9f);
+        e.noteOn(40, 0.9f);                      /* (legato: the same voice glides) */
+        std::vector<float> L(4800), R(4800);
+        e.render(L.data(), R.data(), 4800);
+        CHECK(e.voicesSounding() == 7, "split +1 voice: %d sounding", e.voicesSounding());
+        CHECK(e.splitSounding(), "the split voice sounds");
+        e.setParam(P_SPLIT_EXTRA, 0);
+        e.noteOff(36);
+        e.noteOff(40);
+        for (int k : {60, 64, 67, 71, 72, 76})
+            e.noteOff(k);
+        e.render(L.data(), R.data(), 4800);
+        Stats s = play(e, 48000.0, {36, 60, 64, 67, 71, 72, 76}, 1.0f, 0.8f, 64);
+        CHECK(s.finite && s.peak < 2.5f, "split: %f", s.peak);
+        e.setParam(P_SPLIT_ON, 0);
+        e.render(L.data(), R.data(), 4800);
+        play(e, 48000.0, {}, 3.0f, 0.0f);
+        CHECK(e.voicesSounding() == 0, "all let go: %d", e.voicesSounding());
+    }
+
     /* the SysEx reader: a made-up Trigon program, packed, read back */
     {
         unsigned char b[1024] = {};

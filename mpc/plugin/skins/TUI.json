@@ -4677,7 +4677,7 @@
           }
         },
         {
-          "key": "play knob 8 glide_rate",
+          "key": "play knob 9 split_point",
           "value": {
             "version": 2,
             "actions": [
@@ -4728,7 +4728,7 @@
                   "data": {
                     "version": 3,
                     "knobType": "FilmStrip",
-                    "filmStrip": "play_008_glide_rate_knob.png",
+                    "filmStrip": "play_009_split_point_knob.png",
                     "numFrames": 122,
                     "invert": false,
                     "dragOrientation": "Vertical",
@@ -4779,7 +4779,7 @@
           }
         },
         {
-          "key": "play knob 9 glide_mode",
+          "key": "play knob 10 split_oct",
           "value": {
             "version": 2,
             "actions": [
@@ -4830,7 +4830,7 @@
                   "data": {
                     "version": 3,
                     "knobType": "FilmStrip",
-                    "filmStrip": "play_009_glide_mode_knob.png",
+                    "filmStrip": "play_010_split_oct_knob.png",
                     "numFrames": 4,
                     "invert": false,
                     "dragOrientation": "Vertical",
@@ -4881,7 +4881,313 @@
           }
         },
         {
-          "key": "play knob 11 uni_voices",
+          "key": "play knob 11 split_glide",
+          "value": {
+            "version": 2,
+            "actions": [
+              {
+                "version": 1,
+                "onAction": "Mouse Down",
+                "handler": "Q-Link",
+                "handleName": "Data",
+                "additionalData": ""
+              },
+              {
+                "version": 1,
+                "onAction": "Double Click",
+                "handler": "Show Overlay",
+                "handleName": "Data",
+                "additionalData": "knob overlay"
+              },
+              {
+                "version": 1,
+                "onAction": "Enter Pressed",
+                "handler": "Show Overlay",
+                "handleName": "Data",
+                "additionalData": "knob overlay"
+              }
+            ],
+            "backgroundData": {
+              "version": 1,
+              "focussed": {
+                "version": 1,
+                "colour": "0",
+                "image": ""
+              },
+              "unfocussed": {
+                "version": 1,
+                "colour": "0",
+                "image": ""
+              }
+            },
+            "ignoreMousePresses": false,
+            "disableCoarseDataWheel": false,
+            "componentsData": [
+              {
+                "version": 2,
+                "componentData": {
+                  "version": 1,
+                  "name": "knob",
+                  "type": "Knob",
+                  "data": {
+                    "version": 3,
+                    "knobType": "FilmStrip",
+                    "filmStrip": "play_011_split_glide_knob.png",
+                    "numFrames": 122,
+                    "invert": false,
+                    "dragOrientation": "Vertical",
+                    "handleName": "Data"
+                  }
+                },
+                "handle remapping": {
+                  "version": 1,
+                  "map": []
+                },
+                "bounds": {
+                  "version": 1,
+                  "acceptsHWFocus": "No",
+                  "showWhenDataModelInvalid": "Show",
+                  "whenVisible": "Always",
+                  "boundsType": "Absolute",
+                  "bounds": "24 0 80 80"
+                }
+              },
+              {
+                "version": 2,
+                "componentData": {
+                  "version": 1,
+                  "name": "focus",
+                  "type": "Focus",
+                  "data": {
+                    "version": 1,
+                    "backgroundColour": "19ffffff",
+                    "outlineColour": "ffe81f40",
+                    "backgroundInset": 1.0,
+                    "outlineThickness": 1.0
+                  }
+                },
+                "handle remapping": {
+                  "version": 1,
+                  "map": []
+                },
+                "bounds": {
+                  "version": 1,
+                  "acceptsHWFocus": "No",
+                  "showWhenDataModelInvalid": "Show",
+                  "whenVisible": "WhenFocussed",
+                  "boundsType": "Absolute",
+                  "bounds": "0 0 128 103"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "key": "play knob 12 split_vol",
+          "value": {
+            "version": 2,
+            "actions": [
+              {
+                "version": 1,
+                "onAction": "Mouse Down",
+                "handler": "Q-Link",
+                "handleName": "Data",
+                "additionalData": ""
+              },
+              {
+                "version": 1,
+                "onAction": "Double Click",
+                "handler": "Show Overlay",
+                "handleName": "Data",
+                "additionalData": "knob overlay"
+              },
+              {
+                "version": 1,
+                "onAction": "Enter Pressed",
+                "handler": "Show Overlay",
+                "handleName": "Data",
+                "additionalData": "knob overlay"
+              }
+            ],
+            "backgroundData": {
+              "version": 1,
+              "focussed": {
+                "version": 1,
+                "colour": "0",
+                "image": ""
+              },
+              "unfocussed": {
+                "version": 1,
+                "colour": "0",
+                "image": ""
+              }
+            },
+            "ignoreMousePresses": false,
+            "disableCoarseDataWheel": false,
+            "componentsData": [
+              {
+                "version": 2,
+                "componentData": {
+                  "version": 1,
+                  "name": "knob",
+                  "type": "Knob",
+                  "data": {
+                    "version": 3,
+                    "knobType": "FilmStrip",
+                    "filmStrip": "play_012_split_vol_knob.png",
+                    "numFrames": 122,
+                    "invert": false,
+                    "dragOrientation": "Vertical",
+                    "handleName": "Data"
+                  }
+                },
+                "handle remapping": {
+                  "version": 1,
+                  "map": []
+                },
+                "bounds": {
+                  "version": 1,
+                  "acceptsHWFocus": "No",
+                  "showWhenDataModelInvalid": "Show",
+                  "whenVisible": "Always",
+                  "boundsType": "Absolute",
+                  "bounds": "24 0 80 80"
+                }
+              },
+              {
+                "version": 2,
+                "componentData": {
+                  "version": 1,
+                  "name": "focus",
+                  "type": "Focus",
+                  "data": {
+                    "version": 1,
+                    "backgroundColour": "19ffffff",
+                    "outlineColour": "ffe81f40",
+                    "backgroundInset": 1.0,
+                    "outlineThickness": 1.0
+                  }
+                },
+                "handle remapping": {
+                  "version": 1,
+                  "map": []
+                },
+                "bounds": {
+                  "version": 1,
+                  "acceptsHWFocus": "No",
+                  "showWhenDataModelInvalid": "Show",
+                  "whenVisible": "WhenFocussed",
+                  "boundsType": "Absolute",
+                  "bounds": "0 0 128 103"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "key": "play knob 14 glide_rate",
+          "value": {
+            "version": 2,
+            "actions": [
+              {
+                "version": 1,
+                "onAction": "Mouse Down",
+                "handler": "Q-Link",
+                "handleName": "Data",
+                "additionalData": ""
+              },
+              {
+                "version": 1,
+                "onAction": "Double Click",
+                "handler": "Show Overlay",
+                "handleName": "Data",
+                "additionalData": "knob overlay"
+              },
+              {
+                "version": 1,
+                "onAction": "Enter Pressed",
+                "handler": "Show Overlay",
+                "handleName": "Data",
+                "additionalData": "knob overlay"
+              }
+            ],
+            "backgroundData": {
+              "version": 1,
+              "focussed": {
+                "version": 1,
+                "colour": "0",
+                "image": ""
+              },
+              "unfocussed": {
+                "version": 1,
+                "colour": "0",
+                "image": ""
+              }
+            },
+            "ignoreMousePresses": false,
+            "disableCoarseDataWheel": false,
+            "componentsData": [
+              {
+                "version": 2,
+                "componentData": {
+                  "version": 1,
+                  "name": "knob",
+                  "type": "Knob",
+                  "data": {
+                    "version": 3,
+                    "knobType": "FilmStrip",
+                    "filmStrip": "play_014_glide_rate_knob.png",
+                    "numFrames": 122,
+                    "invert": false,
+                    "dragOrientation": "Vertical",
+                    "handleName": "Data"
+                  }
+                },
+                "handle remapping": {
+                  "version": 1,
+                  "map": []
+                },
+                "bounds": {
+                  "version": 1,
+                  "acceptsHWFocus": "No",
+                  "showWhenDataModelInvalid": "Show",
+                  "whenVisible": "Always",
+                  "boundsType": "Absolute",
+                  "bounds": "24 0 80 80"
+                }
+              },
+              {
+                "version": 2,
+                "componentData": {
+                  "version": 1,
+                  "name": "focus",
+                  "type": "Focus",
+                  "data": {
+                    "version": 1,
+                    "backgroundColour": "19ffffff",
+                    "outlineColour": "ffe81f40",
+                    "backgroundInset": 1.0,
+                    "outlineThickness": 1.0
+                  }
+                },
+                "handle remapping": {
+                  "version": 1,
+                  "map": []
+                },
+                "bounds": {
+                  "version": 1,
+                  "acceptsHWFocus": "No",
+                  "showWhenDataModelInvalid": "Show",
+                  "whenVisible": "WhenFocussed",
+                  "boundsType": "Absolute",
+                  "bounds": "0 0 128 103"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "key": "play knob 15 glide_mode",
           "value": {
             "version": 2,
             "actions": [
@@ -4932,7 +5238,109 @@
                   "data": {
                     "version": 3,
                     "knobType": "FilmStrip",
-                    "filmStrip": "play_011_uni_voices_knob.png",
+                    "filmStrip": "play_015_glide_mode_knob.png",
+                    "numFrames": 4,
+                    "invert": false,
+                    "dragOrientation": "Vertical",
+                    "handleName": "Data"
+                  }
+                },
+                "handle remapping": {
+                  "version": 1,
+                  "map": []
+                },
+                "bounds": {
+                  "version": 1,
+                  "acceptsHWFocus": "No",
+                  "showWhenDataModelInvalid": "Show",
+                  "whenVisible": "Always",
+                  "boundsType": "Absolute",
+                  "bounds": "24 0 80 80"
+                }
+              },
+              {
+                "version": 2,
+                "componentData": {
+                  "version": 1,
+                  "name": "focus",
+                  "type": "Focus",
+                  "data": {
+                    "version": 1,
+                    "backgroundColour": "19ffffff",
+                    "outlineColour": "ffe81f40",
+                    "backgroundInset": 1.0,
+                    "outlineThickness": 1.0
+                  }
+                },
+                "handle remapping": {
+                  "version": 1,
+                  "map": []
+                },
+                "bounds": {
+                  "version": 1,
+                  "acceptsHWFocus": "No",
+                  "showWhenDataModelInvalid": "Show",
+                  "whenVisible": "WhenFocussed",
+                  "boundsType": "Absolute",
+                  "bounds": "0 0 128 103"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "key": "play knob 17 uni_voices",
+          "value": {
+            "version": 2,
+            "actions": [
+              {
+                "version": 1,
+                "onAction": "Mouse Down",
+                "handler": "Q-Link",
+                "handleName": "Data",
+                "additionalData": ""
+              },
+              {
+                "version": 1,
+                "onAction": "Double Click",
+                "handler": "Show Overlay",
+                "handleName": "Data",
+                "additionalData": "menu overlay"
+              },
+              {
+                "version": 1,
+                "onAction": "Enter Pressed",
+                "handler": "Show Overlay",
+                "handleName": "Data",
+                "additionalData": "menu overlay"
+              }
+            ],
+            "backgroundData": {
+              "version": 1,
+              "focussed": {
+                "version": 1,
+                "colour": "0",
+                "image": ""
+              },
+              "unfocussed": {
+                "version": 1,
+                "colour": "0",
+                "image": ""
+              }
+            },
+            "ignoreMousePresses": false,
+            "disableCoarseDataWheel": false,
+            "componentsData": [
+              {
+                "version": 2,
+                "componentData": {
+                  "version": 1,
+                  "name": "knob",
+                  "type": "Knob",
+                  "data": {
+                    "version": 3,
+                    "knobType": "FilmStrip",
+                    "filmStrip": "play_017_uni_voices_knob.png",
                     "numFrames": 7,
                     "invert": false,
                     "dragOrientation": "Vertical",
@@ -4983,7 +5391,7 @@
           }
         },
         {
-          "key": "play knob 12 uni_detune",
+          "key": "play knob 18 uni_detune",
           "value": {
             "version": 2,
             "actions": [
@@ -5034,7 +5442,7 @@
                   "data": {
                     "version": 3,
                     "knobType": "FilmStrip",
-                    "filmStrip": "play_012_uni_detune_knob.png",
+                    "filmStrip": "play_018_uni_detune_knob.png",
                     "numFrames": 16,
                     "invert": false,
                     "dragOrientation": "Vertical",
@@ -5085,7 +5493,7 @@
           }
         },
         {
-          "key": "play knob 13 key_mode",
+          "key": "play knob 19 key_mode",
           "value": {
             "version": 2,
             "actions": [
@@ -5136,7 +5544,7 @@
                   "data": {
                     "version": 3,
                     "knobType": "FilmStrip",
-                    "filmStrip": "play_013_key_mode_knob.png",
+                    "filmStrip": "play_019_key_mode_knob.png",
                     "numFrames": 6,
                     "invert": false,
                     "dragOrientation": "Vertical",
@@ -5187,7 +5595,7 @@
           }
         },
         {
-          "key": "play knob 14 pb_range",
+          "key": "play knob 20 pb_range",
           "value": {
             "version": 2,
             "actions": [
@@ -5238,7 +5646,7 @@
                   "data": {
                     "version": 3,
                     "knobType": "FilmStrip",
-                    "filmStrip": "play_014_pb_range_knob.png",
+                    "filmStrip": "play_020_pb_range_knob.png",
                     "numFrames": 12,
                     "invert": false,
                     "dragOrientation": "Vertical",
@@ -6043,6 +6451,18 @@
       },
       {
         "key": "Parameter 105",
+        "value": ["Off", "On"]
+      },
+      {
+        "key": "Parameter 106",
+        "value": ["Off", "On"]
+      },
+      {
+        "key": "Parameter 108",
+        "value": ["-2", "-1", "0", "+1"]
+      },
+      {
+        "key": "Parameter 111",
         "value": ["Off", "On"]
       }
     ],
@@ -10738,7 +11158,7 @@
                 "showWhenDataModelInvalid": "Hide",
                 "whenVisible": "Always",
                 "boundsType": "Absolute",
-                "bounds": "51 55 58 34",
+                "bounds": "41 55 58 34",
                 "additionalInvalidatingHandles": ["IndexedEnabling/0/2/Parameter 94"]
               }
             },
@@ -10768,7 +11188,7 @@
                 "showWhenDataModelInvalid": "Hide",
                 "whenVisible": "Always",
                 "boundsType": "Absolute",
-                "bounds": "51 55 58 34",
+                "bounds": "41 55 58 34",
                 "additionalInvalidatingHandles": ["IndexedEnabling/1/2/Parameter 94"]
               }
             },
@@ -10798,7 +11218,7 @@
                 "showWhenDataModelInvalid": "Show",
                 "whenVisible": "Always",
                 "boundsType": "Absolute",
-                "bounds": "136 40 128 103"
+                "bounds": "111 40 128 103"
               }
             },
             {
@@ -10827,7 +11247,7 @@
                 "showWhenDataModelInvalid": "Show",
                 "whenVisible": "Always",
                 "boundsType": "Absolute",
-                "bounds": "250 28 130 21"
+                "bounds": "220 28 120 21"
               }
             },
             {
@@ -10856,7 +11276,7 @@
                 "showWhenDataModelInvalid": "Show",
                 "whenVisible": "Always",
                 "boundsType": "Absolute",
-                "bounds": "250 49 130 21"
+                "bounds": "220 49 120 21"
               }
             },
             {
@@ -10885,7 +11305,7 @@
                 "showWhenDataModelInvalid": "Show",
                 "whenVisible": "Always",
                 "boundsType": "Absolute",
-                "bounds": "250 70 130 21"
+                "bounds": "220 70 120 21"
               }
             },
             {
@@ -10914,7 +11334,7 @@
                 "showWhenDataModelInvalid": "Show",
                 "whenVisible": "Always",
                 "boundsType": "Absolute",
-                "bounds": "250 91 130 21"
+                "bounds": "220 91 120 21"
               }
             },
             {
@@ -10943,7 +11363,7 @@
                 "showWhenDataModelInvalid": "Show",
                 "whenVisible": "Always",
                 "boundsType": "Absolute",
-                "bounds": "250 112 130 21"
+                "bounds": "220 112 120 21"
               }
             },
             {
@@ -10972,7 +11392,7 @@
                 "showWhenDataModelInvalid": "Show",
                 "whenVisible": "Always",
                 "boundsType": "Absolute",
-                "bounds": "396 40 128 103"
+                "bounds": "346 40 128 103"
               }
             },
             {
@@ -11001,7 +11421,7 @@
                 "showWhenDataModelInvalid": "Hide",
                 "whenVisible": "Always",
                 "boundsType": "Absolute",
-                "bounds": "51 183 58 34",
+                "bounds": "41 183 58 34",
                 "additionalInvalidatingHandles": ["IndexedEnabling/0/2/Parameter 105"]
               }
             },
@@ -11031,7 +11451,7 @@
                 "showWhenDataModelInvalid": "Hide",
                 "whenVisible": "Always",
                 "boundsType": "Absolute",
-                "bounds": "51 183 58 34",
+                "bounds": "41 183 58 34",
                 "additionalInvalidatingHandles": ["IndexedEnabling/1/2/Parameter 105"]
               }
             },
@@ -11061,7 +11481,7 @@
                 "showWhenDataModelInvalid": "Show",
                 "whenVisible": "Always",
                 "boundsType": "Absolute",
-                "bounds": "652 40 128 103"
+                "bounds": "497 40 128 103"
               }
             },
             {
@@ -11090,7 +11510,7 @@
                 "showWhenDataModelInvalid": "Hide",
                 "whenVisible": "Always",
                 "boundsType": "Absolute",
-                "bounds": "931 55 58 34",
+                "bounds": "677 55 58 34",
                 "additionalInvalidatingHandles": ["IndexedEnabling/0/2/Parameter 97"]
               }
             },
@@ -11120,8 +11540,244 @@
                 "showWhenDataModelInvalid": "Hide",
                 "whenVisible": "Always",
                 "boundsType": "Absolute",
-                "bounds": "931 55 58 34",
+                "bounds": "677 55 58 34",
                 "additionalInvalidatingHandles": ["IndexedEnabling/1/2/Parameter 97"]
+              }
+            },
+            {
+              "version": 2,
+              "componentData": {
+                "version": 1,
+                "name": "split_on",
+                "type": "Button",
+                "data": {
+                  "version": 2,
+                  "onImage": "play_007_split_on_button_0.png",
+                  "offImage": "play_007_split_on_button_0.png",
+                  "buttonId": 1,
+                  "numButtonsInGroup": 2,
+                  "handleName": "Parameter 106",
+                  "gestureBehaviour": "Instant"
+                }
+              },
+              "handle remapping": {
+                "version": 1,
+                "map": []
+              },
+              "bounds": {
+                "version": 2,
+                "acceptsHWFocus": "No",
+                "showWhenDataModelInvalid": "Hide",
+                "whenVisible": "Always",
+                "boundsType": "Absolute",
+                "bounds": "801 55 58 34",
+                "additionalInvalidatingHandles": ["IndexedEnabling/0/2/Parameter 106"]
+              }
+            },
+            {
+              "version": 2,
+              "componentData": {
+                "version": 1,
+                "name": "split_on",
+                "type": "Button",
+                "data": {
+                  "version": 2,
+                  "onImage": "play_007_split_on_button_1.png",
+                  "offImage": "play_007_split_on_button_1.png",
+                  "buttonId": 0,
+                  "numButtonsInGroup": 2,
+                  "handleName": "Parameter 106",
+                  "gestureBehaviour": "Instant"
+                }
+              },
+              "handle remapping": {
+                "version": 1,
+                "map": []
+              },
+              "bounds": {
+                "version": 2,
+                "acceptsHWFocus": "No",
+                "showWhenDataModelInvalid": "Hide",
+                "whenVisible": "Always",
+                "boundsType": "Absolute",
+                "bounds": "801 55 58 34",
+                "additionalInvalidatingHandles": ["IndexedEnabling/1/2/Parameter 106"]
+              }
+            },
+            {
+              "version": 2,
+              "componentData": {
+                "version": 1,
+                "name": "split_extra",
+                "type": "Button",
+                "data": {
+                  "version": 2,
+                  "onImage": "play_008_split_extra_button_0.png",
+                  "offImage": "play_008_split_extra_button_0.png",
+                  "buttonId": 1,
+                  "numButtonsInGroup": 2,
+                  "handleName": "Parameter 111",
+                  "gestureBehaviour": "Instant"
+                }
+              },
+              "handle remapping": {
+                "version": 1,
+                "map": []
+              },
+              "bounds": {
+                "version": 2,
+                "acceptsHWFocus": "No",
+                "showWhenDataModelInvalid": "Hide",
+                "whenVisible": "Always",
+                "boundsType": "Absolute",
+                "bounds": "801 183 58 34",
+                "additionalInvalidatingHandles": ["IndexedEnabling/0/2/Parameter 111"]
+              }
+            },
+            {
+              "version": 2,
+              "componentData": {
+                "version": 1,
+                "name": "split_extra",
+                "type": "Button",
+                "data": {
+                  "version": 2,
+                  "onImage": "play_008_split_extra_button_1.png",
+                  "offImage": "play_008_split_extra_button_1.png",
+                  "buttonId": 0,
+                  "numButtonsInGroup": 2,
+                  "handleName": "Parameter 111",
+                  "gestureBehaviour": "Instant"
+                }
+              },
+              "handle remapping": {
+                "version": 1,
+                "map": []
+              },
+              "bounds": {
+                "version": 2,
+                "acceptsHWFocus": "No",
+                "showWhenDataModelInvalid": "Hide",
+                "whenVisible": "Always",
+                "boundsType": "Absolute",
+                "bounds": "801 183 58 34",
+                "additionalInvalidatingHandles": ["IndexedEnabling/1/2/Parameter 111"]
+              }
+            },
+            {
+              "version": 2,
+              "componentData": {
+                "version": 1,
+                "name": "split_point",
+                "type": "play knob 9 split_point",
+                "data": {
+                  "version": 1,
+                  "handleName": "Data"
+                }
+              },
+              "handle remapping": {
+                "version": 1,
+                "map": [
+                  {
+                    "key": "Data",
+                    "value": "Parameter 107"
+                  }
+                ]
+              },
+              "bounds": {
+                "version": 1,
+                "acceptsHWFocus": "Yes",
+                "showWhenDataModelInvalid": "Show",
+                "whenVisible": "Always",
+                "boundsType": "Absolute",
+                "bounds": "876 40 128 103"
+              }
+            },
+            {
+              "version": 2,
+              "componentData": {
+                "version": 1,
+                "name": "split_oct",
+                "type": "play knob 10 split_oct",
+                "data": {
+                  "version": 1,
+                  "handleName": "Data"
+                }
+              },
+              "handle remapping": {
+                "version": 1,
+                "map": [
+                  {
+                    "key": "Data",
+                    "value": "Parameter 108"
+                  }
+                ]
+              },
+              "bounds": {
+                "version": 1,
+                "acceptsHWFocus": "Yes",
+                "showWhenDataModelInvalid": "Show",
+                "whenVisible": "Always",
+                "boundsType": "Absolute",
+                "bounds": "986 40 128 103"
+              }
+            },
+            {
+              "version": 2,
+              "componentData": {
+                "version": 1,
+                "name": "split_glide",
+                "type": "play knob 11 split_glide",
+                "data": {
+                  "version": 1,
+                  "handleName": "Data"
+                }
+              },
+              "handle remapping": {
+                "version": 1,
+                "map": [
+                  {
+                    "key": "Data",
+                    "value": "Parameter 109"
+                  }
+                ]
+              },
+              "bounds": {
+                "version": 1,
+                "acceptsHWFocus": "Yes",
+                "showWhenDataModelInvalid": "Show",
+                "whenVisible": "Always",
+                "boundsType": "Absolute",
+                "bounds": "1096 40 128 103"
+              }
+            },
+            {
+              "version": 2,
+              "componentData": {
+                "version": 1,
+                "name": "split_vol",
+                "type": "play knob 12 split_vol",
+                "data": {
+                  "version": 1,
+                  "handleName": "Data"
+                }
+              },
+              "handle remapping": {
+                "version": 1,
+                "map": [
+                  {
+                    "key": "Data",
+                    "value": "Parameter 110"
+                  }
+                ]
+              },
+              "bounds": {
+                "version": 1,
+                "acceptsHWFocus": "Yes",
+                "showWhenDataModelInvalid": "Show",
+                "whenVisible": "Always",
+                "boundsType": "Absolute",
+                "bounds": "986 168 128 103"
               }
             },
             {
@@ -11132,8 +11788,8 @@
                 "type": "Button",
                 "data": {
                   "version": 2,
-                  "onImage": "play_007_glide_button_0.png",
-                  "offImage": "play_007_glide_button_0.png",
+                  "onImage": "play_013_glide_button_0.png",
+                  "offImage": "play_013_glide_button_0.png",
                   "buttonId": 1,
                   "numButtonsInGroup": 2,
                   "handleName": "Parameter 73",
@@ -11162,8 +11818,8 @@
                 "type": "Button",
                 "data": {
                   "version": 2,
-                  "onImage": "play_007_glide_button_1.png",
-                  "offImage": "play_007_glide_button_1.png",
+                  "onImage": "play_013_glide_button_1.png",
+                  "offImage": "play_013_glide_button_1.png",
                   "buttonId": 0,
                   "numButtonsInGroup": 2,
                   "handleName": "Parameter 73",
@@ -11189,7 +11845,7 @@
               "componentData": {
                 "version": 1,
                 "name": "glide_rate",
-                "type": "play knob 8 glide_rate",
+                "type": "play knob 14 glide_rate",
                 "data": {
                   "version": 1,
                   "handleName": "Data"
@@ -11218,7 +11874,7 @@
               "componentData": {
                 "version": 1,
                 "name": "glide_mode",
-                "type": "play knob 9 glide_mode",
+                "type": "play knob 15 glide_mode",
                 "data": {
                   "version": 1,
                   "handleName": "Data"
@@ -11250,8 +11906,8 @@
                 "type": "Button",
                 "data": {
                   "version": 2,
-                  "onImage": "play_010_unison_button_0.png",
-                  "offImage": "play_010_unison_button_0.png",
+                  "onImage": "play_016_unison_button_0.png",
+                  "offImage": "play_016_unison_button_0.png",
                   "buttonId": 1,
                   "numButtonsInGroup": 2,
                   "handleName": "Parameter 75",
@@ -11280,8 +11936,8 @@
                 "type": "Button",
                 "data": {
                   "version": 2,
-                  "onImage": "play_010_unison_button_1.png",
-                  "offImage": "play_010_unison_button_1.png",
+                  "onImage": "play_016_unison_button_1.png",
+                  "offImage": "play_016_unison_button_1.png",
                   "buttonId": 0,
                   "numButtonsInGroup": 2,
                   "handleName": "Parameter 75",
@@ -11307,7 +11963,7 @@
               "componentData": {
                 "version": 1,
                 "name": "uni_voices",
-                "type": "play knob 11 uni_voices",
+                "type": "play knob 17 uni_voices",
                 "data": {
                   "version": 1,
                   "handleName": "Data"
@@ -11336,7 +11992,7 @@
               "componentData": {
                 "version": 1,
                 "name": "uni_detune",
-                "type": "play knob 12 uni_detune",
+                "type": "play knob 18 uni_detune",
                 "data": {
                   "version": 1,
                   "handleName": "Data"
@@ -11365,7 +12021,7 @@
               "componentData": {
                 "version": 1,
                 "name": "key_mode",
-                "type": "play knob 13 key_mode",
+                "type": "play knob 19 key_mode",
                 "data": {
                   "version": 1,
                   "handleName": "Data"
@@ -11394,7 +12050,7 @@
               "componentData": {
                 "version": 1,
                 "name": "pb_range",
-                "type": "play knob 14 pb_range",
+                "type": "play knob 20 pb_range",
                 "data": {
                   "version": 1,
                   "handleName": "Data"
@@ -11420,7 +12076,7 @@
             }
           ]
         },
-        "qlinkBoundsData": ["134 326 712 107"]
+        "qlinkBoundsData": ["870 34 360 243", "134 326 712 107"]
       },
       {
         "version": 1,

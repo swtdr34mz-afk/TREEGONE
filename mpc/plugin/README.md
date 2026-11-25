@@ -28,7 +28,7 @@ denselben Ordner; jedes Gerät lädt seine eigene Datei darin.
 | **FILTER** | Filter-Typ (LP1 OTA, LP2 Ladder, SVF), Cutoff, Resonance, Env Amt, SVF Mode, 2 Pole, Keyboard, Velocity, Filter-Hüllkurve; Amp-Hüllkurve |
 | **MOD** | LFO (Frequency, Sync, Shape, Amount, acht Ziele); Poly Mod (Osc 3, Filter Env, sieben Ziele) |
 | **AT/FX** | Aftertouch (Amount, acht Ziele); Effekte A und B (Typ, Dry/Wet, zwei Werte, Sync), FX On |
-| **PLAY** | Arp, Clock Divide, Sequencer PLAY; Glide, Unison, Key Mode, Pitch-Wheel |
+| **PLAY** | Arp, Clock Divide, Sequencer PLAY, LOW SPLIT (an/aus, Splitpunkt, Oktave, Glide, Lautstärke, +1 Stimme); Glide, Unison, Key Mode, Pitch-Wheel |
 | **MASTER** | Distortion, Vintage, Pan Spread, Program-Volume, Lautstärke; 6/12 Stimmen, Qualität, Hold |
 
 Ein Knopf wird mit dem Finger gezogen oder mit seinem Q-Link gedreht; zweimal tippen öffnet den großen Regler der MPC

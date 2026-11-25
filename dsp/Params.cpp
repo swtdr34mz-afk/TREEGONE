@@ -13,6 +13,7 @@ static const char *const KEYTRACK[] = {"Off", "Half", "Full"};
 static const char *const GLIDEMODE[] = {"Fixed Rate", "Rate Legato", "Fixed Time", "Time Legato"};
 static const char *const UNIVOICES[] = {"1", "2", "3", "4", "5", "6", "Chord"};
 static const char *const ARPOCT[] = {"1", "2", "3"};
+static const char *const SPLITOCT[] = {"-2", "-1", "0", "+1"};
 const char *const LFOSHAPE_NAME[NLFOSHAPE] = {"Triangle", "Sawtooth", "Rev Saw", "Square", "Random"};
 const char *const FILTERTYPE_NAME[NFILTERTYPE] = {"LP1 OTA 4-Pole", "LP2 Ladder 4-Pole", "SVF OTA 2-Pole"};
 const char *const ARPMODE_NAME[NARPMODE] = {"Up", "Down", "Up/Down", "Random", "Assign"};
@@ -135,6 +136,12 @@ const ParamDef PARAMS[NPARAM] = {
     N("pan_spread", "Pan Spread", 0, 127, 0),
     N("pgm_vol", "Program Volume", 0, 127, 100),
     N("pb_range", "Pitch Wheel Range", 1, 12, 2),
+    B("split_on", "Low Split", 0),
+    {"split_point", "Split Point", 0, 127, 48, K_NOTE, nullptr},
+    C("split_oct", "Split Octave", 4, 2, SPLITOCT),
+    N("split_glide", "Split Glide", 0, 127, 0),
+    N("split_vol", "Split Volume", 0, 127, 100),
+    B("split_extra", "Split +1 Voice", 1),
 };
 
 /* PITCH, osc 2 and 3: the middle (188, where the factory programs keep it) is in tune; a few steps either side are
@@ -187,6 +194,11 @@ void paramText(int p, int v, char *out, int n, bool synced)
             std::snprintf(out, (size_t)n, hz < 10.0f ? "%.2f Hz" : "%.0f Hz", hz);
         }
         break;
+    case K_NOTE: {
+        static const char *const NT[12] = {"C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"};
+        std::snprintf(out, (size_t)n, "%s%d", NT[(v % 12 + 12) % 12], v / 12 - 2);
+        break;
+    }
     default: std::snprintf(out, (size_t)n, "%d", v);
     }
 }
@@ -208,6 +220,11 @@ void paramShort(int p, int v, char *out, int n)
             std::snprintf(out, (size_t)n, "%d", v - (p == P_O3_OCT ? 3 : 2));
         break;
     case K_PITCH: std::snprintf(out, (size_t)n, "%d", v - 188); break;
+    case K_NOTE: {
+        static const char *const NT[12] = {"C", "C.", "D", "D.", "E", "F", "F.", "G", "G.", "A", "A.", "B"};
+        std::snprintf(out, (size_t)n, "%s%d", NT[(v % 12 + 12) % 12], v / 12 - 2);
+        break;
+    }
     default: std::snprintf(out, (size_t)n, "%d", v);
     }
 }

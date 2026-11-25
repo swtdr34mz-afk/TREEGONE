@@ -247,7 +247,7 @@ int main(int argc, char **argv)
     std::printf("  %s by %s, %d parameters, %d programs\n", p.str(effGetEffectName).c_str(), p.str(effGetVendorString).c_str(),
                 p.e->numParams, p.e->numPrograms);
     check(p.str(effGetEffectName) == "TREEGONE" && p.str(effGetVendorString) == "swtdr34mz", "names as in plugin.json");
-    check(p.e->numParams == 106, "106 parameters (their order permanent)");
+    check(p.e->numParams == 112, "112 parameters (their order permanent)");
 
     p.d(effSetSampleRate, 0, 0, nullptr, 44100.0f);
     p.d(effSetBlockSize, 0, 512);
@@ -372,7 +372,10 @@ int main(int argc, char **argv)
         e.push_back({44100 * 8, 0xB0, 64, 0});
         p.d(effSetProgram, 0, 23);
         for (int q = 0; q < 300; q++)
-            p.e->setParameter(p.e, 1 + (int)(rnd() % 102), (float)(rnd() % 1000) / 999.0f);
+            {
+                int i = (int)(rnd() % 108);       /* (the program's parameters: not VOICES, QUALITY, HOLD) */
+                p.e->setParameter(p.e, i < 102 ? 1 + i : 106 + i - 102, (float)(rnd() % 1000) / 999.0f);
+            }
         auto st = render(p, 44100 * 9, e, {256, 33, 512});
         check(finite(st) && peak(st) < 6.0, "a storm of parameters and MIDI: finite and bounded");
         p.d(effSetProgram, 0, 23);
@@ -410,6 +413,25 @@ int main(int argc, char **argv)
         auto s = render(p, 44100 * 6, {{100, 0x90, 60, 100}, {100, 0x90, 64, 100}, {100, 0x90, 67, 100}, {44100 * 3, 0x80, 60, 0},
                                        {44100 * 3, 0x80, 64, 0}, {44100 * 3, 0x80, 67, 0}}, {256});
         check(rms(s, 4410, 44100 * 3) > 1e-3 && rms(s, 44100 * 5, 44100 * 6) < 1e-3, "the arp plays on the tempo and stops");
+    }
+
+    /* LOW SPLIT: a bass voice under the split point, on top of six */
+    {
+        p.d(effSetProgram, 0, 0);
+        render(p, 4410, {}, {256});
+        int on = param(p, "Split On"), pt = param(p, "Split Point");
+        p.e->setParameter(p.e, on, 1.0f);
+        p.e->setParameter(p.e, pt, 48.0f / 127.0f);
+        std::vector<Ev> e;
+        for (int k : {36, 60, 64, 67})
+            e.push_back({0, 0x90, (uint8_t)k, 100});
+        for (int k : {36, 60, 64, 67})
+            e.push_back({44100 * 2, 0x80, (uint8_t)k, 0});
+        auto s = render(p, 44100 * 4, e, {128});
+        p.e->setParameter(p.e, on, 0.0f);
+        auto t = render(p, 44100 * 3, {}, {256});
+        check(finite(s) && rms(s, 4410, 44100 * 2) > 1e-3 && peak(s) < 2.0 && rms(t, 44100 * 2, 44100 * 3) < 1e-4,
+              "LOW SPLIT plays under the split point and lets go");
     }
 
     /* CPU: twelve voices (six notes, unison off), ECO and HIGH (this computer; the MPC's ARM is slower) */

@@ -999,6 +999,21 @@ void Panel::build()
         auto *km = button(1905, 560, [] {}, [] { return false; });
         km->setComponentID("keymode");
     }
+    /* LOW SPLIT (TREEGONE's): ON/OFF, SET (the next key played is the split point), SPLIT POINT, OCTAVE, GLIDE,
+     * VOLUME, +1 VOICE */
+    {
+        pbutton(PG + 1008, 742, P_SPLIT_ON);
+        button(PG + 1058, 742, [this] {
+            proc.splitLearn = !proc.splitLearn.load();
+            if (proc.splitLearn.load())
+                say("Play the key for the split point");
+        }, [this] { return proc.splitLearn.load(); });
+        knob(PG + 1120, 735, P_SPLIT_POINT, KS);
+        knob(PG + 1183, 735, P_SPLIT_OCT, KS);
+        knob(PG + 1246, 735, P_SPLIT_GLIDE, KS);
+        knob(PG + 1309, 735, P_SPLIT_VOL, KS);
+        pbutton(PG + 1370, 742, P_SPLIT_EXTRA);
+    }
     /* the menu buttons: opened where they are */
     for (auto &c : parts) {
         auto id = c->getComponentID();
@@ -1207,6 +1222,15 @@ void Panel::paintBackground(juce::Graphics &g, float sc)
     legend(295, 590, "GLIDE RATE", 9.0f);
     legend(370, 578, "GLIDE", 9.0f);
     legend(440, 578, "UNISON", 9.0f);
+    /* LOW SPLIT */
+    drawSection(g, R(PG + 978, 682, PG + 1402, 790), "LOW SPLIT");
+    legend(PG + 1008, 760, "ON/OFF", 9.0f);
+    legend(PG + 1058, 760, "SET", 9.0f);
+    legend(PG + 1120, 772, "SPLIT POINT", 9.0f);
+    legend(PG + 1183, 772, "OCTAVE", 9.0f);
+    legend(PG + 1246, 772, "GLIDE", 9.0f);
+    legend(PG + 1309, 772, "VOLUME", 9.0f);
+    legend(PG + 1370, 760, "+1 VOICE", 9.0f);
     /* the program block */
     drawSection(g, R(PG + 838, 440, PG + 1695, 660), "PROGRAMS");
     small(C(PG + 900, 560, 70, 11), "Decrement", Justification::centred, 8.0f);
@@ -1270,6 +1294,13 @@ void Panel::paint(juce::Graphics &g)
 
 void Panel::timerCallback()
 {
+    int ln = proc.learnedNote.exchange(-1);
+    if (ln >= 0) {
+        proc.setValue(P_SPLIT_POINT, ln);
+        if (!proc.value(P_SPLIT_ON))
+            proc.setValue(P_SPLIT_ON, 1);
+        touch(P_SPLIT_POINT);
+    }
     for (auto *l : live)
         l->poll();
 }

@@ -11,10 +11,11 @@
 //
 // Parameters (their ids never change; new ones only at the end):
 //   0           VOLUME (the host nudges parameter 0 on every prepare: harmless here, it ramps)
-//   1..102      the program's 102 parameters, in dsp/Params.h's order
+//   1..102      the program's first 102 parameters (1.0's), in dsp/Params.h's order
 //   103         VOICES (6 or 12)
 //   104         QUALITY (ECO: the filters at 2x; HIGH: at 4x)
 //   105         HOLD
+//   106..111    LOW SPLIT (1.1): on, split point, octave, glide, volume, +1 voice (dsp/Params.h's 102..107)
 // The program's sequence and chord memory ride in the state (saveExtraState); a program change brings its own.
 //
 // MIDI in: notes and velocity, pitch bend, channel and poly pressure, CC 1 mod wheel, CC 64 sustain, CC 120 all sound
@@ -34,12 +35,23 @@ using namespace tg;
 enum {
     kVolume = 0,
     kP = 1,
-    kVoices = kP + NPARAM,
+    kVoices = kP + NPARAM_V1,
     kQuality,
     kHold,
-    kNumParams
+    kP2,                                 /* the parameters after 1.0's */
+    kNumParams = kP2 + NPARAM - NPARAM_V1
 };
-static_assert(kNumParams == 106, "the parameters' order is permanent");
+static_assert(kNumParams == 112, "the parameters' order is permanent");
+/* the MPC's index of a program parameter, and back (-1: not one) */
+int indexOf(int p) { return p < NPARAM_V1 ? kP + p : kP2 + p - NPARAM_V1; }
+int paramOf(int i)
+{
+    if (i >= kP && i < kVoices)
+        return i - kP;
+    if (i >= kP2 && i < kNumParams)
+        return NPARAM_V1 + i - kP2;
+    return -1;
+}
 static_assert(sizeof(SHORT) / sizeof(SHORT[0]) == NPARAM, "a short name for each parameter");
 
 class TreegoneMpc : public mpc::Plugin
@@ -48,7 +60,7 @@ public:
     TreegoneMpc() : mpc::Plugin(makeInfo())
     {
         addParam(mpc::floatParam("vol", "Volume", 0.0f, 1.0f, 0.7f, "", 2));
-        for (int p = 0; p < NPARAM; p++) {
+        auto addP = [this](int p) {
             const ParamDef &d = PARAMS[p];
             if (d.kind == K_CHOICE || d.kind == K_ONOFF) {
                 std::vector<std::string> ch;
@@ -58,19 +70,25 @@ public:
             } else {
                 addParam(mpc::intParam(d.id, SHORT[p], d.lo, d.hi, d.def));
             }
-        }
+        };
+        for (int p = 0; p < NPARAM_V1; p++)
+            addP(p);
         addParam(mpc::choiceParam("voices", "Voices", {"6 Voice", "12 Voice"}, 0));
         addParam(mpc::choiceParam("quality", "Quality", {"ECO", "HIGH"}, 0));
         addParam(mpc::boolParam("hold", "Hold", false));
+        for (int p = NPARAM_V1; p < NPARAM; p++)
+            addP(p);
 
         /* the factory programs: VOLUME and the sound; VOICES, QUALITY and HOLD they leave as they are */
         for (int k = 0; k < NFACTORY; k++) {
-            std::vector<float> v;
-            v.push_back(0.7f);
-            for (int p = 0; p < NPARAM; p++) {
+            /* (the list stops before VOICES, QUALITY and HOLD: they stay as they are; the split's parameters, after
+             * them, are set in reset() when the program changes) */
+            std::vector<float> v((size_t)kVoices, 0.0f);
+            v[kVolume] = 0.7f;
+            for (int p = 0; p < NPARAM_V1; p++) {
                 int val = p == P_SEQ_ON ? 0 : FACTORY[k].p[p];   /* (the sequencer waits for PLAY) */
                 const ParamDef &d = PARAMS[p];
-                v.push_back((float)(d.kind == K_CHOICE || d.kind == K_ONOFF ? val - d.lo : val));
+                v[(size_t)indexOf(p)] = (float)(d.kind == K_CHOICE || d.kind == K_ONOFF ? val - d.lo : val);
             }
             addProgram(FACTORY[k].name, v);
         }
@@ -99,6 +117,10 @@ public:
         } else if (currentProgram() != lastProgram) {
             int k = currentProgram();
             if (k >= 0 && k < NFACTORY) {
+                for (int p = NPARAM_V1; p < NPARAM; p++) {
+                    const ParamDef &d = PARAMS[p];
+                    set(indexOf(p), (float)(d.kind == K_CHOICE || d.kind == K_ONOFF ? FACTORY[k].p[p] - d.lo : FACTORY[k].p[p]));
+                }
                 cur.seq = FACTORY[k].seq;
                 std::memcpy(cur.chord, FACTORY[k].chord, sizeof cur.chord);
                 std::memcpy(cur.name, FACTORY[k].name, sizeof cur.name);
@@ -154,13 +176,13 @@ public:
             }
             return true;
         }
-        if (index >= kP && index < kVoices) {
-            int p = index - kP;
+        if (paramOf(index) >= 0) {
+            int p = paramOf(index);
             const ParamDef &d = PARAMS[p];
             if (d.kind == K_CHOICE || d.kind == K_ONOFF)
                 v += d.lo;
             v = mpc::clamp(v, d.lo, d.hi);
-            paramText(p, v, t, sizeof t, p == P_LFO_FREQ && getInt(kP + P_LFO_SYNC) != 0);
+            paramText(p, v, t, sizeof t, p == P_LFO_FREQ && getInt(indexOf(P_LFO_SYNC)) != 0);
             out = t;
             if (out.size() > 12)
                 out.resize(12);
@@ -218,7 +240,7 @@ private:
     int value(int p) const
     {
         const ParamDef &d = PARAMS[p];
-        int v = getInt(kP + p);
+        int v = getInt(indexOf(p));
         if (d.kind == K_CHOICE || d.kind == K_ONOFF)
             v += d.lo;
         return mpc::clamp(v, d.lo, d.hi);

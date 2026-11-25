@@ -7,7 +7,7 @@
  *   FILTER   FILTER (with the TYPE) / AMPLIFIER
  *   MOD      LFO / POLYMOD
  *   AT/FX    AFTER TOUCH / EFFECTS A and B
- *   PLAY     ARPEGGIATOR, CLOCK, SEQUENCER / GLIDE, UNISON, KEYS
+ *   PLAY     ARPEGGIATOR, CLOCK, SEQUENCER, LOW SPLIT / GLIDE, UNISON, KEYS
  *   MASTER   DISTORTION, VINTAGE, PAN SPREAD, VOLUMES / VOICES, QUALITY, HOLD
  *
  * Each page is drawn at the MPC's 1280 x 628 and cut up: its background, and every control at every value it can take
@@ -222,18 +222,24 @@ std::vector<Page> pages()
     {
         Builder b;
         b.pg.name = "PLAY";
-        b.sec(14, 16, 560, 284, "ARPEGGIATOR");
-        b.B(80, T1 - 8, "arp_on", "ON/OFF");
-        b.K(200, T1, "arp_mode", "MODE");
-        b.L(250, T1 - 52, "arp_mode", 110);
-        b.K(460, T1, "arp_oct", "OCTAVES");
-        b.B(80, T2 - 8, "hold", "HOLD");
-        b.sec(572, 16, 860, 284, "CLOCK");
-        b.K(716, T1, "divide", "DIVIDE");
-        b.note(716, T2 - 20, "on the MPC's tempo");
-        b.sec(872, 16, 1266, 284, "SEQUENCER");
-        b.B(960, T1 - 8, "seq_on", "PLAY");
-        b.note(1069, T2 - 20, "the program's sequence");
+        b.sec(14, 16, 470, 284, "ARPEGGIATOR");
+        b.B(70, T1 - 8, "arp_on", "ON/OFF");
+        b.K(175, T1, "arp_mode", "MODE");
+        b.L(220, T1 - 52, "arp_mode", 100);
+        b.K(410, T1, "arp_oct", "OCTAVES");
+        b.B(70, T2 - 8, "hold", "HOLD");
+        b.sec(482, 16, 640, 284, "CLOCK");
+        b.K(561, T1, "divide", "DIVIDE");
+        b.note(561, T2 - 20, "MPC tempo");
+        b.sec(652, 16, 760, 284, "SEQ");
+        b.B(706, T1 - 8, "seq_on", "PLAY");
+        b.sec(772, 16, 1266, 284, "LOW SPLIT");
+        b.B(830, T1 - 8, "split_on", "ON/OFF");
+        b.B(830, T2 - 8, "split_extra", "+1 VOICE");
+        b.K(940, T1, "split_point", "SPLIT POINT");
+        b.K(1050, T1, "split_oct", "OCTAVE");
+        b.K(1160, T1, "split_glide", "GLIDE");
+        b.K(1050, T2, "split_vol", "VOLUME");
         b.sec(14, 304, 1266, 572, "GLIDE / UNISON / KEYS");
         b.B(80, B1 - 8, "glide", "GLIDE");
         b.K(200, B1, "glide_rate", "GLIDE RATE");

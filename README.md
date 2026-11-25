@@ -67,8 +67,20 @@ Noten). Die Trigon-Programme kommen mit dem Ladder-Filter (LP2); TYPE schaltet a
 - **Glide** (fixed rate or time, legato or always), **unison** of 1-6 voices or the **chord memory**, six key modes,
   **HOLD**, **TRANSPOSE**, the **clock** (ten divisions, TAP), the **arpeggiator** (up, down, up/down, random, assign;
   1-3 octaves), the **poly sequencer** (64 steps of six notes, RECORD with REST and TIE).
+- **LOW SPLIT** (TREEGONE's own, 1.1): under a split point (SET: the next key played) one more voice of the same
+  sound, monophonic, for a bass line under the chords: its OCTAVE, its own legato GLIDE, its VOLUME; +1 VOICE: a voice
+  of its own (else it takes one of the six).
 - **HOST SYNC**: the clock, synced LFO and delays follow the DAW.
 - 24 factory programs of its own; WRITE keeps your own (Documents/TREEGONE/Programs).
+
+## LOW SPLIT (kurz auf Deutsch)
+
+Der Block unten rechts: **ON/OFF** schaltet ihn ein, **SET** drücken und dann die Taste spielen, ab der es oben
+weitergeht (die Taste selbst gehört schon zum oberen Teil). Darunter spielt eine einzelne Stimme mit dem gleichen
+Sound eine Basslinie: **OCTAVE** verschiebt sie (−2 bis +1), **GLIDE** lässt sie gleiten, solange noch eine Taste
+gehalten wird, **VOLUME** stellt sie gegen die Akkorde ein. **+1 VOICE** an: der Bass ist eine siebte Stimme; aus: er
+nimmt eine der sechs. Arp, Sequencer und Unison gelten nur für den oberen Teil. Der Split wird mit dem Programm
+gespeichert.
 
 ## Build
 

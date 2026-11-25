@@ -21,6 +21,7 @@ enum FxType {
     FX_ROOM, FX_HALL, FX_PLATE, FX_SPRING, NFXTYPE
 };
 constexpr int NFXTYPE_A = 10;
+constexpr int NPARAM_V1 = 102;                      /* (the parameters of 1.0: the MPC keeps their numbers) */
 enum { NFXDIV = 9 };
 
 enum Param {
@@ -54,6 +55,9 @@ enum Param {
     P_ARP_ON, P_ARP_OCT, P_ARP_MODE, P_SEQ_ON,
     /* the strip under the program buttons */
     P_DISTORTION, P_VINTAGE, P_PAN_SPREAD, P_PGM_VOL, P_PB_RANGE,
+    /* LOW SPLIT (TREEGONE's, 1.1): under the split point one more voice of the same sound, monophonic, for a bass
+     * line: its octave, its own glide, its volume; +1 VOICE: a voice of its own (else one of the six) */
+    P_SPLIT_ON, P_SPLIT_POINT, P_SPLIT_OCT, P_SPLIT_GLIDE, P_SPLIT_VOL, P_SPLIT_EXTRA,
     NPARAM
 };
 
@@ -65,7 +69,8 @@ enum Kind : uint8_t {
     K_OCT,      /* -2..+2 (osc 3: LO first) */
     K_PITCH,    /* osc 2 / 3 PITCH: semitones and cents */
     K_LFOFREQ,  /* Hz, or a clock division when synced */
-    K_FXP1      /* the effect's first parameter */
+    K_FXP1,     /* the effect's first parameter */
+    K_NOTE      /* a MIDI note's name (middle C: C3, as Cubase names it) */
 };
 
 struct ParamDef {

@@ -105,4 +105,10 @@ static const char *const SHORT[] = {
     "Pan Spread",
     "Pgm Vol",
     "PB Range",
+    "Split On",
+    "Split Point",
+    "Split Oct",
+    "Split Glide",
+    "Split Vol",
+    "Split +1",
 };
