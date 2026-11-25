@@ -1,10 +1,11 @@
 /* SPDX-License-Identifier: MPL-2.0
  * Copyright (C) 2026 swtdr34mz (TREEGONE) */
-/* The editor: the Trigon-6's front panel without its keys, drawn at 2200 x 660 and scaled to the window (drag the
- * corner). Its sections as the Trigon has them: VOLUME and AFTERTOUCH, LFO and POLYMOD, OSCILLATORS, FILTER (with
- * TREEGONE's TYPE: LP1 OTA, LP2 LADDER, SVF and the SVF's MODE) and AMPLIFIER, CLOCK, EFFECTS, ARPEGGIATOR,
- * SEQUENCER; under them TRANSPOSE, HOLD, GLIDE, UNISON, the program display with BANK, TENS and the ten number
- * buttons, WRITE, GLOBALS, LOAD SYX, and DISTORTION, VINTAGE, PAN SPREAD, PGM VOLUME, P WHL RANGE, KEY MODE.
+/* The editor: the Trigon-6's front panel without its keys, a desktop module's proportions (1760 x 800,
+ * scaled to the window: drag the corner). On top VOLUME and AFTERTOUCH, LFO and POLYMOD, OSCILLATORS, FILTER (with
+ * TREEGONE's TYPE: LP1 OTA, LP2 LADDER, SVF and the SVF's MODE) and AMPLIFIER; then CLOCK, EFFECTS, ARPEGGIATOR,
+ * SEQUENCER and the PROGRAMS (the name line, BANK, the display, TENS, the ten number buttons, WRITE, GLOBALS, LOAD
+ * SYX, SOURCE); at the bottom TRANSPOSE, HOLD, GLIDE, UNISON, DISTORTION, VINTAGE, PAN SPREAD, PGM VOLUME,
+ * P WHL RANGE, KEY MODE.
  *
  * The red displays work as the Trigon's: the program's number, the value of a knob while it turns, the tempo, the
  * effects. A line beside the program display (TREEGONE's) spells out the program's name and what was touched. A
@@ -16,7 +17,7 @@
 class TreegonePanel : public juce::Component, public juce::FileDragAndDropTarget, private juce::Timer
 {
 public:
-    static constexpr int W = 2200, H = 660;
+    static constexpr int W = 1760, H = 800;
     explicit TreegonePanel(TreegoneProcessor &);
     ~TreegonePanel() override;
     void paint(juce::Graphics &) override;

@@ -6,7 +6,7 @@
  *   CHORUS, PHASER 1 (four stages, gentle), PHASER 2 (six, with feedback), PHASER 3 (after Oberheim's: twelve stages,
  *     deep), FLANGER 1 (through zero, high feedback), FLANGER 2 (classic): rate, depth
  *   RING MOD (after Oberheim's): frequency; tracking (over 64 the carrier follows the lowest note held)
- *   ROOM, HALL, PLATE, SPRING (B only): decay, tone
+ *   ROOM (0.15-1.8 s), HALL (0.7-7 s, a pre-delay), PLATE (0.4-5 s), SPRING (B only): decay, tone; their lows cut
  * Everything glides (no zipper, no click), a new type crossfades in. */
 #pragma once
 #include "Dsp.h"
@@ -60,6 +60,7 @@ public:
         std::memset(rvW, 0, sizeof rvW);
         std::memset(rvApW, 0, sizeof rvApW);
         std::memset(rvLp, 0, sizeof rvLp);
+        rvHp = 0.0f;
         std::memset(ph12, 0, sizeof ph12);
         std::memset(bbdLp, 0, sizeof bbdLp);
         std::memset(fbS, 0, sizeof fbS);
@@ -158,7 +159,7 @@ private:
     int dlN = 1, dlW = 0, mdN = 1, mdW = 0, preN = 1, preW = 0;
     int rvW[8] = {}, rvApW[6] = {}, spW[2] = {};
     float rvLp[8] = {}, rvMph[8] = {};
-    float lfoPh = 0.0f, ph12[2][12] = {}, fbS[2] = {}, bbdLp[2] = {}, bbdWob = 0.0f, ringPh = 0.0f;
+    float rvHp = 0.0f, lfoPh = 0.0f, ph12[2][12] = {}, fbS[2] = {}, bbdLp[2] = {}, bbdWob = 0.0f, ringPh = 0.0f;
     float spAp[2][16] = {}, spLp[2] = {}, spHp[2] = {};
     uint32_t seed = 0x13579BDFu;
 
@@ -192,10 +193,14 @@ private:
     void reverb(float x0, float x1, float &yl, float &yr, float size, float tMin, float tMax, float diff, float preS, float bright)
     {
         const float isr = 1.0f / sr;
-        float t60 = tMin + std::pow(sP1 / 255.0f, 1.7f) * (tMax - tMin);
-        float damp = (900.0f + bright) * std::exp2(sP2 / 127.0f * 3.8f);
+        float t60 = tMin + std::pow(sP1 / 255.0f, 1.6f) * (tMax - tMin);
+        /* TONE: the damping, from dark to bright (the middle about 4 kHz in a hall) */
+        float damp = (700.0f + bright) * std::exp2(sP2 / 127.0f * 3.6f);
         float kd = 1.0f - std::exp(-2.0f * PI * minf(damp, 0.45f * sr) * isr);
-        float in = 0.3f * (x0 + x1);
+        /* the input's lows taken out (160 Hz): no mud under the dry */
+        float in0 = 0.3f * (x0 + x1);
+        rvHp += (in0 - rvHp) * (1.0f - std::exp(-2.0f * PI * 160.0f * isr));
+        float in = in0 - rvHp;
         /* the pre-delay */
         pre[(size_t)preW] = in;
         in = rd(pre, preN, preW, maxf(1.0f, preS * sr));
@@ -236,8 +241,8 @@ private:
             b[(size_t)rvW[i]] = v > 3.0f ? 3.0f : v < -3.0f ? -3.0f : v;
             rvW[i] = (rvW[i] + 1) % N;
         }
-        yl = 0.62f * (o[0] + o[2] + o[4] + o[6]);
-        yr = 0.62f * (o[1] + o[3] + o[5] + o[7]);
+        yl = 0.5f * (o[0] + o[2] + o[4] + o[6]);
+        yr = 0.5f * (o[1] + o[3] + o[5] + o[7]);
     }
 
     void run(float x0, float x1, float &yl, float &yr)
@@ -358,13 +363,13 @@ private:
             yr = x1 * c;
             break;
         }
-        case FX_ROOM: reverb(x0, x1, yl, yr, 0.55f, 0.2f, 3.0f, 0.62f, 0.004f, 1500.0f); break;
-        case FX_HALL: reverb(x0, x1, yl, yr, 1.45f, 0.6f, 14.0f, 0.6f, 0.025f, 600.0f); break;
-        case FX_PLATE: reverb(x0, x1, yl, yr, 0.9f, 0.4f, 8.0f, 0.72f, 0.001f, 3000.0f); break;
+        case FX_ROOM: reverb(x0, x1, yl, yr, 0.5f, 0.15f, 1.8f, 0.6f, 0.005f, 900.0f); break;
+        case FX_HALL: reverb(x0, x1, yl, yr, 1.3f, 0.7f, 7.0f, 0.62f, 0.022f, 300.0f); break;
+        case FX_PLATE: reverb(x0, x1, yl, yr, 0.85f, 0.4f, 5.0f, 0.72f, 0.0f, 1800.0f); break;
         case FX_SPRING: {
             /* a spring: a chain of allpasses (the chirp: high frequencies arrive first), two short lines feeding back
              * (the tank's echoes), band-limited as a tank is */
-            float t60 = 0.6f + std::pow(sP1 / 255.0f, 1.5f) * 5.0f;
+            float t60 = 0.5f + std::pow(sP1 / 255.0f, 1.5f) * 3.0f;
             float lpf = 2500.0f * std::exp2(sP2 / 127.0f * 1.6f);
             float kl = 1.0f - std::exp(-2.0f * PI * lpf * isr), kh = 1.0f - std::exp(-2.0f * PI * 180.0f * isr);
             for (int c = 0; c < 2; c++) {

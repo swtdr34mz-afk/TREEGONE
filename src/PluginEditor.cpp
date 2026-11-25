@@ -664,7 +664,26 @@ void Panel::filesDropped(const juce::StringArray &files, int, int)
 }
 
 /* ------------------------------------------------------------------------------- the build --- */
-static juce::Point<float> at(float x, float y) { return {X0 + x, y}; }
+/* The panel's places, as a desktop module: the first band (AFTER TOUCH, LFO, POLYMOD, OSCILLATORS, FILTER, AMPLIFIER)
+ * as the code gives it; under it CLOCK, EFFECTS, ARPEGGIATOR, SEQUENCER (given at x from 1702, moved down) and the
+ * PROGRAMS (PG + x: given where they are); at the bottom the strip (given at y from 440). */
+constexpr float PG = 5000.0f;
+static juce::Point<float> at(float x, float y)
+{
+    if (x >= PG)
+        return {X0 + x - PG, y};
+    if (y < 440.0f) {
+        if (x < 1702.0f)
+            return {X0 + x, y};
+        return y < 258.0f ? juce::Point<float>(X0 + x - 1696.0f, y + 410.0f) : juce::Point<float>(X0 + x - 1283.0f, y + 175.0f);
+    }
+    if (x < 500.0f)
+        return {X0 + x, y + 182.0f};
+    if (x >= 1960.0f)
+        return {X0 + x - 465.0f, y + 182.0f};
+    return {X0 + x - 965.0f, y + 182.0f};
+}
+static juce::Rectangle<float> atR(float x, float y, float w, float h) { return {at(x, y).x, at(x, y).y, w, h}; }
 
 void Panel::build()
 {
@@ -701,9 +720,9 @@ void Panel::build()
                             },
                             horizontal);
         if (horizontal)
-            l->setBounds((int)(X0 + x), (int)(y0 - 7.0f), (int)(step * (float)n), 14);
+            l->setBounds(atR(x, y0 - 7.0f, step * (float)n, 14.0f).toNearestInt());
         else
-            l->setBounds((int)(X0 + x - 6.0f), (int)(y0 - step * 0.5f), 12, (int)(step * (float)n));
+            l->setBounds(atR(x - 6.0f, y0 - step * 0.5f, 12.0f, step * (float)n).toNearestInt());
         return l;
     };
     auto glob = [this](const char *id) { return proc.apvts.getParameter(id); };
@@ -765,7 +784,7 @@ void Panel::build()
                 add<Leds>(2, [this](int i) { return proc.value(P_O3_SAW) == i + 1 ? 1.0f : 0.0f; }, [this](int i) {
                     proc.setValue(P_O3_SAW, proc.value(P_O3_SAW) == i + 1 ? 0 : i + 1);
                     touch(P_O3_SAW);
-                }, true)->setBounds((int)(X0 + 903), (int)(y - 31), 28, 12);
+                }, true)->setBounds(atR(903, y - 31, 28, 12).toNearestInt());
             }
             pbutton(962, y, pul[o]);
             knob(1035, y + 4, pw[o]);
@@ -794,7 +813,7 @@ void Panel::build()
         add<Leds>(2, [this](int i) { return proc.value(P_F_KEY) == i + 1 ? 1.0f : 0.0f; }, [this](int i) {
             proc.setValue(P_F_KEY, proc.value(P_F_KEY) == i + 1 ? 0 : i + 1);
             touch(P_F_KEY);
-        }, true)->setBounds((int)(X0 + 1645), (int)(108), 30, 12);
+        }, true)->setBounds(atR(1645, 108, 30, 12).toNearestInt());
         const int env[4] = {P_F_ATT, P_F_DEC, P_F_SUS, P_F_REL};
         for (int i = 0; i < 4; i++)
             knob(1365.0f + 75.0f * (float)i, 200, env[i]);
@@ -853,7 +872,7 @@ void Panel::build()
         }
         button(2090, 62, [this] { proc.fxEditB = proc.fxEditB.load() ? 0 : 1; }, [] { return false; });
         add<Leds>(2, [this](int i) { return proc.fxEditB.load() == i ? 1.0f : 0.0f; }, [this](int i) { proc.fxEditB = i; })
-            ->setBounds((int)(X0 + 2078), 74, 12, 28);
+            ->setBounds(atR(2078, 74, 12, 28).toNearestInt());
         auto fxKnob = [&](float x, float y, std::function<int()> which) {
             auto *k = add<Knob>([this, which] { return proc.param(which()); }, [this, which](juce::RangedAudioParameter *) { touch(which()); });
             place(k, x, y, KS, KS);
@@ -915,7 +934,7 @@ void Panel::build()
             *q = i - 2;
             q->endChangeGesture();
             touchGlobal(q);
-        }, true)->setBounds((int)(X0 + 55), 512, 75, 14);
+        }, true)->setBounds(atR(55, 512, 75, 14).toNearestInt());
         button(215, 560, [this] { proc.command(TreegoneProcessor::C_HOLD, proc.holdNow.load() ? 0 : 1); }, [this] { return proc.holdNow.load(); });
         knob(295, 553, P_GLIDE_RATE, KS);
         pbutton(370, 560, P_GLIDE);
@@ -927,11 +946,15 @@ void Panel::build()
             touch(P_UNISON);
         }, isOn(P_UNISON));
     }
-    /* the programs: BANK, the display, TENS, 0..9; the name line */
+    /* the programs (their own block): the name line, under it BANK, the display, TENS; the ten number buttons in two
+     * rows, SOURCE with its three LEDs; WRITE, GLOBALS, LOAD SYX */
     {
-        auto *bank = button(545, 560, [this] { stepBank(); }, [] { return false; });
+        auto *nl = add<NameLine>(*this);
+        nl->setBounds(atR(PG + 852, 460, 400, 52).toNearestInt());
+        nl->onClick = [this, nl](const juce::MouseEvent &) { programMenu(nl->getScreenBounds()); };
+        auto *bank = button(PG + 900, 590, [this] { stepBank(); }, [] { return false; });
         bank->setSize(36, 30);
-        bank->setCentrePosition(at(545, 560).toInt());
+        bank->setCentrePosition(at(PG + 900, 590).toInt());
         auto *s = add<Seg>(3, [this] {
             if (showingValue() && shownParam >= 0) {
                 char t[8];
@@ -940,37 +963,30 @@ void Panel::build()
             }
             return juce::String(proc.numberInSource(proc.getCurrentProgram()) % 1000).paddedLeft('0', 3);
         });
-        place(s, 638, 556, 112, 50);
+        place(s, PG + 1052, 586, 112, 50);
         s->onClick = [this, s](const juce::MouseEvent &) { programMenu(s->getScreenBounds()); };
         s->onWheel = [this](int d) {
             int n = proc.getNumPrograms();
             proc.setCurrentProgram(((proc.getCurrentProgram() - d) % n + n) % n);
         };
-        auto *tens = button(730, 560, [this] { stepTens(); }, [] { return false; });
+        auto *tens = button(PG + 1204, 590, [this] { stepTens(); }, [] { return false; });
         tens->setSize(36, 30);
-        tens->setCentrePosition(at(730, 560).toInt());
+        tens->setCentrePosition(at(PG + 1204, 590).toInt());
         for (int d = 0; d < 10; d++)
-            button(790.0f + 44.0f * (float)d, 566, [this, d] { selectDigit(d); },
+            button(PG + 1300.0f + 58.0f * (float)(d % 5), 478.0f + 56.0f * (float)(d / 5), [this, d] { selectDigit(d); },
                    [this, d] { return proc.numberInSource(proc.getCurrentProgram()) % 10 == d; });
-        auto *nl = add<NameLine>(*this);
-        nl->setBounds(Rectangle<float>(X0 + 770, 470, 440, 50).toNearestInt());
-        nl->onClick = [this, nl](const juce::MouseEvent &) { programMenu(nl->getScreenBounds()); };
-    }
-    /* WRITE, GLOBALS, LOAD SYX and the program sources */
-    {
-        button(1265, 560, [this] { writeDialog(); }, [] { return false; });
-        auto *gb = button(1320, 560, [] {}, [] { return false; });
+        button(PG + 1300, 612, [this] { writeDialog(); }, [] { return false; });
+        auto *gb = button(PG + 1366, 612, [] {}, [] { return false; });
         gb->setComponentID("globals");
-        auto *src = button(1375, 560, [this] { stepSource(); }, [] { return false; });
-        (void)src;
+        button(PG + 1432, 612, [this] { loadSyx(); }, [] { return false; });
+        button(PG + 1600, 478, [this] { stepSource(); }, [] { return false; });
         add<Leds>(3, [this](int i) { return proc.sourceOf(proc.getCurrentProgram()) == i ? 1.0f : 0.0f; }, [this](int i) {
             int a = proc.firstOf(i);
             if (a >= 0)
                 proc.setCurrentProgram(a);
             else if (i == 1)
                 loadSyx();
-        })->setBounds((int)(X0 + 1400), 525, 12, 48);
-        button(1500, 560, [this] { loadSyx(); }, [] { return false; });
+        })->setBounds(atR(PG + 1592, 516, 12, 45).toNearestInt());
     }
     /* DISTORTION, VINTAGE, PAN SPREAD, PGM VOLUME, P WHL RANGE, KEY MODE */
     {
@@ -1012,7 +1028,7 @@ void Panel::paintBackground(juce::Graphics &g, float sc)
     drawPanelFace(g, face, sc);
     drawMaple(g, {0.0f, 0.0f, wood, (float)H}, 11);
     drawMaple(g, {(float)W - wood, 0.0f, wood, (float)H}, 29);
-    auto R = [](float x0, float y0, float x1, float y1) { return Rectangle<float>(X0 + x0, y0, x1 - x0, y1 - y0); };
+    auto R = [](float x0, float y0, float x1, float y1) { return atR(x0, y0, x1 - x0, y1 - y0); };
     auto C = [](float x, float y, float w, float h) { return Rectangle<float>(w, h).withCentre(at(x, y)); };
     auto legend = [&](float x, float y, const String &t, float size = 11.0f) {
         drawLegend(g, t, C(x, y, 110, 16), size);
@@ -1074,13 +1090,13 @@ void Panel::paintBackground(juce::Graphics &g, float sc)
             legend(715, y + 42, "OCTAVE", 9.5f);
             const char *oct5[5] = {"-2", "-1", "0", "+1", "+2"}, *oct6[6] = {"LO", "-2", "-1", "0", "+1", "+2"};
             for (int i = 0; i < (o == 2 ? 6 : 5); i++)
-                small(Rectangle<float>(X0 + (o == 2 ? 683.0f : 690.0f) + 12.5f * (float)i - 2.0f, y - 50.0f, 17.0f, 11.0f),
+                small(atR((o == 2 ? 683.0f : 690.0f) + 12.5f * (float)i - 2.0f, y - 50.0f, 17.0f, 11.0f),
                       o == 2 ? oct6[i] : oct5[i], Justification::centred, 8.0f);
             legend(800, y + (o ? 40.0f : 22.0f), o ? "PITCH" : "SYNC OSC 2", 9.5f);
             /* the wave symbols over their buttons */
             g.setColour(col::legend);
             auto sym = [&](float x, int k) {
-                float cx = X0 + x, cy = y - 22.0f, w = 9.0f, h = 6.0f;
+                float cx = at(x, y).x, cy = y - 22.0f, w = 9.0f, h = 6.0f;
                 Path p;
                 if (k == 0) {
                     p.startNewSubPath(cx - w, cy + h);
@@ -1109,7 +1125,7 @@ void Panel::paintBackground(juce::Graphics &g, float sc)
             else {
                 /* osc 3: sawtooth and reverse sawtooth, an LED each */
                 Path p;
-                float cx = X0 + 909.0f, cy = y - 40.0f;
+                float cx = at(909.0f, y).x, cy = y - 40.0f;
                 p.startNewSubPath(cx - 5, cy + 4);
                 p.lineTo(cx + 5, cy - 4);
                 p.lineTo(cx + 5, cy + 4);
@@ -1131,15 +1147,15 @@ void Panel::paintBackground(juce::Graphics &g, float sc)
         legend(1288, 50, "TYPE", 9.5f);
         const char *tn[3] = {"LP1 OTA 4P", "LP2 LADDER 4P", "SVF OTA 2P"};
         for (int i = 0; i < 3; i++)
-            small(Rectangle<float>(X0 + 1325.0f, 57.5f + 15.0f * (float)i, 95.0f, 13.0f), tn[i], Justification::centredLeft, 9.0f);
+            small(atR(1325.0f, 57.5f + 15.0f * (float)i, 95.0f, 13.0f), tn[i], Justification::centredLeft, 9.0f);
         legend(1290, 176, "SVF MODE", 9.0f);
         small(C(1290, 112, 60, 10), "LP    BP    HP", Justification::centred, 7.5f);
         legend(1440, 136, "CUTOFF");
         legend(1520, 136, "RESONANCE");
         legend(1595, 136, "ENV AMT");
         legend(1660, 75, "2 POLE", 9.5f);
-        small(Rectangle<float>(X0 + 1645.0f, 94.0f, 15.0f, 10.0f), "Half", Justification::centred, 7.5f);
-        small(Rectangle<float>(X0 + 1660.0f, 94.0f, 15.0f, 10.0f), "Full", Justification::centred, 7.5f);
+        small(atR(1645.0f, 94.0f, 15.0f, 10.0f), "Half", Justification::centred, 7.5f);
+        small(atR(1660.0f, 94.0f, 15.0f, 10.0f), "Full", Justification::centred, 7.5f);
         legend(1660, 146, "KEYBOARD", 9.0f);
         const char *e[4] = {"ATTACK", "DECAY", "SUSTAIN", "RELEASE"};
         for (int i = 0; i < 4; i++) {
@@ -1156,8 +1172,8 @@ void Panel::paintBackground(juce::Graphics &g, float sc)
     legend(1870, 88, "ON/OFF", 9.0f);
     small(C(1945, 95, 66, 11), "A", Justification::centred, 9.0f);
     small(C(2019, 95, 66, 11), "B", Justification::centred, 9.0f);
-    small(Rectangle<float>(X0 + 2092.0f, 74.0f, 12.0f, 14.0f), "A", Justification::centredLeft, 8.5f);
-    small(Rectangle<float>(X0 + 2092.0f, 88.0f, 12.0f, 14.0f), "B", Justification::centredLeft, 8.5f);
+    small(atR(2092.0f, 74.0f, 12.0f, 14.0f), "A", Justification::centredLeft, 8.5f);
+    small(atR(2092.0f, 88.0f, 12.0f, 14.0f), "B", Justification::centredLeft, 8.5f);
     legend(2090, 46, "A / B", 9.0f);
     legend(1985, 147, "TYPE", 9.5f);
     legend(1880, 218, "1", 10.0f);
@@ -1168,47 +1184,49 @@ void Panel::paintBackground(juce::Graphics &g, float sc)
     legend(1730, 348, "ON/OFF", 9.0f);
     legend(1800, 375, "OCTAVES", 9.0f);
     for (int i = 0; i < 3; i++)
-        small(Rectangle<float>(X0 + 1843.0f, 315.0f + 14.0f * (float)i, 14.0f, 13.0f), String(i + 1), Justification::centredLeft, 9.0f);
+        small(atR(1843.0f, 315.0f + 14.0f * (float)i, 14.0f, 13.0f), String(i + 1), Justification::centredLeft, 9.0f);
     legend(1885, 375, "MODE", 9.0f);
     for (int i = 0; i < NARPMODE; i++)
-        small(Rectangle<float>(X0 + 1928.0f, 305.5f + 13.0f * (float)i, 60.0f, 13.0f), ARPMODE_NAME[i], Justification::centredLeft, 8.5f);
+        small(atR(1928.0f, 305.5f + 13.0f * (float)i, 60.0f, 13.0f), ARPMODE_NAME[i], Justification::centredLeft, 8.5f);
     legend(2025, 333, "PLAY", 9.0f);
     legend(2085, 333, "RECORD", 9.0f);
     legend(2025, 396, "REST", 8.5f);
     legend(2085, 396, "TIE", 8.5f);
     /* the strip */
     g.setColour(col::frame.withAlpha(0.9f));
-    g.drawLine(X0 + 12.0f, 450.0f, X0 + 2108.0f, 450.0f, 1.2f);
+    g.drawLine(X0 + 12.0f, 668.0f, X0 + 1695.0f, 668.0f, 1.2f);
     legend(92, 595, "TRANSPOSE", 9.5f);
     legend(45, 578, "DOWN", 8.5f);
     legend(140, 578, "UP", 8.5f);
     {
         const char *tn[5] = {"-2", "-1", "0", "+1", "+2"};
         for (int i = 0; i < 5; i++)
-            small(Rectangle<float>(X0 + 55.0f + 15.0f * (float)i, 496.0f, 15.0f, 11.0f), tn[i], Justification::centred, 8.0f);
+            small(atR(55.0f + 15.0f * (float)i, 496.0f, 15.0f, 11.0f), tn[i], Justification::centred, 8.0f);
     }
     legend(215, 578, "HOLD", 9.0f);
     legend(295, 590, "GLIDE RATE", 9.0f);
     legend(370, 578, "GLIDE", 9.0f);
     legend(440, 578, "UNISON", 9.0f);
-    small(C(545, 528, 70, 11), "Decrement", Justification::centred, 8.0f);
-    legend(545, 540, "BANK", 9.0f);
-    legend(545, 585, "SELECT", 9.0f);
-    legend(638, 590, "BANK  PROGRAM", 9.0f);
-    small(C(730, 528, 70, 11), "Increment", Justification::centred, 8.0f);
-    legend(730, 540, "TENS", 9.0f);
-    legend(730, 585, "SELECT", 9.0f);
+    /* the program block */
+    drawSection(g, R(PG + 838, 440, PG + 1695, 660), "PROGRAMS");
+    small(C(PG + 900, 560, 70, 11), "Decrement", Justification::centred, 8.0f);
+    legend(PG + 900, 572, "BANK", 9.0f);
+    legend(PG + 900, 615, "SELECT", 9.0f);
+    legend(PG + 1052, 621, "BANK  PROGRAM", 9.0f);
+    small(C(PG + 1204, 560, 70, 11), "Increment", Justification::centred, 8.0f);
+    legend(PG + 1204, 572, "TENS", 9.0f);
+    legend(PG + 1204, 615, "SELECT", 9.0f);
     for (int d = 0; d < 10; d++)
-        legend(790.0f + 44.0f * (float)d, 588, String(d), 11.0f);
-    legend(1265, 578, "WRITE", 9.0f);
-    legend(1320, 578, "GLOBALS", 9.0f);
-    legend(1375, 578, "SOURCE", 9.0f);
+        legend(PG + 1300.0f + 58.0f * (float)(d % 5), 500.0f + 56.0f * (float)(d / 5), String(d), 11.0f);
+    legend(PG + 1300, 630, "WRITE", 9.0f);
+    legend(PG + 1366, 630, "GLOBALS", 9.0f);
+    legend(PG + 1432, 630, "LOAD SYX", 9.0f);
+    legend(PG + 1600, 496, "SOURCE", 9.0f);
     {
         const char *sn[3] = {"TREEGONE", "TRIGON .SYX", "USER"};
         for (int i = 0; i < 3; i++)
-            small(Rectangle<float>(X0 + 1412.0f, 525.0f + 16.0f * (float)i, 80.0f, 16.0f), sn[i], Justification::centredLeft, 8.5f);
+            small(atR(PG + 1604.0f, 516.0f + 15.0f * (float)i, 85.0f, 15.0f), sn[i], Justification::centredLeft, 8.5f);
     }
-    legend(1500, 578, "LOAD SYX", 9.0f);
     legend(1585, 590, "DISTORTION", 9.0f);
     legend(1655, 590, "VINTAGE", 9.0f);
     legend(1725, 590, "PAN SPREAD", 9.0f);
@@ -1223,18 +1241,18 @@ void Panel::paintBackground(juce::Graphics &g, float sc)
         Path p;
         ga.createPath(p);
         auto b = p.getBounds();
-        p.applyTransform(AffineTransform::translation(X0 + 2015.0f - b.getWidth() * 0.5f - b.getX(), 500.0f - b.getY()));
+        p.applyTransform(AffineTransform::translation(at(2015.0f, 500.0f).x - b.getWidth() * 0.5f - b.getX(), 690.0f - b.getY()));
         g.setColour(col::legend);
         g.fillPath(p);
-        small(Rectangle<float>(X0 + 2015.0f - 130.0f, 548.0f, 260.0f, 12.0f), "6-VOICE  3-VCO  POLYPHONIC SYNTHESIZER",
+        small(Rectangle<float>(at(2015.0f, 500.0f).x - 130.0f, 737.0f, 260.0f, 12.0f), "6-VOICE  3-VCO  POLYPHONIC SYNTHESIZER",
               Justification::centred, 8.5f);
-        drawTag(g, Rectangle<float>(X0 + 2045.0f, 582.0f, 80.0f, 40.0f));
+        drawTag(g, Rectangle<float>(at(2015.0f, 500.0f).x - 40.0f, 752.0f, 80.0f, 32.0f));
     }
     for (float x : {(float)wood + 14.0f, (float)W - wood - 14.0f})
         for (float y : {12.0f, (float)H - 12.0f})
             drawScrew(g, {x, y}, 5.5f);
     drawPanelEdge(g, face);
-    drawWear(g, face, 1.0f / sc, {at(1440, 92), at(1520, 92), at(95, 95), at(1110, 100), at(1595, 92), at(270, 95), at(638, 556)});
+    drawWear(g, face, 1.0f / sc, {at(1440, 92), at(1520, 92), at(95, 95), at(1110, 100), at(1595, 92), at(270, 95), at(PG + 1052, 586)});
 }
 
 void Panel::paint(juce::Graphics &g)
