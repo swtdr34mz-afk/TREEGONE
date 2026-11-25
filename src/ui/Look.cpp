@@ -98,40 +98,21 @@ void drawKnob(juce::Graphics &g, juce::Rectangle<float> r, float pos, bool bipol
             g.drawText("+", Rectangle<float>(12.0f, 12.0f).withCentre(pp), Justification::centred, false);
         }
     }
-    g.setGradientFill(ColourGradient(Colours::black.withAlpha(0.75f), c.x, c.y + rb * 0.3f, Colours::transparentBlack, c.x, c.y + rb * 1.5f, true));
-    g.fillEllipse(Rectangle<float>(rb * 2.7f, rb * 2.7f).withCentre(c.translated(rb * 0.08f, rb * 0.22f)));
-    auto body = Rectangle<float>(rb * 2.0f, rb * 2.0f).withCentre(c);
-    g.setColour(Colour(0xff070708));
+    /* the pot (the MPC skin's): matte black, a little domed, its shadow under it */
+    const float bd = rb * 2.0f;
+    g.setGradientFill(ColourGradient(Colours::black.withAlpha(0.7f), c.x, c.y + bd * 0.08f, Colours::transparentBlack, c.x + bd * 0.62f, c.y + bd * 0.08f, true));
+    g.fillEllipse(Rectangle<float>(bd, bd).withCentre(c).expanded(bd * 0.12f).translated(0.0f, bd * 0.06f));
+    auto body = Rectangle<float>(bd, bd).withCentre(c);
+    g.setGradientFill(ColourGradient(Colour(0xff2e2e31), c.x - bd * 0.35f, c.y - bd * 0.45f, Colour(0xff060606), c.x + bd * 0.3f, c.y + bd * 0.5f, false));
     g.fillEllipse(body);
-    const int ribs = 36;
-    for (int i = 0; i < ribs; i++) {
-        float a = MathConstants<float>::twoPi * (float)i / (float)ribs;
-        float lit = 0.5f + 0.5f * std::cos(a + 0.9f);
-        g.setColour(Colours::white.withAlpha(0.04f + 0.10f * lit));
-        g.drawLine(Line<float>(c.getPointOnCircumference(rb * 0.90f, a), c.getPointOnCircumference(rb * 0.995f, a)), jmax(0.8f, d * 0.018f));
-    }
-    const float ro = rb * 0.89f, ri = rb * 0.70f;
-    const int slices = 48;
-    for (int i = 0; i < slices; i++) {
-        float a = MathConstants<float>::twoPi * (float)i / (float)slices, a2 = a + MathConstants<float>::twoPi / (float)slices + 0.01f;
-        float k = 0.5f + 0.5f * std::cos(2.0f * (a + 0.75f));
-        float v = 0.38f + 0.55f * std::pow(k, 1.6f);
-        Path p;
-        p.addCentredArc(c.x, c.y, ro, ro, 0.0f, a, a2, true);
-        p.lineTo(c.getPointOnCircumference(ri, a2));
-        p.addCentredArc(c.x, c.y, ri, ri, 0.0f, a2, a, false);
-        p.closeSubPath();
-        g.setColour(Colour::fromFloatRGBA(v, v, v * 1.02f, 1.0f));
-        g.fillPath(p);
-    }
-    g.setColour(Colours::black.withAlpha(0.6f));
-    g.drawEllipse(Rectangle<float>(ro * 2.0f, ro * 2.0f).withCentre(c), 0.8f);
-    g.setGradientFill(ColourGradient(Colour(0xff2a2a2d), c.x - ri * 0.5f, c.y - ri * 0.6f, Colour(0xff0d0d0f), c.x + ri * 0.6f, c.y + ri * 0.7f, false));
-    g.fillEllipse(Rectangle<float>(ri * 2.0f, ri * 2.0f).withCentre(c));
+    g.setColour(Colours::black);
+    g.drawEllipse(body.reduced(0.5f), 1.0f);
+    auto cap = body.reduced(bd * 0.1f);
+    g.setGradientFill(ColourGradient(Colour(0xff2a2a2c), c.x - bd * 0.15f, c.y - bd * 0.35f, Colour(0xff0c0c0d), c.x + bd * 0.2f, c.y + bd * 0.35f, true));
+    g.fillEllipse(cap);
     g.setColour(Colours::white.withAlpha(0.06f));
-    g.drawEllipse(Rectangle<float>(ri * 1.5f, ri * 1.5f).withCentre(c), 0.6f);
-    g.setColour(Colours::black.withAlpha(0.8f));
-    g.drawEllipse(Rectangle<float>(ri * 2.0f, ri * 2.0f).withCentre(c), 0.8f);
+    g.drawEllipse(cap, 0.8f);
+    ignoreUnused(ang);
     if (pointer)
         drawKnobPointer(g, r, pos, endless);
 }
@@ -139,12 +120,11 @@ void drawKnob(juce::Graphics &g, juce::Rectangle<float> r, float pos, bool bipol
 void drawKnobPointer(juce::Graphics &g, juce::Rectangle<float> r, float pos, bool endless)
 {
     using namespace juce;
-    const float d = jmin(r.getWidth(), r.getHeight()), ri = d * 0.5f * 0.70f * 0.70f;
+    const float d = jmin(r.getWidth(), r.getHeight()), bd = d * 0.70f;   /* (the pot's diameter) */
     const Point<float> c = r.getCentre();
     const float ang = endless ? pos * MathConstants<float>::twoPi : -2.4f + pos * 4.8f;
-    auto p0 = c.getPointOnCircumference(ri * 0.15f, ang), p1 = c.getPointOnCircumference(ri * 0.96f, ang);
-    g.setColour(Colour(0xfff4f2ec));
-    g.drawLine({p0, p1}, jmax(1.5f, d * 0.045f));
+    g.setColour(Colour(0xfff6f6f6));
+    g.fillEllipse(Rectangle<float>(bd * 0.13f, bd * 0.13f).withCentre(c.getPointOnCircumference(bd * 0.30f, ang)));
 }
 
 /* ---------------------------------------------------------------------------- the button --- */
@@ -210,7 +190,7 @@ void drawLegend(juce::Graphics &g, const juce::String &t, juce::Rectangle<float>
 void drawSection(juce::Graphics &g, juce::Rectangle<float> r, const juce::String &title)
 {
     using namespace juce;
-    auto f = font(Face::title, 16.5f).withExtraKerningFactor(0.05f);
+    auto f = font(Face::title, 17.5f).withExtraKerningFactor(0.14f);   /* (spaced out, as the MPC skin's titles) */
     float tw = textWidth(f, title), cx = r.getCentreX(), gl = cx - tw * 0.5f - 7.0f, gr = cx + tw * 0.5f + 7.0f, rad = 10.0f;
     Path p;
     p.startNewSubPath(gr, r.getY());

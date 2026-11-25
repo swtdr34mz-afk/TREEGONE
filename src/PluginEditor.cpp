@@ -1264,7 +1264,7 @@ void Panel::paintBackground(juce::Graphics &g, float sc)
         for (float y : {12.0f, (float)H - 12.0f})
             drawScrew(g, {x, y}, 5.5f);
     drawPanelEdge(g, face);
-    drawWear(g, face, 1.0f / sc, {at(1440, 92), at(1520, 92), at(95, 95), at(1110, 100), at(1595, 92), at(270, 95), at(PG + 1052, 586)});
+    /* (no wear: the coat alone, as on the MPC) */
 }
 
 void Panel::paint(juce::Graphics &g)
