@@ -11,7 +11,7 @@
  *            RANGE, KEY MODE) / GLIDE, UNISON, VOICES / LOW SPLIT
  *
  * TREEGONE's own art (its panel coat, buttons, LEDs, displays, legends), its pots: black, a white dot, a white scale.
- * The panel with what never changes (the coat and its wear under everything, the titles, the lines, the legends, the
+ * The panel with what never changes (the coat, the titles, the lines, the legends, the
  * pots' scales) is one picture; each control is cut out at every value it can take: a pot's film strip, a button's
  * look at each value, an LED's lit and unlit look, a display's film strip. manifest.json says what each is, for
  * make_skin.py.
@@ -626,13 +626,12 @@ int main(int argc, char **argv)
         pg.name = d.name;
         pg.title = d.title;
         String tag = pg.name.toLowerCase().retainCharacters("abcdefghijklmnopqrstuvwxyz0123456789");
-        /* the panel: the coat and its wear under everything, then what never changes, the bottom strip */
+        /* the panel: the coat, then what never changes, the bottom strip */
         Image bg(Image::RGB, TW, TH, true);
         {
             Graphics g(bg);
             auto r = Rectangle<float>(0, 0, (float)TW, (float)TH);
-            drawPanelFace(g, r, 1.0f);
-            drawWear(g, r, 1.0f, {});
+            drawPanelFace(g, r, 1.0f);   /* (the coat's rough surface alone: no scratches) */
             B b{g, pg};
             d.build(b);
             g.setColour(INK);
