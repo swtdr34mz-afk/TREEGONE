@@ -1,0 +1,190 @@
+# Builds TREEGONE for Windows (VST3, Standalone) and the Mac (VST3, AU, Standalone; Apple Silicon and Intel) on every
+# push. The zips are under the run's "Artifacts"; a tag v* (or a release published on GitHub) also puts them in its
+# release.
+name: build
+on:
+  push:
+    branches: [main]
+    tags: ['v*']
+  pull_request:
+  workflow_dispatch:
+  release:
+    types: [published]
+
+permissions:
+  contents: write
+
+jobs:
+  # the engine's tests (tests/engine_tests.cpp): every program at three rates, the three filters singing, every effect,
+  # unison and chord, the arp, the sequencer, 12 voices, any buffer size, the SysEx reader; no JUCE needed
+  tests:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: build
+        run: cmake -S tests -B build-tests -DCMAKE_BUILD_TYPE=Release && cmake --build build-tests --parallel 4
+      - name: run
+        run: build-tests/engine_tests
+
+  # the MPC plugin (mpc/): Akai's MPC Plugin SDK (pinned) builds it for the MPC's two CPUs and checks it; our own host
+  # test plays it as the MPC would (44.1 kHz, its block sizes, programs, its saved state); then the Open MPC
+  # catalog's zips, checked with its own tool
+  mpc:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: the MPC Plugin SDK (pinned)
+        run: |
+          git init -q mpc-sdk
+          git -C mpc-sdk remote add origin https://github.com/inmusic-software/mpc-plugin-builder-sdk
+          git -C mpc-sdk fetch -q --depth 1 origin a5949cf6fe2cbfb95bcbe0ddf1f7ef555e71f2be
+          git -C mpc-sdk checkout -q FETCH_HEAD
+      - name: version from the tag
+        if: startsWith(github.ref, 'refs/tags/v')
+        run: |
+          v="${GITHUB_REF_NAME#v}"
+          sed -i -E "s/\"version\": \"[^\"]*\"/\"version\": \"$v\"/" mpc/plugin/plugin.json
+          grep '"version"' mpc/plugin/plugin.json
+      - name: build (native, arm32, arm64)
+        run: python3 mpc/build.py --sdk mpc-sdk --target all
+      - name: host test (the native build)
+        run: |
+          g++ -std=c++17 -O2 -Impc-sdk/framework mpc/test/mpc_host_test.cpp -ldl -o mpc_host_test
+          ./mpc_host_test "mpc/build/TREEGONE/build/native/treegone.so"
+      - name: package
+        run: |
+          cd "mpc/build/TREEGONE/build"
+          file "swtdr34mz - VST - TREEGONE/VST/"*.so
+          cp "../README.md" "swtdr34mz - VST - TREEGONE/README.md"
+          zip -qr "$GITHUB_WORKSPACE/TREEGONE-MPC.zip" "swtdr34mz - VST - TREEGONE"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: TREEGONE-MPC
+          path: TREEGONE-MPC.zip
+      - name: the Open MPC catalog's tools (pinned)
+        run: |
+          git init -q openmpc
+          git -C openmpc remote add origin https://github.com/open-mpc/mpc-vst-plugins
+          git -C openmpc fetch -q --depth 1 origin aa81004516da80490a79b493061723513c438ff6
+          git -C openmpc checkout -q FETCH_HEAD
+      - name: catalog zips (per CPU) and the SDK zip
+        run: |
+          v=$(python3 -c "import json; print(json.load(open('mpc/plugin/plugin.json'))['version'])")
+          python3 openmpc/tools/sdk_release.py "mpc/build/TREEGONE/build/swtdr34mz - VST - TREEGONE" --version "$v" \
+            --id treegone --repo swtdr34mz-afk/TREEGONE --license MPL-2.0 -o dist
+          cp TREEGONE-MPC.zip "dist/TREEGONE-$v-mpc-sdk.zip"
+          {
+            echo "## Open MPC catalog zips ($v)"
+            for z in dist/*-mpc-armv7.zip dist/*-mpc-aarch64.zip; do
+              echo; echo "### $(basename "$z")"; echo '```'
+              python3 openmpc/tools/catalog_check.py "$z" --catalog --expect-id treegone --expect-repo swtdr34mz-afk/TREEGONE 2>&1
+              echo '```'
+            done
+            echo; echo "### SHA-256"; echo '```'; (cd dist && sha256sum *.zip); echo '```'
+          } | tee -a "$GITHUB_STEP_SUMMARY"
+          for z in dist/*-mpc-armv7.zip dist/*-mpc-aarch64.zip; do
+            python3 openmpc/tools/catalog_check.py "$z" --catalog --expect-id treegone --expect-repo swtdr34mz-afk/TREEGONE > /dev/null
+          done
+      - uses: actions/upload-artifact@v4
+        with:
+          name: TREEGONE-catalog
+          path: dist/*.zip
+      - uses: softprops/action-gh-release@v2
+        if: startsWith(github.ref, 'refs/tags/v') && (github.event_name == 'release' || github.event_name == 'push')
+        with:
+          files: dist/*.zip
+
+  build:
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: windows-latest
+            name: Windows
+          - os: macos-15-intel
+            name: macOS
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 90
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: configure
+        shell: bash
+        run: cmake -B build -DCMAKE_BUILD_TYPE=Release
+
+      - name: build
+        shell: bash
+        run: cmake --build build --config Release --parallel 4
+
+      - name: pluginval (Windows)
+        # the plugin checked as a host would: loading, its parameters fuzzed, state saved and restored, the editor
+        # opened, every buffer size and rate (Tracktion's pluginval, strictness 8)
+        if: runner.os == 'Windows'
+        shell: pwsh
+        run: |
+          Invoke-WebRequest -Uri https://github.com/Tracktion/pluginval/releases/download/v1.0.4/pluginval_Windows.zip -OutFile pluginval.zip
+          Expand-Archive pluginval.zip -DestinationPath pluginval
+          $p = Start-Process -FilePath pluginval/pluginval.exe -ArgumentList '--strictness-level','8','--timeout-ms','600000','--output-dir','pluginval-log','--validate','"build/Treegone_artefacts/Release/VST3/TREEGONE.vst3"' -Wait -PassThru -NoNewWindow
+          Get-ChildItem pluginval-log -ErrorAction SilentlyContinue | ForEach-Object { Get-Content $_.FullName | Select-Object -Last 60 }
+          if ($p.ExitCode -ne 0) { throw "pluginval failed ($($p.ExitCode))" }
+
+      - uses: actions/upload-artifact@v4
+        if: always() && runner.os == 'Windows'
+        with:
+          name: pluginval-log
+          path: pluginval-log
+          if-no-files-found: ignore
+
+      - name: package (Windows)
+        if: runner.os == 'Windows'
+        shell: pwsh
+        run: |
+          $a = "build/Treegone_artefacts/Release"
+          $o = "TREEGONE-Windows"
+          New-Item -ItemType Directory -Force $o | Out-Null
+          Copy-Item -Recurse "$a/VST3/TREEGONE.vst3" $o/
+          Copy-Item "$a/Standalone/TREEGONE.exe" $o/
+          Copy-Item README.md $o/
+          Compress-Archive -Path $o -DestinationPath TREEGONE-Windows.zip
+
+      - name: auval (macOS)
+        if: runner.os == 'macOS'
+        continue-on-error: true
+        shell: bash
+        run: |
+          mkdir -p ~/Library/Audio/Plug-Ins/Components
+          cp -R "build/Treegone_artefacts/Release/AU/TREEGONE.component" ~/Library/Audio/Plug-Ins/Components/
+          killall -9 AudioComponentRegistrar || true
+          auval -v aumu Tgn6 Swtd
+
+      - name: package (macOS)
+        if: runner.os == 'macOS'
+        shell: bash
+        run: |
+          a="build/Treegone_artefacts/Release"
+          o=TREEGONE-macOS
+          mkdir -p $o
+          cp -R "$a/VST3/TREEGONE.vst3" "$a/AU/TREEGONE.component" "$a/Standalone/TREEGONE.app" $o/
+          for b in $o/*.vst3 $o/*.component $o/*.app; do codesign --force --deep -s - "$b"; done
+          cp README.md $o/
+          lipo -info "$o/TREEGONE.vst3/Contents/MacOS/TREEGONE"
+          ditto -c -k --sequesterRsrc --keepParent $o $o.zip
+          tar -czf $o.tar.gz $o   # (the same as a .tar.gz: some Macs' unzip had lost the plugins' signatures)
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: TREEGONE-${{ matrix.name }}
+          path: |
+            TREEGONE-*.zip
+            TREEGONE-*.tar.gz
+
+      - name: release
+        if: startsWith(github.ref, 'refs/tags/v') && (github.event_name == 'release' || github.event_name == 'push')
+        uses: softprops/action-gh-release@v2
+        with:
+          files: |
+            TREEGONE-*.zip
+            TREEGONE-*.tar.gz

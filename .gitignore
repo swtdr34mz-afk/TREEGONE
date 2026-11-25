@@ -1,0 +1,5 @@
+build/
+build-*/
+mpc/build/
+*.wav
+.DS_Store

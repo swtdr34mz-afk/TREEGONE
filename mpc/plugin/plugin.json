@@ -1,0 +1,17 @@
+{
+  "name": "TREEGONE",
+  "manufacturer": "swtdr34mz",
+  "version": "1.0.0",
+  "format": "vst2",
+  "kind": "instrument",
+  "uid": "Tgn6",
+  "numInputs": 0,
+  "numOutputs": 2,
+  "category": "Synth",
+  "file32": "VST/treegone-arm32.so",
+  "file64": "VST/treegone-arm64.so",
+  "description": "TREEGONE: a 6- or 12-voice poly in the style of the Sequential Trigon-6. Three oscillators with sync, osc 3 LO, noise, feedback and drive, three filters (LP1 4-pole OTA, LP2 4/2-pole ladder, 2-pole OTA state variable), two ADSR, LFO, poly mod, aftertouch, distortion, two effects, glide, unison with chord memory, arp and poly sequencer. The same engine as the TREEGONE VST3.",
+  "author": "swtdr34mz",
+  "url": "https://github.com/swtdr34mz-afk/TREEGONE",
+  "license": "MPL-2.0"
+}

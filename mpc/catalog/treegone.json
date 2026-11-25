@@ -1,0 +1,13 @@
+{
+  "id": "treegone",
+  "name": "TREEGONE",
+  "author": "swtdr34mz",
+  "repo": "swtdr34mz-afk/TREEGONE",
+  "kind": "instrument",
+  "license": "MPL-2.0",
+  "summary": "A polysynth in the manner of the Sequential Trigon-6: three oscillators per voice (triangle, sawtooth, reverse sawtooth on osc 3, pulse, all at once), sync, osc 3 LO, noise, FDBK <> DRIVE, three filters as on the Pro 3 (LP1 4-pole OTA, LP2 4/2-pole ladder, SVF 2-pole OTA), two ADSR, LFO to audio rate, poly mod, aftertouch, vintage, distortion, two effects with reverbs, glide, unison with chord memory, arp and poly sequencer, 6 or 12 voices. ECO and HIGH quality. Panel-style touch pages.",
+  "style": "polysynth",
+  "tags": ["analog-modelling", "polyphonic", "subtractive", "arpeggiator", "sequencer"],
+  "asset_pattern": "TREEGONE-*-mpc-armv7.zip",
+  "screenshot": "https://raw.githubusercontent.com/swtdr34mz-afk/TREEGONE/v1.0.0/mpc/catalog/screenshot.png"
+}
