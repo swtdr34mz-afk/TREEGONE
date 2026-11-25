@@ -632,13 +632,17 @@ void Panel::writeDialog()
 
 void Panel::loadSyx()
 {
-    chooser = std::make_unique<juce::FileChooser>("Trigon-6 programs (.syx)", juce::File::getSpecialLocation(juce::File::userHomeDirectory), "*.syx");
+    /* (the plugin's own window the dialog's parent: in a host such as Cubase a free-standing dialog can open behind
+     * the plugin's window, unseen; it starts in the folder last used) */
+    auto start = lastSyxFolder.isDirectory() ? lastSyxFolder : juce::File::getSpecialLocation(juce::File::userDocumentsDirectory);
+    chooser = std::make_unique<juce::FileChooser>("Trigon-6 programs (.syx)", start, "*.syx;*.SYX", true, false, this);
     juce::Component::SafePointer<Panel> self(this);
     chooser->launchAsync(juce::FileBrowserComponent::openMode | juce::FileBrowserComponent::canSelectFiles, [self](const juce::FileChooser &fc) {
         if (!self)
             return;
         auto f = fc.getResult();
         if (f.existsAsFile()) {
+            self->lastSyxFolder = f.getParentDirectory();
             juce::String msg;
             self->proc.importSyx(f, msg);
             self->say(msg);

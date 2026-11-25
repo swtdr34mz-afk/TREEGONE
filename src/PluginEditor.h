@@ -66,6 +66,7 @@ private:
     std::vector<double> taps;
     juce::Component::SafePointer<juce::AlertWindow> dialog;
     std::unique_ptr<juce::FileChooser> chooser;
+    juce::File lastSyxFolder;
     template <class T, class... A> T *add(A &&...a);
 };
 
