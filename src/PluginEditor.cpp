@@ -13,6 +13,20 @@ constexpr float KS = 50.0f;                      /* a small knob's */
 constexpr float BW = 30.0f, BH = 19.0f;          /* a button's */
 constexpr float X0 = 30.0f;                      /* the panel's left edge (the maple before it) */
 
+/* A right click on a control: the host's menu for its parameter (MIDI Learn, automation, ...); never a change of
+ * its value. True: the click was the menu's (or a right click with nothing to show) */
+static bool hostMenu(juce::Component &c, const juce::MouseEvent &e, juce::RangedAudioParameter *p)
+{
+    if (!e.mods.isPopupMenu())
+        return false;
+    if (p != nullptr)
+        if (auto *ed = c.findParentComponentOfClass<juce::AudioProcessorEditor>())
+            if (auto *ctx = ed->getHostContext())
+                if (auto menu = ctx->getContextMenuForParameter(p))
+                    menu->showNativeMenu(ed->getMouseXYRelative());
+    return true;
+}
+
 /* ------------------------------------------------------------------------------- a knob --- */
 class Knob : public juce::Component, public Panel::Live
 {
@@ -50,6 +64,9 @@ public:
     }
     void mouseDown(const juce::MouseEvent &e) override
     {
+        rightClick = e.mods.isPopupMenu();
+        if (hostMenu(*this, e, target()))
+            return;
         startY = e.position.y;
         if (auto *p = target()) {
             if (auto *ip = dynamic_cast<juce::AudioParameterInt *>(p))
@@ -63,6 +80,8 @@ public:
     }
     void mouseDrag(const juce::MouseEvent &e) override
     {
+        if (rightClick || e.mods.isPopupMenu())
+            return;
         float dy = startY - e.position.y;
         bool fine = e.mods.isShiftDown();
         auto *p = target();
@@ -81,6 +100,10 @@ public:
     }
     void mouseUp(const juce::MouseEvent &) override
     {
+        if (rightClick) {
+            rightClick = false;
+            return;
+        }
         if (auto *p = target())
             p->endChangeGesture();
     }
@@ -101,8 +124,10 @@ public:
             p->setValueNotifyingHost(juce::jlimit(0.0f, 1.0f, p->getValue() + 0.01f * (float)d));
         p->endChangeGesture();
     }
-    void mouseDoubleClick(const juce::MouseEvent &) override
+    void mouseDoubleClick(const juce::MouseEvent &e) override
     {
+        if (e.mods.isPopupMenu())
+            return;
         if (auto *p = target()) {
             p->beginChangeGesture();
             p->setValueNotifyingHost(p->getDefaultValue());
@@ -113,7 +138,7 @@ public:
 private:
     Target target;
     std::function<void(juce::RangedAudioParameter *)> onTouch;
-    bool bipolar = false, bodyBipolar = false;
+    bool bipolar = false, bodyBipolar = false, rightClick = false;
     float shownPos = -1.0f, startY = 0.0f, bodyScale = 0.0f;
     juce::Image body;
     int startV = 0;
@@ -128,6 +153,7 @@ public:
         setRepaintsOnMouseActivity(true);
     }
     std::function<void(juce::Rectangle<int>)> onRight;
+    std::function<juce::RangedAudioParameter *()> param;   /* its parameter (a right click: the host's menu) */
     void setPress(std::function<void()> f) { onPress = std::move(f); }
     void paint(juce::Graphics &g) override
     {
@@ -158,8 +184,11 @@ public:
     }
     void mouseDown(const juce::MouseEvent &e) override
     {
-        if (e.mods.isPopupMenu() && onRight) {
-            onRight(getScreenBounds());
+        if (e.mods.isPopupMenu()) {
+            if (param && param())
+                hostMenu(*this, e, param());
+            else if (onRight)
+                onRight(getScreenBounds());
             return;
         }
         down = true;
@@ -208,9 +237,10 @@ public:
         if (ch)
             repaint();
     }
+    std::function<juce::RangedAudioParameter *()> param;   /* its parameter (a right click: the host's menu) */
     void mouseDown(const juce::MouseEvent &e) override
     {
-        if (!pick)
+        if (hostMenu(*this, e, param ? param() : nullptr) || !pick)
             return;
         float best = 1e9f;
         int bi = 0;
@@ -258,7 +288,7 @@ public:
     }
     void mouseDown(const juce::MouseEvent &e) override
     {
-        if (onClick)
+        if (onClick && !e.mods.isPopupMenu())   /* (a right click: nothing) */
             onClick(e);
     }
     void mouseWheelMove(const juce::MouseEvent &, const juce::MouseWheelDetails &w) override
@@ -321,7 +351,7 @@ public:
     }
     void mouseDown(const juce::MouseEvent &e) override
     {
-        if (onClick)
+        if (onClick && !e.mods.isPopupMenu())   /* (a right click: nothing) */
             onClick(e);
     }
 
@@ -714,7 +744,11 @@ void Panel::build()
         };
     };
     auto isOn = [this](int p) { return [this, p] { return proc.value(p) != 0; }; };
-    auto pbutton = [&](float x, float y, int p) { return button(x, y, toggle(p), isOn(p)); };
+    auto pbutton = [&](float x, float y, int p) {
+        auto *b = button(x, y, toggle(p), isOn(p));
+        b->param = P(p);
+        return b;
+    };
     /* a choice's LEDs (a column at x, from y, step apart), each a click away */
     auto choiceLeds = [&](float x, float y0, float step, int p, int n, bool horizontal = false) {
         auto *l = add<Leds>(n, [this, p](int i) { return proc.value(p) == PARAMS[p].lo + i ? 1.0f : 0.0f; },
@@ -723,6 +757,7 @@ void Panel::build()
                                 touch(p);
                             },
                             horizontal);
+        l->param = P(p);
         if (horizontal)
             l->setBounds(atR(x, y0 - 7.0f, step * (float)n, 14.0f).toNearestInt());
         else
@@ -784,11 +819,13 @@ void Panel::build()
                 button(917, y, [this] {
                     proc.setValue(P_O3_SAW, (proc.value(P_O3_SAW) + 1) % 3);
                     touch(P_O3_SAW);
-                }, [this] { return proc.value(P_O3_SAW) != 0; });
-                add<Leds>(2, [this](int i) { return proc.value(P_O3_SAW) == i + 1 ? 1.0f : 0.0f; }, [this](int i) {
+                }, [this] { return proc.value(P_O3_SAW) != 0; })->param = P(P_O3_SAW);
+                auto *sl = add<Leds>(2, [this](int i) { return proc.value(P_O3_SAW) == i + 1 ? 1.0f : 0.0f; }, [this](int i) {
                     proc.setValue(P_O3_SAW, proc.value(P_O3_SAW) == i + 1 ? 0 : i + 1);
                     touch(P_O3_SAW);
-                }, true)->setBounds(atR(903, y - 31, 28, 12).toNearestInt());
+                }, true);
+                sl->param = P(P_O3_SAW);
+                sl->setBounds(atR(903, y - 31, 28, 12).toNearestInt());
             }
             pbutton(962, y, pul[o]);
             knob(1035, y + 4, pw[o]);
@@ -803,7 +840,7 @@ void Panel::build()
         button(1288, 78, [this] {
             proc.setValue(P_F_TYPE, (proc.value(P_F_TYPE) + 1) % NFILTERTYPE);
             touch(P_F_TYPE);
-        }, [] { return false; });
+        }, [] { return false; })->param = P(P_F_TYPE);
         choiceLeds(1316, 64, 15, P_F_TYPE, NFILTERTYPE);
         knob(1440, 92, P_CUTOFF, 66.0f);
         knob(1520, 92, P_RESO);
@@ -813,11 +850,13 @@ void Panel::build()
         button(1660, 128, [this] {
             proc.setValue(P_F_KEY, (proc.value(P_F_KEY) + 1) % 3);
             touch(P_F_KEY);
-        }, [this] { return proc.value(P_F_KEY) != 0; });
-        add<Leds>(2, [this](int i) { return proc.value(P_F_KEY) == i + 1 ? 1.0f : 0.0f; }, [this](int i) {
+        }, [this] { return proc.value(P_F_KEY) != 0; })->param = P(P_F_KEY);
+        auto *kl = add<Leds>(2, [this](int i) { return proc.value(P_F_KEY) == i + 1 ? 1.0f : 0.0f; }, [this](int i) {
             proc.setValue(P_F_KEY, proc.value(P_F_KEY) == i + 1 ? 0 : i + 1);
             touch(P_F_KEY);
-        }, true)->setBounds(atR(1645, 108, 30, 12).toNearestInt());
+        }, true);
+        kl->param = P(P_F_KEY);
+        kl->setBounds(atR(1645, 108, 30, 12).toNearestInt());
         const int env[4] = {P_F_ATT, P_F_DEC, P_F_SUS, P_F_REL};
         for (int i = 0; i < 4; i++)
             knob(1365.0f + 75.0f * (float)i, 200, env[i]);
@@ -893,7 +932,7 @@ void Panel::build()
             int p = fx(P_FXA_SYNC, P_FXB_SYNC);
             proc.setValue(p, proc.value(p) ? 0 : 1);
             touch(p);
-        }, [this, fx] { return proc.value(fx(P_FXA_SYNC, P_FXB_SYNC)) != 0; });
+        }, [this, fx] { return proc.value(fx(P_FXA_SYNC, P_FXB_SYNC)) != 0; })->param = [this, fx] { return proc.param(fx(P_FXA_SYNC, P_FXB_SYNC)); };
         fxKnob(2170, 185, [fx] { return fx(P_FXA_MIX, P_FXB_MIX); });
     }
     /* ARPEGGIATOR */
@@ -916,9 +955,9 @@ void Panel::build()
                 touchGlobal(q);
             };
         };
-        button(45, 560, tr(-1), [] { return false; });
-        button(140, 560, tr(1), [] { return false; });
-        add<Leds>(5, [this, glob](int i) {
+        button(45, 560, tr(-1), [] { return false; })->param = [glob] { return glob("transpose"); };
+        button(140, 560, tr(1), [] { return false; })->param = [glob] { return glob("transpose"); };
+        auto *tl = add<Leds>(5, [this, glob](int i) {
             auto *q = dynamic_cast<juce::AudioParameterInt *>(glob("transpose"));
             return q && q->get() == i - 2 ? 1.0f : 0.0f;
         }, [this, glob](int i) {
@@ -927,7 +966,9 @@ void Panel::build()
             *q = i - 2;
             q->endChangeGesture();
             touchGlobal(q);
-        }, true)->setBounds(atR(55, 512, 75, 14).toNearestInt());
+        }, true);
+        tl->param = [glob] { return glob("transpose"); };
+        tl->setBounds(atR(55, 512, 75, 14).toNearestInt());
         button(215, 560, [this] { proc.command(TreegoneProcessor::C_HOLD, proc.holdNow.load() ? 0 : 1); }, [this] { return proc.holdNow.load(); });
         knob(295, 553, P_GLIDE_RATE, KS);
         pbutton(370, 560, P_GLIDE);
@@ -937,7 +978,7 @@ void Panel::build()
             if (!on && proc.value(P_UNI_VOICES) >= 6)
                 proc.command(TreegoneProcessor::C_CHORD);
             touch(P_UNISON);
-        }, isOn(P_UNISON));
+        }, isOn(P_UNISON))->param = P(P_UNISON);
     }
     /* the programs (their own block): the name line, under it BANK, the display, TENS; the ten number buttons in two
      * rows, SOURCE with its three LEDs; WRITE, GLOBALS, LOAD SYX */
@@ -1000,8 +1041,10 @@ void Panel::build()
         knob(1795, 553, P_PGM_VOL, KS);
         auto *pw = button(1850, 560, [] {}, [] { return false; });
         pw->setComponentID("pwhl");
+        pw->param = P(P_PB_RANGE);
         auto *km = button(1905, 560, [] {}, [] { return false; });
         km->setComponentID("keymode");
+        km->param = P(P_KEY_MODE);
     }
     /* LOW SPLIT (TREEGONE's): ON/OFF, SET (the next key played is the split point), SPLIT POINT, OCTAVE, GLIDE,
      * VOLUME, +1 VOICE */
