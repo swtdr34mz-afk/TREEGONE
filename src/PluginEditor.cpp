@@ -962,6 +962,17 @@ void Panel::build()
             int n = proc.programCount();
             proc.setCurrentProgram(((proc.getCurrentProgram() - d) % n + n) % n);
         };
+        /* PREV / NEXT (TREEGONE's): the program before, after (all of them in a row, wrapping round) */
+        auto step = [this](int d) {
+            return [this, d] {
+                int n = proc.programCount();
+                proc.setCurrentProgram(((proc.getCurrentProgram() + d) % n + n) % n);
+                shownParam = -1;
+                shownGlobal = nullptr;
+            };
+        };
+        button(PG + 1010, 537, step(-1), [] { return false; });
+        button(PG + 1094, 537, step(1), [] { return false; });
         auto *tens = button(PG + 1204, 590, [this] { stepTens(); }, [] { return false; });
         tens->setSize(36, 30);
         tens->setCentrePosition(at(PG + 1204, 590).toInt());
@@ -1225,6 +1236,8 @@ void Panel::paintBackground(juce::Graphics &g, float sc)
     legend(PG + 900, 572, "BANK", 9.0f);
     legend(PG + 900, 615, "SELECT", 9.0f);
     legend(PG + 1052, 621, "BANK  PROGRAM", 9.0f);
+    legend(PG + 962, 537, "PREV", 9.0f);
+    legend(PG + 1142, 537, "NEXT", 9.0f);
     small(C(PG + 1204, 560, 70, 11), "Increment", Justification::centred, 8.0f);
     legend(PG + 1204, 572, "TENS", 9.0f);
     legend(PG + 1204, 615, "SELECT", 9.0f);
