@@ -37,7 +37,7 @@ int main(int argc, char **argv)
         juce::MemoryBlock st;
         proc.getStateInformation(st);
         proc.setStateInformation(st.getData(), (int)st.getSize());
-        std::printf("processed: peak %.3f, state %d bytes, %d programs\n", peak, (int)st.getSize(), proc.getNumPrograms());
+        std::printf("processed: peak %.3f, state %d bytes, %d programs\n", peak, (int)st.getSize(), proc.programCount());
     }
     std::unique_ptr<juce::AudioProcessorEditor> ed(proc.createEditor());
     ed->setSize(TreegonePanel::W, TreegonePanel::H);

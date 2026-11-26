@@ -415,7 +415,7 @@ void Panel::selectDigit(int d)
     int cur = proc.getCurrentProgram(), src = proc.sourceOf(cur);
     int num = proc.numberInSource(cur);
     int want = (num / 10) * 10 + d;
-    for (int i = 0; i < proc.getNumPrograms(); i++)
+    for (int i = 0; i < proc.programCount(); i++)
         if (proc.sourceOf(i) == src && proc.numberInSource(i) == want) {
             proc.setCurrentProgram(i);
             shownParam = -1;
@@ -429,7 +429,7 @@ void Panel::stepBank()
     /* the next bank that has programs (wrapping round) */
     for (int k = 1; k <= 10; k++) {
         int bank = (num / 100 + k) % 10, best = -1, bestNum = 100000;
-        for (int i = 0; i < proc.getNumPrograms(); i++)
+        for (int i = 0; i < proc.programCount(); i++)
             if (proc.sourceOf(i) == src && proc.numberInSource(i) / 100 == bank) {
                 int n = proc.numberInSource(i);
                 int score = std::abs(n % 100 - num % 100);
@@ -450,7 +450,7 @@ void Panel::stepTens()
     for (int k = 1; k <= 10; k++) {
         int tens = (num / 10 % 10 + k) % 10, want = num / 100 * 100 + tens * 10 + num % 10;
         int best = -1, bestD = 100000;
-        for (int i = 0; i < proc.getNumPrograms(); i++)
+        for (int i = 0; i < proc.programCount(); i++)
             if (proc.sourceOf(i) == src && proc.numberInSource(i) / 10 == want / 10) {
                 int dd = std::abs(proc.numberInSource(i) - want);
                 if (dd < bestD) {
@@ -497,7 +497,7 @@ void Panel::programMenu(juce::Rectangle<int> screen)
     }
     m.addSectionHeader("YOUR PROGRAMS");
     int u0 = NFACTORY + (int)proc.imported.size();
-    for (int i = u0; i < proc.getNumPrograms(); i++)
+    for (int i = u0; i < proc.programCount(); i++)
         m.addItem(i + 1, "U" + juce::String(i - u0 + 1).paddedLeft('0', 2) + "   " + juce::String(proc.userPrograms[(size_t)(i - u0)].name),
                   true, i == proc.getCurrentProgram());
     if (proc.userPrograms.empty())
@@ -959,7 +959,7 @@ void Panel::build()
         place(s, PG + 1052, 586, 112, 50);
         s->onClick = [this, s](const juce::MouseEvent &) { programMenu(s->getScreenBounds()); };
         s->onWheel = [this](int d) {
-            int n = proc.getNumPrograms();
+            int n = proc.programCount();
             proc.setCurrentProgram(((proc.getCurrentProgram() - d) % n + n) % n);
         };
         auto *tens = button(PG + 1204, 590, [this] { stepTens(); }, [] { return false; });

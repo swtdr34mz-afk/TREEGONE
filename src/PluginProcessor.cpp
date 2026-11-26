@@ -124,7 +124,7 @@ void TreegoneProcessor::applyProgram(const Program &p0, bool toHost)
 
 void TreegoneProcessor::setCurrentProgram(int index)
 {
-    if (index < 0 || index >= getNumPrograms())
+    if (index < 0 || index >= programCount())   /* (an empty slot: nothing changes) */
         return;
     program = index;
     applyProgram(programAt(index), true);
@@ -133,8 +133,8 @@ void TreegoneProcessor::setCurrentProgram(int index)
 
 const juce::String TreegoneProcessor::getProgramName(int index)
 {
-    if (index < 0 || index >= getNumPrograms())
-        return {};
+    if (index < 0 || index >= programCount())
+        return "-";
     juce::String n(programAt(index).name);
     if (sourceOf(index) == 1)
         return "T" + trigonPlace(index) + " " + n;
@@ -509,7 +509,7 @@ void TreegoneProcessor::setStateInformation(const void *data, int sizeInBytes)
         xml->removeChildElement(pg, true);
     }
     auto state = juce::ValueTree::fromXml(*xml);
-    program = juce::jlimit(0, juce::jmax(0, getNumPrograms() - 1), (int)state.getProperty("program", 0));
+    program = juce::jlimit(0, juce::jmax(0, programCount() - 1), (int)state.getProperty("program", 0));
     uiScale = (float)(double)state.getProperty("uiScale", 0.9);
     uiScaleSet = (bool)state.getProperty("uiScaleSet", false);
     apvts.replaceState(state);

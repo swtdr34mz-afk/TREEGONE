@@ -30,7 +30,12 @@ public:
     bool isMidiEffect() const override { return false; }
     double getTailLengthSeconds() const override { return 10.0; }
 
-    int getNumPrograms() override { return tg::NFACTORY + (int)imported.size() + (int)userPrograms.size(); }
+    /* The host is told a fixed number of program slots: a VST3 host (Cubase) sizes its program parameter when the
+     * plugin opens, so programs loaded later (a .syx, WRITE) past that size were clamped to its last slot (the
+     * factory's Basic Program) and the program buttons stuck there. The slots past the real programs are empty. */
+    static constexpr int HOST_PROGRAMS = 2048;
+    int getNumPrograms() override { return HOST_PROGRAMS; }
+    int programCount() const { return tg::NFACTORY + (int)imported.size() + (int)userPrograms.size(); }
     int getCurrentProgram() override { return program; }
     void setCurrentProgram(int index) override;
     const juce::String getProgramName(int index) override;
