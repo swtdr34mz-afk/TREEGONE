@@ -2,6 +2,7 @@
  * Copyright (C) 2026 swtdr34mz (TREEGONE) */
 /* A picture of the editor (a PNG), without a window: for checking the panel's drawing.
  *   TreegoneShot out.png [scale] [program] [a .syx to load first] */
+#include <cstdlib>
 #include "PluginProcessor.h"
 #include "PluginEditor.h"
 
@@ -45,6 +46,42 @@ int main(int argc, char **argv)
         for (auto *k : c->getChildren())
             if (auto *lv = dynamic_cast<TreegonePanel::Live *>(k))
                 lv->poll();
+    if (std::getenv("TREEGONE_RIGHTCLICK_TEST") != nullptr) {
+        /* a right click (down, a drag, up, a double click) on every control: no parameter may change */
+        auto values = [&] {
+            std::vector<float> v;
+            for (auto *p : proc.getParameters())
+                v.push_back(p->getValue());
+            return v;
+        };
+        auto before = values();
+        int n = 0;
+        auto src = juce::Desktop::getInstance().getMainMouseSource();
+        juce::ModifierKeys right(juce::ModifierKeys::rightButtonModifier);
+        for (auto *c : ed->getChildren())
+            for (auto *k : c->getChildren())
+                if (dynamic_cast<TreegonePanel::Live *>(k) != nullptr) {
+                    auto at = k->getLocalBounds().getCentre().toFloat();
+                    auto t = juce::Time::getCurrentTime();
+                    juce::MouseEvent down(src, at, right, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, k, k, t, at, t, 1, false);
+                    juce::MouseEvent drag(src, at.translated(0.0f, -60.0f), right, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, k, k, t, at, t, 1, true);
+                    k->mouseDown(down);
+                    k->mouseDrag(drag);
+                    k->mouseUp(drag);
+                    k->mouseDoubleClick(down);
+                    n++;
+                }
+        auto after = values();
+        int changed = 0;
+        for (size_t i = 0; i < before.size(); i++)
+            if (before[i] != after[i]) {
+                std::printf("changed by a right click: %s\n", proc.getParameters()[(int)i]->getName(40).toRawUTF8());
+                changed++;
+            }
+        std::printf("right clicks on %d controls: %d parameters changed\n", n, changed);
+        if (changed)
+            return 1;
+    }
     auto img = ed->createComponentSnapshot(ed->getLocalBounds(), true, scale);
     juce::File f = juce::File::getCurrentWorkingDirectory().getChildFile(out);
     f.deleteFile();
