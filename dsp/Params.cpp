@@ -137,7 +137,7 @@ const ParamDef PARAMS[NPARAM] = {
     N("pgm_vol", "Program Volume", 0, 127, 100),
     N("pb_range", "Pitch Wheel Range", 1, 12, 2),
     B("split_on", "Low Split", 0),
-    {"split_point", "Split Point", 0, 127, 48, K_NOTE, nullptr},
+    {"split_point", "Split Point", 0, 127, 60, K_NOTE, nullptr},
     C("split_oct", "Split Octave", 4, 2, SPLITOCT),
     N("split_glide", "Split Glide", 0, 127, 0),
     N("split_vol", "Split Volume", 0, 127, 100),
