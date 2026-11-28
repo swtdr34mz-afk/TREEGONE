@@ -1,6 +1,7 @@
 /* SPDX-License-Identifier: MPL-2.0
  * Copyright (C) 2026 swtdr34mz (TREEGONE) */
 #include "PluginProcessor.h"
+#include "PanelDialog.h"
 #include "PluginEditor.h"
 #include "Sysex.h"
 
@@ -181,11 +182,11 @@ Program TreegoneProcessor::currentProgram() const
 
 juce::File TreegoneProcessor::programFolder()
 {
-    return juce::File::getSpecialLocation(juce::File::userDocumentsDirectory).getChildFile("TREEGONE").getChildFile("Programs");
+    return pdlg::docsOrAppData().getChildFile("TREEGONE").getChildFile("Programs");
 }
 juce::File TreegoneProcessor::importFolder()
 {
-    return juce::File::getSpecialLocation(juce::File::userDocumentsDirectory).getChildFile("TREEGONE").getChildFile("Imported");
+    return pdlg::docsOrAppData().getChildFile("TREEGONE").getChildFile("Imported");
 }
 
 void TreegoneProcessor::programToXml(const Program &p, juce::XmlElement &x)

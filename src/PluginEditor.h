@@ -75,6 +75,7 @@ class TreegoneEditor : public juce::AudioProcessorEditor
 public:
     explicit TreegoneEditor(TreegoneProcessor &);
     void resized() override;
+    bool sized = false;                      /* (resizes during the constructor keep nothing) */
 
 private:
     TreegoneProcessor &proc;
