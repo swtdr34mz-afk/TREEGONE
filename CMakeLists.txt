@@ -36,11 +36,15 @@ endif()
 if(APPLE)
     list(APPEND TREEGONE_FORMATS AU)
 endif()
+if(CMAKE_SYSTEM_NAME STREQUAL "Linux")
+    list(APPEND TREEGONE_FORMATS LV2)
+endif()
 
 juce_add_plugin(Treegone
     PRODUCT_NAME "TREEGONE"
     COMPANY_NAME "swtdr34mz"
     BUNDLE_ID "com.swtdr34mz.treegone"
+    LV2URI "https://github.com/swtdr34mz-afk/TREEGONE"
     PLUGIN_MANUFACTURER_CODE Swtd
     PLUGIN_CODE Tgn6
     FORMATS ${TREEGONE_FORMATS}

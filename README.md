@@ -32,6 +32,8 @@ xattr -cr ~/Library/Audio/Plug-Ins/VST3/TREEGONE.vst3 ~/Library/Audio/Plug-Ins/C
 
 **MPC:** siehe [mpc/plugin/README.md](mpc/plugin/README.md).
 
+**Linux (Bitwig, Reaper, Ardour, ...):** Die `.tar.gz` entpacken. `TREEGONE.vst3` nach `~/.vst3/` kopieren, `TREEGONE.lv2` nach `~/.lv2/`. Die App `TREEGONE` startet auch ohne DAW. 64 Bit, gebaut auf Ubuntu 22.04.
+
 ## Trigon-6-Programme laden (.syx)
 
 **LOAD SYX** auf dem Panel (oder *GLOBALS → Load Trigon-6 programs*), oder die `.syx`-Datei einfach auf das Panel
