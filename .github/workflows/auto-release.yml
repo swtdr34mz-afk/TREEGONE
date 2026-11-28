@@ -1,0 +1,32 @@
+# Automatic release: when the number in VERSION goes up on main, the release v<VERSION> is made by itself - with the
+# notes of that version from CHANGES.md (the section '## <VERSION>') - and the build workflow then builds it and puts
+# its downloads into it. Nothing else to do: merge, and the release, the website and the Discord post follow.
+name: auto release
+on:
+  push:
+    branches: [main]
+    paths: ['VERSION']
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  actions: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: "a new version - tag, release, build"
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          v=$(tr -d ' \r\n' < VERSION)
+          [ -n "$v" ] || { echo "VERSION is empty"; exit 1; }
+          if gh release view "v$v" >/dev/null 2>&1; then echo "v$v is out already"; exit 0; fi
+          awk -v v="$v" '$0 ~ "^## " { on = ($2 == v); next } on' CHANGES.md > notes.md || true
+          [ -s notes.md ] || echo "Version $v" > notes.md
+          name=$(gh repo view --json name -q .name)
+          gh release create "v$v" --target "$GITHUB_SHA" --title "$name $v" --notes-file notes.md
+          # the downloads: the build workflow on the new tag (a release made here does not start it by itself)
+          gh workflow run build.yml --ref "v$v"
