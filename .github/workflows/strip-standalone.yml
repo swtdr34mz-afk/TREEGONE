@@ -1,0 +1,36 @@
+# Takes the standalone app (.exe) out of the Windows zip of the newest release, so the download holds only the VST3
+# plugin: unsigned standalone apps are what Windows Defender most often flags by mistake. The plugin inside stays
+# the same file, the release keeps its version (no new release, no announcement). Runs once when this file comes to
+# main, and by hand: Actions -> "Windows zip: plugin only" -> Run workflow.
+name: Windows zip - plugin only
+on:
+  push:
+    branches: [main]
+    paths: ['.github/workflows/strip-standalone.yml']
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  strip:
+    runs-on: ubuntu-latest
+    steps:
+      - name: the newest release's Windows zip, without the .exe
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          REPO: ${{ github.repository }}
+        run: |
+          tag=$(gh release view -R "$REPO" --json tagName -q .tagName) || { echo "no release"; exit 0; }
+          mkdir work && cd work
+          gh release download "$tag" -R "$REPO" -p '*-Windows.zip' || { echo "no Windows zip in $tag"; exit 0; }
+          for z in *-Windows.zip; do
+            mkdir x && (cd x && unzip -q "../$z")
+            n=$(find x -iname '*.exe' | wc -l)
+            if [ "$n" -eq 0 ]; then echo "$z: plugin only already"; rm -rf x; continue; fi
+            find x -iname '*.exe' -print -delete
+            rm "$z" && (cd x && zip -q -r -9 "../$z" .)
+            unzip -l "$z"
+            gh release upload "$tag" "$z" -R "$REPO" --clobber
+            rm -rf x
+          done
