@@ -1,4 +1,4 @@
-# Builds TREEGONE for Windows (VST3, Standalone) and the Mac (VST3, AU, Standalone; Apple Silicon and Intel) on every
+# Builds TREEGONE for Windows (VST3, Standalone) and the Mac (VST3, AU, Standalone; Apple Silicon and Intel) and Linux (VST3, LV2, Standalone) on every
 # push. The zips are under the run's "Artifacts"; a tag v* (or a release published on GitHub) also puts them in its
 # release.
 name: build
@@ -13,6 +13,12 @@ on:
 
 permissions:
   contents: write
+
+env:
+  # what JUCE needs to build on Linux
+  LINUX_DEPS: >-
+    libasound2-dev libjack-jackd2-dev libx11-dev libxext-dev libxrandr-dev libxinerama-dev libxcursor-dev
+    libxcomposite-dev libxrender-dev libfreetype-dev libfontconfig1-dev libgl1-mesa-dev
 
 jobs:
   # the engine's tests (tests/engine_tests.cpp): every program at three rates, the three filters singing, every effect,
@@ -106,10 +112,16 @@ jobs:
             name: Windows
           - os: macos-15-intel
             name: macOS
+          - os: ubuntu-22.04
+            name: Linux
     runs-on: ${{ matrix.os }}
     timeout-minutes: 90
     steps:
       - uses: actions/checkout@v4
+
+      - name: dependencies (Linux)
+        if: runner.os == 'Linux'
+        run: sudo apt-get update -qq && sudo apt-get install -y -qq $LINUX_DEPS
 
       - name: configure
         shell: bash
@@ -172,6 +184,32 @@ jobs:
           lipo -info "$o/TREEGONE.vst3/Contents/MacOS/TREEGONE"
           ditto -c -k --sequesterRsrc --keepParent $o $o.zip
           tar -czf $o.tar.gz $o   # (the same as a .tar.gz: some Macs' unzip had lost the plugins' signatures)
+
+      - name: pluginval (Linux)
+        # the same check as on Windows, in a virtual screen. Up to three tries: pluginval's own VST3 host (stock JUCE 8
+        # code) can crash by itself at the end of its parameter fuzz test (Tracktion/pluginval#177); a plug-in that
+        # really fails, fails all three
+        if: runner.os == 'Linux'
+        shell: bash
+        run: |
+          curl -sSL -o pluginval.zip https://github.com/Tracktion/pluginval/releases/download/v1.0.4/pluginval_Linux.zip
+          unzip -q pluginval.zip
+          for i in 1 2 3; do
+            xvfb-run -a ./pluginval --strictness-level 8 --timeout-ms 600000 --validate "build/Treegone_artefacts/Release/VST3/TREEGONE.vst3" && exit 0
+            echo "::warning::pluginval try $i did not pass"
+          done
+          exit 1
+
+      - name: package (Linux)
+        if: runner.os == 'Linux'
+        shell: bash
+        run: |
+          a="build/Treegone_artefacts/Release"
+          o=TREEGONE-Linux
+          mkdir -p $o
+          cp -R "$a/VST3/TREEGONE.vst3" "$a/LV2/TREEGONE.lv2" "$a/Standalone/TREEGONE" $o/
+          cp README.md $o/
+          tar czf $o.tar.gz $o
 
       - uses: actions/upload-artifact@v4
         with:
