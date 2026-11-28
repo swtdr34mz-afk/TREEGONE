@@ -146,7 +146,6 @@ jobs:
           $o = "TREEGONE-Windows"
           New-Item -ItemType Directory -Force $o | Out-Null
           Copy-Item -Recurse "$a/VST3/TREEGONE.vst3" $o/
-          Copy-Item "$a/Standalone/TREEGONE.exe" $o/
           Copy-Item README.md $o/
           Compress-Archive -Path $o -DestinationPath TREEGONE-Windows.zip
 
